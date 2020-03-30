@@ -15,20 +15,21 @@
       <a href="#news">News</a>
       <a href="#contact">Contact</a>
       <a href="#about">About</a> -->
+      
+     <img src = "reEatsLogo.png"
+      width = 150px
+      height = 75px 
+      align = "left"/>
 
       <a label
-      >Resturant: "{{ resturantName }}" 
-      </label>
-
-      <a label
-      style = "padding-left: 70px;"
+      style = "padding-left: 80px;"
       >Menu:</label>
       <span class="material-icons">
           menu_book
       </span>
 
       <a label
-      style = "padding-left: 70px;"
+      style = "padding-left: 80px;"
       align = "right"
       >Account:</label>
       <span class="material-icons">
@@ -37,14 +38,14 @@
 
 
       <a label
-      style = "padding-left: 70px;"
+      style = "padding-left: 80px;"
       >Checkout:</label>
       <span class="material-icons">
         shopping_cart
       </span>
 
       <a label
-      style = "padding-left: 70px;"
+      style = "padding-left: 80px;"
       >Feedback:</label>
       <span class="material-icons">
         feedback
@@ -52,58 +53,37 @@
 
      </div>
 
-    <form action="/">
-      <label 
-      style = "padding-left: 25px;"
-      for="dept">Dept:</label>
-      <input 
-      style = "margin-bottom: 6px;"
-      type="text" id="dept" name="dept" value = "{{ dept }}"><br>
+    <hr>
 
-      <label 
-      style = "padding-left: 4px;"
-
-      for="coursenumber">Number:</label>
-      <input 
-      style = "margin-bottom: 6px;"
-      type="text" id="coursenumber" name="coursenumber" value = "{{ coursenum }}"><br>
-
-      <label 
-      style = "padding-left: 25px;"
-      for="area">Area:</label>
-      <input 
-      style = "margin-bottom: 6px;"
-      type="text" id="area" name="area" value = "{{ area }}"><br>
-
-      <label 
-      style = "padding-left: 27px;"
-      for="title">Title:</label>
-      <input 
-      style = "margin-bottom: 6px;"
-      type="text" id="title" name="title" value = "{{ title }}"><br>
-
-      <input 
-      type="submit" 
-      style = "margin-left: 65px;"
-      value="Submit">
-    </form> 
+    <label
+    style = "padding-left: 450px"
+    >Resturant "{{ resturant_name }}" 
+    </label>
 
     <hr>
     <table cellspacing="2" cellpadding="2">
       <tr>
-        <td><strong>ClassId</strong></td>
-        <td><strong>Dept</strong></td>
-        <td><strong>Num</strong></td>
-        <td><strong>Area</strong></td>
-        <td><strong>Title</strong></td>
+        <td><strong>Food Item</strong></td>
+        <td><strong>Description</strong></td>
+        <td><strong>Dietary Restrictions</strong></td>
+        <td><strong>List Price</strong></td>
+        <td><strong>Discount</strong></td>
+        <td><strong>Discounted Price</strong></td>
       </tr>
-      {% for course in courses %}
+      {% for item in resturant %}
         <tr>
-          <td><a href = "/regdetails?classid={{ course.classid }}">{{ course.classid }}</a></td>
-          <td>{{ course.dept }}</td>
-          <td>{{ course.coursenum }}</td>
-          <td>{{ course.area }}</td>
-          <td>{{ course.title }}</td>
+          <td>{{ item.food }}</td>
+          <td>{{ item.description }}</td>
+          <td>{{ item.dietaryRestrictions }}</td>
+          <!-- <td>{{ resturant.listPrice }}</td> -->
+          <td> {{ item.listPrice }} </td>
+          <td>
+            <form action="/action_page.php">
+              <label for="discount"></label><br>
+              <input type="text" id="discount" name="discount"><br><br>
+            </form>
+          </td>
+          <td> {{ item.discountPrice}} </td>
         </tr>
         {% endfor %}
     </table>
