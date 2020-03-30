@@ -1,13 +1,111 @@
 <!DOCTYPE html>
 <html>
-<body>
+  <head>
+  <title>Chennai Chimney</title>
+  <link rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet"
+  href = "background.css">
+  </head>
 
-<h1>Chennai Chimney</h1>
+  <body>
 
-<hr>
+    <div class="topnav">
+     <!--  <a class="active" href="#home">Home</a>
+      <a href="#news">News</a>
+      <a href="#contact">Contact</a>
+      <a href="#about">About</a> -->
 
-<h2>Menu</h2>
+      <a label
+      >Resturant: "{{ resturantName }}" 
+      </label>
+
+      <a label
+      style = "padding-left: 70px;"
+      >Menu:</label>
+      <span class="material-icons">
+          menu_book
+      </span>
+
+      <a label
+      style = "padding-left: 70px;"
+      align = "right"
+      >Account:</label>
+      <span class="material-icons">
+        account_box
+      </span>
 
 
-</body>
+      <a label
+      style = "padding-left: 70px;"
+      >Checkout:</label>
+      <span class="material-icons">
+        shopping_cart
+      </span>
+
+      <a label
+      style = "padding-left: 70px;"
+      >Feedback:</label>
+      <span class="material-icons">
+        feedback
+      </span>
+
+     </div>
+
+    <form action="/">
+      <label 
+      style = "padding-left: 25px;"
+      for="dept">Dept:</label>
+      <input 
+      style = "margin-bottom: 6px;"
+      type="text" id="dept" name="dept" value = "{{ dept }}"><br>
+
+      <label 
+      style = "padding-left: 4px;"
+
+      for="coursenumber">Number:</label>
+      <input 
+      style = "margin-bottom: 6px;"
+      type="text" id="coursenumber" name="coursenumber" value = "{{ coursenum }}"><br>
+
+      <label 
+      style = "padding-left: 25px;"
+      for="area">Area:</label>
+      <input 
+      style = "margin-bottom: 6px;"
+      type="text" id="area" name="area" value = "{{ area }}"><br>
+
+      <label 
+      style = "padding-left: 27px;"
+      for="title">Title:</label>
+      <input 
+      style = "margin-bottom: 6px;"
+      type="text" id="title" name="title" value = "{{ title }}"><br>
+
+      <input 
+      type="submit" 
+      style = "margin-left: 65px;"
+      value="Submit">
+    </form> 
+
+    <hr>
+    <table cellspacing="2" cellpadding="2">
+      <tr>
+        <td><strong>ClassId</strong></td>
+        <td><strong>Dept</strong></td>
+        <td><strong>Num</strong></td>
+        <td><strong>Area</strong></td>
+        <td><strong>Title</strong></td>
+      </tr>
+      {% for course in courses %}
+        <tr>
+          <td><a href = "/regdetails?classid={{ course.classid }}">{{ course.classid }}</a></td>
+          <td>{{ course.dept }}</td>
+          <td>{{ course.coursenum }}</td>
+          <td>{{ course.area }}</td>
+          <td>{{ course.title }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </body>
 </html>
