@@ -17,51 +17,55 @@
       <a href="#about">About</a> -->
       
      <img src = "reEatsLogo.png"
-      width = 150px
-      height = 75px 
+      width = 130px
+      height = 60px 
       align = "left"/>
 
       <a label
-      style = "padding-left: 80px;"
-      >Menu:</label>
+      align = "right"
+      style = "padding-left: 600px;"
+      >menu</label>
       <span class="material-icons">
           menu_book
       </span>
 
       <a label
-      style = "padding-left: 80px;"
       align = "right"
-      >Account:</label>
+      >account</label>
       <span class="material-icons">
         account_box
       </span>
 
 
       <a label
-      style = "padding-left: 80px;"
-      >Checkout:</label>
+      >checkout</label>
       <span class="material-icons">
         shopping_cart
       </span>
 
       <a label
-      style = "padding-left: 80px;"
-      >Feedback:</label>
+      >feedback</label>
       <span class="material-icons">
         feedback
       </span>
 
      </div>
 
-    <hr>
+    <hr color ="black">
 
-    <label
-    style = "padding-left: 450px"
-    >Resturant "{{ resturant_name }}" 
-    </label>
+    
+    <form action="/" method="get">
+        <label for="restName"></label><br>
+        <label
+          style = "padding-left: 500px"
+          >Restaurant Name: 
+        </label>
+        <input type="text" id="restName" name="restName"><br><br>
+    </form>
 
-    <hr>
-    <table cellspacing="2" cellpadding="2">
+    <hr color ="black">
+
+    <table cellspacing="2" cellpadding="2" align:"center">
       <tr>
         <td><strong>Food Item</strong></td>
         <td><strong>Description</strong></td>
@@ -70,15 +74,15 @@
         <td><strong>Discount</strong></td>
         <td><strong>Discounted Price</strong></td>
       </tr>
-      {% for item in resturant %}
+      {% for item in restaurant %}
         <tr>
-          <td>{{ item.food }}</td>
-          <td>{{ item.description }}</td>
-          <td>{{ item.dietaryRestrictions }}</td>
-          <!-- <td>{{ resturant.listPrice }}</td> -->
-          <td> {{ item.listPrice }} </td>
+          <td>{{ item.getFood()}}</td>
+          <td>{{ item.getDescription()}}</td>
+          <td>{{ item.getDietary()}}</td>
+          <!-- <td>{{ restaurant.listPrice }}</td> -->
+          <td> {{ item.getPrice() }} </td>
           <td>
-            <form action="/action_page.php">
+            <form action="/" method="get">
               <label for="discount"></label><br>
               <input type="text" id="discount" name="discount"><br><br>
             </form>
