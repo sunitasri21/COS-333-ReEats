@@ -73,28 +73,26 @@
           <td>{{ item.getFood()}}</td>
           <td>{{ item.getDescription()}}</td>
           <!-- <td>{{ restaurant.listPrice }}</td> -->
-          <td id="price"> {{item.getPrice() }} </td>
+          <td id="price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
           <td>
-<!--             <form action="/handleDiscount" method="get">
- -->              <label for="discount"></label><br>
+              <label for="discount"></label><br>
               <input align = "right" type="text" id="discount" name="discount" value="{{discount}}"><br><br>
-              <script src='js/script.js'></script>
+              <!-- <script src='js/script.js'></script> -->
 <!--             </form>
  -->      </td>
           <td> 
             <input align = "right" type="button" onclick="changeValue()" id="submit" name="submit" value="Apply">
-            <label id="newPrice"> {{item.getPrice() * discount}} </label>
+            <label id="newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>
           </td>
         </tr>
-      {% endfor %}
         <script>
             function changeValue() {
-                alert(document.getElementById("price").text);
-                alert(document.getElementById("discount").text);
-                var newPrice = document.getElementById("price").text * html.getElementById("discount");
-                html.getElementById("newPrice").text = newPrice;
+                var newPrice = document.getElementById("price").textContent * document.getElementById("discount").value;
+                document.getElementById("newPrice").textContent = newPrice.toPrecision(3);
               }
         </script>
+      {% endfor %}
+
     </table>
   </body>
 </html>
