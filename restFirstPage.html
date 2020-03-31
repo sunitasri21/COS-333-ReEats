@@ -67,6 +67,9 @@
  -->        <td><strong>List Price</strong></td>
         <td><strong>Discount</strong></td>
         <td><strong>Discounted Price</strong></td>
+        <script>
+            var count = 0;
+        </script>
       </tr>
       {% for item in restaurant %}
         <tr>
@@ -77,20 +80,22 @@
           <td>
               <label for="discount"></label><br>
               <input align = "right" type="text" id="discount" name="discount" value="{{discount}}"><br><br>
-              <!-- <script src='js/script.js'></script> -->
-<!--             </form>
- -->      </td>
+              <script>
+            function changeValue() {
+                var newPrice = document.getElementById("price").textContent;
+                var discount = document.getElementById("discount").value;
+                if (discount < 1) newPrice = newPrice * (1-discount); 
+                document.getElementById("newPrice").textContent = newPrice.toPrecision(3);
+                count++; 
+              }
+            </script>
+       </td>
           <td> 
             <input align = "right" type="button" onclick="changeValue()" id="submit" name="submit" value="Apply">
             <label id="newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>
           </td>
         </tr>
-        <script>
-            function changeValue() {
-                var newPrice = document.getElementById("price").textContent * document.getElementById("discount").value;
-                document.getElementById("newPrice").textContent = newPrice.toPrecision(3);
-              }
-        </script>
+
       {% endfor %}
 
     </table>

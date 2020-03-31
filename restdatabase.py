@@ -27,13 +27,10 @@ class Database:
 
     def menuSearch(self, restName):
         cursor = self._connection.cursor() 
-        print(restName)
         restIdString = 'SELECT restaurant_id FROM restaurants ' +\
          'WHERE restaurant_name LIKE "Chennai Chimney"'
         cursor.execute(restIdString)
         restId = cursor.fetchone()[0]
-        print(restId)
-
         stmStr = 'SELECT food, description, unit_price FROM menu ' +\
         'WHERE menu.restaurant_id = 1;'
         cursor.execute(stmStr)
@@ -41,7 +38,6 @@ class Database:
         results = []
         row = cursor.fetchone()
         while row is not None:  
-            print(row)
             result = MenuResult(str(row[0]), str(row[1]), str(row[2]))
             results.append(result);
             row = cursor.fetchone()
