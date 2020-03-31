@@ -16,7 +16,7 @@
       <a href="#contact">Contact</a>
       <a href="#about">About</a> --> 
 
-      <a label href = "/"
+      <a label href= "/"
       >menu</label>
       <span class="material-icons">
           menu_book
@@ -35,7 +35,8 @@
         shopping_cart
       </span>
 
-      <a label href = "/feedbackPage">feedback</label>
+      <a label href = "/feedbackPage"
+      >feedback</label>
       <span class="material-icons">
         feedback
       </span>
@@ -53,7 +54,7 @@
         <label for="restName"></label><br> -->
         <label
           style = "padding-left: 575px"
-          ><strong>Chennai Chimney
+          ><strong>Preview
         </strong></label>
 <!--     </form> -->
 
@@ -75,15 +76,15 @@
           <!-- <td>{{ restaurant.listPrice }}</td> -->
           <td id="price"> {{item.getPrice() }} </td>
           <td>
-<!--             <form action="/handleDiscount" method="get">
- -->              <label for="discount"></label><br>
+            <form action="/handleDiscount" method="get">
+              <label for="discount"></label><br>
               <input align = "right" type="text" id="discount" name="discount" value="{{discount}}"><br><br>
               <script src='js/script.js'></script>
-<!--             </form>
- -->      </td>
-          <td> 
+            </form>
+          </td>
+          <td > 
             <input align = "right" type="button" onclick="changeValue()" id="submit" name="submit" value="Apply">
-            <label> {{item.getPrice() * discount}} </label>
+            <label id = newPrice"> {{item.getPrice() * discount}} </label>
           </td>
         </tr>
       {% endfor %}

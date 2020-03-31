@@ -56,6 +56,13 @@ body {
   background-color: black;
 }
 
+.p {
+  font-family: "Verdana", sans-serif;
+  color: white;
+  text-align: center;
+  font-style: bold;
+}
+
 {
   color: black;
 }

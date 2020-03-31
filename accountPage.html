@@ -35,7 +35,8 @@
         shopping_cart
       </span>
 
-      <a label href = "/feedbackPage">feedback</label>
+      <a label href = "/feedbackPage"
+      >feedback</label>
       <span class="material-icons">
         feedback
       </span>
@@ -47,13 +48,16 @@
   <body>
 
     <hr color ="black">
+    <hr color ="black">
+    <hr color ="black">
+
 
     
  <!--    <form action="/" method="get">
         <label for="restName"></label><br> -->
         <label
           style = "padding-left: 575px"
-          ><strong>Chennai Chimney
+          ><strong>Account
         </strong></label>
 <!--     </form> -->
 
@@ -61,32 +65,19 @@
 
     <table cellspacing="2" cellpadding="2" align:"center">
       <tr>
-        <td><strong>Food Item</strong></td>
-        <td><strong>Description</strong></td>
+        <td style = "padding-left: 120px"><strong>username</strong></td>
+        <td style = "padding-left: 120px"><strong>email</strong></td>
 <!--         <td><strong>Dietary Restrictions</strong></td>
- -->        <td><strong>List Price</strong></td>
-        <td><strong>Discount</strong></td>
-        <td><strong>Discounted Price</strong></td>
+ -->    <td style = "padding-left: 120px"><strong>password</strong></td>
+        <td style = "padding-left: 120px"><strong>payment details</strong></td>
       </tr>
-      {% for item in restaurant %}
-        <tr>
-          <td>{{ item.getFood()}}</td>
-          <td>{{ item.getDescription()}}</td>
-          <!-- <td>{{ restaurant.listPrice }}</td> -->
-          <td id="price"> {{item.getPrice() }} </td>
-          <td>
-<!--             <form action="/handleDiscount" method="get">
- -->              <label for="discount"></label><br>
-              <input align = "right" type="text" id="discount" name="discount" value="{{discount}}"><br><br>
-              <script src='js/script.js'></script>
-<!--             </form>
- -->      </td>
-          <td> 
-            <input align = "right" type="button" onclick="changeValue()" id="submit" name="submit" value="Apply">
-            <label> {{item.getPrice() * discount}} </label>
-          </td>
-        </tr>
-      {% endfor %}
+       <tr>
+        <td style = "padding-left: 120px">chennai_chimney</td>
+        <td style = "padding-left: 120px">chennaichimney@gmail.com</td>
+<!--         <td><strong>Dietary Restrictions</strong></td>
+ -->    <td style = "padding-left: 120px">*******</td>
+        <td style = "padding-left: 120px"><a href = "/"> link your venmo</td>
+      </tr>
     </table>
   </body>
 </html>

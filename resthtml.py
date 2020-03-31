@@ -49,25 +49,30 @@ def searchResults():
     response = make_response(html)
     return response         
 
-# # #-----------------------------------------------------------------------
+# -----------------------------------------------------------------------
 
-# @app.route('/handleDiscount', methods=['GET'])
-#  def handleDiscount():
-#      discount = request.args.get('discount') or 1
-#      if discount:
-#          r = requests.get('http://localhost:55555')
+@app.route('/checkoutPage', methods=['GET'])
+def checkoutPage():
+    html = render_template('checkoutPage.html')
+    response = make_response(html)
+    return response
 
-#          soup = BeautifulSoup(r.content, 'lxml')
+# -----------------------------------------------------------------------
 
-#          prices = soup.findAll('td', attrs={'name': 'price'})
+@app.route('/accountPage', methods=['GET'])
+def accountPage():
+    html = render_template('accountPage.html')
+    response = make_response(html)
+    return response     
 
-#          for price in suggestions:
-#              suggestions_list.append(suggestion.attrs['data'])
-     
-#      html = render_template(r,
-#          prices=prices)
-#      response = make_response(html) 
-#      return response          
+# -----------------------------------------------------------------------
+
+@app.route('/feedbackPage', methods=['GET'])
+def feedbackPage():
+    html = render_template('feedbackPage.html')
+    response = make_response(html)
+    return response     
+
 
 #-----------------------------------------------------------------------
 
