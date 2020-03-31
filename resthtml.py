@@ -18,7 +18,7 @@ app = Flask(__name__, template_folder='.')
 #-----------------------------------------------------------------------
 @app.route('/', methods=['GET'])
 def searchResults():
-    restName = request.args.get('restName') or ''
+    restName = str(request.args.get('restName')) or ""
 
     # items = {}
     # items['food'] = dept

@@ -29,21 +29,20 @@ class Database:
         cursor = self._connection.cursor() 
         print(restName)
         restIdString = 'SELECT restaurant_id FROM restaurants ' +\
-         'WHERE restaurant_name = ?'
-        cursor.execute(restIdString, restName)
-        restId = cursor.fetchone()
+         'WHERE restaurant_name LIKE "Chennai Chimney"'
+        cursor.execute(restIdString)
+        restId = cursor.fetchone()[0]
         print(restId)
 
-        stmStr = 'SELECT food, description, price, vegan, spicy ' + \
-            'FROM menu ' +\
-            'JOIN dietary ON menu.food_id = dietary.food_id ' +\
-            'WHERE menu.restaurant_id = ? ORDER BY price ASC;'
-        cursor.execute(stmStr, restId)
+        stmStr = 'SELECT food, description, unit_price FROM menu ' +\
+        'WHERE menu.restaurant_id = 1;'
+        cursor.execute(stmStr)
 
         results = []
         row = cursor.fetchone()
         while row is not None:  
-            result = MenuResult(str(row[0]), str(row[1]), str(row[2]), (str(row[3]), str(row[4])))
+            print(row)
+            result = MenuResult(str(row[0]), str(row[1]), str(row[2]))
             results.append(result);
             row = cursor.fetchone()
         cursor.close()
@@ -57,7 +56,7 @@ class Database:
 if __name__ == '__main__':
     database = Database()
     database.connect()
-    results = database.menuSearch("chennai")
+    results = database.menuSearch("Chennai Chimney")
     for result in results:
         print('result', result)
     # print(results2.getCourseId())
