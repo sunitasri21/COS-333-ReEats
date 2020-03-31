@@ -23,4 +23,8 @@ checkoutPage.html : general checkout page
 feedbackPage.html : general feedback page
 accountPage.html : general account page  
 
+Styling:
+
+static folder contains background.css, reEatslogo.png for design purposes
+
 
