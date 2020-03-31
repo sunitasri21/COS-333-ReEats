@@ -2,35 +2,27 @@
 <html>
   <head>
   <title>Chennai Chimney</title>
-  <link rel="stylesheet"
-  href="https://fonts.googleapis.com/icon?family=Material+Icons">
-  <link rel="stylesheet"
-  href = "background.css">
-  </head>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="static/background.css">
 
-  <body>
-
-    <div class="topnav">
-     <!--  <a class="active" href="#home">Home</a>
-      <a href="#news">News</a>
-      <a href="#contact">Contact</a>
-      <a href="#about">About</a> -->
-      
-     <img src = "reEatsLogo.png"
-      width = 130px
-      height = 60px 
+  <img src = "static/reEatsLogo.png"
+      width = 160px
+      height = 70px 
       align = "left"/>
 
+  <div class="topnav">
+<!--      <a class="active" href="#home">Home</a>
+      <a href="#news">News</a>
+      <a href="#contact">Contact</a>
+      <a href="#about">About</a> --> 
+
       <a label
-      align = "right"
-      style = "padding-left: 600px;"
       >menu</label>
       <span class="material-icons">
           menu_book
       </span>
 
       <a label
-      align = "right"
       >account</label>
       <span class="material-icons">
         account_box
@@ -51,17 +43,20 @@
 
      </div>
 
+  </head>
+
+  <body>
+
     <hr color ="black">
 
     
-    <form action="/" method="get">
-        <label for="restName"></label><br>
+ <!--    <form action="/" method="get">
+        <label for="restName"></label><br> -->
         <label
-          style = "padding-left: 500px"
-          >Restaurant Name: 
-        </label>
-        <input type="text" id="restName" name="restName"><br><br>
-    </form>
+          style = "padding-left: 575px"
+          ><strong>Chennai Chimney
+        </strong></label>
+<!--     </form> -->
 
     <hr color ="black">
 
@@ -69,8 +64,8 @@
       <tr>
         <td><strong>Food Item</strong></td>
         <td><strong>Description</strong></td>
-        <td><strong>Dietary Restrictions</strong></td>
-        <td><strong>List Price</strong></td>
+<!--         <td><strong>Dietary Restrictions</strong></td>
+ -->        <td><strong>List Price</strong></td>
         <td><strong>Discount</strong></td>
         <td><strong>Discounted Price</strong></td>
       </tr>
@@ -78,16 +73,19 @@
         <tr>
           <td>{{ item.getFood()}}</td>
           <td>{{ item.getDescription()}}</td>
-          <td>{{ item.getDietary()}}</td>
           <!-- <td>{{ restaurant.listPrice }}</td> -->
-          <td> {{ item.getPrice() }} </td>
+          <td id="price"> {{item.getPrice() }} </td>
           <td>
-            <form action="/" method="get">
+            <form action="/handleDiscount" method="get">
               <label for="discount"></label><br>
-              <input type="text" id="discount" name="discount"><br><br>
+              <input align = "right" type="text" id="discount" name="discount" value="{{discount}}"><br><br>
+              <script src='js/script.js'></script>
             </form>
           </td>
-          <td> {{ item.discountPrice}} </td>
+          <td > 
+            <input align = "right" type="button" onclick="changeValue()" id="submit" name="submit" value="Apply">
+            <label id = newPrice"> {{item.getPrice() * discount}} </label>
+          </td>
         </tr>
         {% endfor %}
     </table>

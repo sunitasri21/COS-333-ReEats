@@ -19,7 +19,7 @@ app = Flask(__name__, template_folder='.')
 @app.route('/', methods=['GET'])
 def searchResults():
     restName = str(request.args.get('restName')) or ""
-
+    discount = request.args.get('discount', default=1) 
     # items = {}
     # items['food'] = dept
     # queries['num'] = num
@@ -40,11 +40,34 @@ def searchResults():
         exit(1)
 
     database.disconnect()
+    # discountedPrice = []
 
-    html = render_template('restFirstPage.html', restaurant=searchResults)
+    # for result in searchResults:
+    #     discountedPrice.append(discount * result.getPrice())
+
+    html = render_template('restFirstPage.html', restaurant=searchResults, discount=discount)
     response = make_response(html)
     return response         
-    
+
+# # #-----------------------------------------------------------------------
+
+# @app.route('/handleDiscount', methods=['GET'])
+#  def handleDiscount():
+#      discount = request.args.get('discount') or 1
+#      if discount:
+#          r = requests.get('http://localhost:55555')
+
+#          soup = BeautifulSoup(r.content, 'lxml')
+
+#          prices = soup.findAll('td', attrs={'name': 'price'})
+
+#          for price in suggestions:
+#              suggestions_list.append(suggestion.attrs['data'])
+     
+#      html = render_template(r,
+#          prices=prices)
+#      response = make_response(html) 
+#      return response          
 
 #-----------------------------------------------------------------------
 
