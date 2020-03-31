@@ -56,13 +56,16 @@ body {
   background-color: black;
 }
 
-.p {
+body.p {
   font-family: "Verdana", sans-serif;
   color: white;
   text-align: center;
   font-style: bold;
 }
 
+.wrapper {
+  align-items: center;
+}
 {
   color: black;
 }
