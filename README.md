@@ -8,9 +8,9 @@ Code Documentation:
 All files with prefix 'rest' are restaurant specific and all files with prefix 'user' are user specific. 
 
 .py files 
-main.py : main controller for the webapp (this file is called in terminal to launch)
+resthtml.py: main controller for the webapp (this file is called in terminal to launch)
 
-db_search.py : the database search query code for restaurants (menuSearchRest) AND users (menuSearchUser)
+restdatabase.py : the database search query code for restaurants (menuSearchRest) AND users (menuSearchUser)
 
 menuResult.py : creates an obj of type MenuResult
 
