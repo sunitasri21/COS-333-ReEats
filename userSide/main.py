@@ -6,7 +6,7 @@
 #-----------------------------------------------------------------------
 import flask 
 from sys import argv, stderr
-from restdatabase import Database
+from db_search import Database
 from time import localtime, asctime, strftime
 from flask import Flask, request, make_response, redirect, url_for
 from flask import render_template
