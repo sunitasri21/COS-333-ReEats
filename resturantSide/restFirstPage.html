@@ -103,21 +103,34 @@ hr {
           <td>
               <label for="discount"></label><br>
               <input align = "right" type="text" id="discount" name="discount" value="{{discount}}"><br><br>
-<!--               <script>
-            // function changeValue() {
-            //     var newPrice = document.getElementById("price").textContent;
-            //     var discount = document.getElementById("discount").value;
-            //     if (discount < 1) newPrice = newPrice * (1-discount); 
-            //     document.getElementById("newPrice").textContent = newPrice.toPrecision(3);
-            //     count++; 
-            //   }
-            </script> -->
+              <input align = "right" type="button" onclick="handleDiscount()" id="submit" name="submit" value={{item.getFood()}}>
+              <script>
+            function changeValue() {
+                var newPrice = document.getElementById("price").textContent;
+                var discount = document.getElementById("discount").value;
+                if (discount < 1) newPrice = newPrice * (1-discount); 
+                document.getElementById("newPrice").textContent = newPrice.toPrecision(3);
+                count++; 
+              }
+            </script>
        </td>x
           <td> 
             <input align = "right" type="button" onclick="changeValue()" id="submit" name="submit" value="Apply">
             <label id="newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>
           </td>
         </tr>
+<!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+        $(function() {
+          $('a#test').bind('click', function() {
+            $.getJSON('/background_process_test',
+                function(data) {
+              //do nothing
+            });
+            return false;
+          });
+        });
+</script> -->
 
       {% endfor %}
 

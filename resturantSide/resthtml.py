@@ -23,51 +23,50 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
 # variables that are accessible from anywhere
 # source: https://stackoverflow.com/questions/14384739/how-can-i-add-a-background-thread-to-flask
-commonDataStruct = {}
-# lock to control access to variable
-dataLock = threading.Lock()
-# thread handler
-yourThread = threading.Thread()
+# commonDataStruct = {}
+# # lock to control access to variable
+# dataLock = threading.Lock()
+# # thread handler
+# yourThread = threading.Thread()
 
 def create_app():
     app = Flask(__name__,  template_folder='.')
 
-    def interrupt():
-        global yourThread
-        yourThread.cancel()
+    # def interrupt():
+    #     global yourThread
+    #     yourThread.cancel()
 
-    def doStuff():
-        global commonDataStruct
-        global yourThread
-        with dataLock:
-        # Do your stuff with commonDataStruct Here
+    # def doStuff():
+    #     global commonDataStruct
+    #     global yourThread
+    #     with dataLock:
+    #     # Do your stuff with commonDataStruct Here
 
-        # Set the next thread to happen
-        yourThread = threading.Timer(POOL_TIME, doStuff, ())
-        yourThread.start()   
+    #     # Set the next thread to happen
+    #     yourThread = threading.Timer(POOL_TIME, doStuff, ())
+    #     yourThread.start()   
 
-    def doStuffStart():
-        # Do initialisation stuff here
-        global yourThread
-        # Create your thread
-        yourThread = threading.Timer(POOL_TIME, doStuff, ())
-        yourThread.start()
+    # def doStuffStart():
+    #     # Do initialisation stuff here
+    #     global yourThread
+    #     # Create your thread
+    #     yourThread = threading.Timer(POOL_TIME, doStuff, ())
+    #     yourThread.start()
 
     # Initiate
-    doStuffStart()
-    # When you kill Flask (SIGTERM), clear the trigger for the next thread
-    atexit.register(interrupt)
+    # doStuffStart()
+    # # When you kill Flask (SIGTERM), clear the trigger for the next thread
+    # atexit.register(interrupt)
     return app
 
 app = create_app()
 
-@app.route('/restFirstPage', methods=['GET'])
-def handleDiscount():
-    discount = request.args.get('discount')
+def handleDiscount(discount):
     #FIGURE OUT HOW TO GET FOOD ID FROM HTML 
     #food_id = request.args.get('item')
     inputDiscount(discount, food_id)
-    #app.doStuffStart()
+    app.doStuffStart()
+    app.doStuffStart()
 
 
 @app.route('/', methods=['GET'])
@@ -84,6 +83,9 @@ def searchResults():
     try:
         database.connect()
         searchResults = database.menuSearch(restName)
+        if discount != 1:
+            print('hello')
+            handleDiscount(discount, request.args.get(item.getFood()))
 
     except Exception as e:
         errorMsg =  str(e)
@@ -92,6 +94,7 @@ def searchResults():
         # response = make_response(html)
         # return response
         exit(1)
+
 
     database.disconnect()
     # discountedPrice = []
