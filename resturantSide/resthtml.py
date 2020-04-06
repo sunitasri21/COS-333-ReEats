@@ -61,10 +61,13 @@ def create_app():
 
 app = create_app()
 
-@app.route('/', methods=['GET'])
+@app.route('/restFirstPage', methods=['GET'])
 def handleDiscount():
-    discount = request.args.get()
-    app.doStuff(discount)
+    discount = request.args.get('discount')
+    #FIGURE OUT HOW TO GET FOOD ID FROM HTML 
+    #food_id = request.args.get('item')
+    inputDiscount(discount, food_id)
+    #app.doStuffStart()
 
 
 @app.route('/', methods=['GET'])

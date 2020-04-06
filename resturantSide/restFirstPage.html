@@ -103,16 +103,16 @@ hr {
           <td>
               <label for="discount"></label><br>
               <input align = "right" type="text" id="discount" name="discount" value="{{discount}}"><br><br>
-              <script>
-            function changeValue() {
-                var newPrice = document.getElementById("price").textContent;
-                var discount = document.getElementById("discount").value;
-                if (discount < 1) newPrice = newPrice * (1-discount); 
-                document.getElementById("newPrice").textContent = newPrice.toPrecision(3);
-                count++; 
-              }
-            </script>
-       </td>
+<!--               <script>
+            // function changeValue() {
+            //     var newPrice = document.getElementById("price").textContent;
+            //     var discount = document.getElementById("discount").value;
+            //     if (discount < 1) newPrice = newPrice * (1-discount); 
+            //     document.getElementById("newPrice").textContent = newPrice.toPrecision(3);
+            //     count++; 
+            //   }
+            </script> -->
+       </td>x
           <td> 
             <input align = "right" type="button" onclick="changeValue()" id="submit" name="submit" value="Apply">
             <label id="newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>

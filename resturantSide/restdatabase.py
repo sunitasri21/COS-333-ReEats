@@ -45,6 +45,15 @@ class Database:
 
         return results
 
+    def inputDiscount(self, discount):
+        #CHECK NEW TABLE NAME
+        stmstr = 'INSERT INTO menu VALUES ?'  +\
+        'WHERE food_id == ?'
+        cursor = self._connection.cursor() 
+        cursor.execute(stmStr, discounts, food_id)
+
+
+
 #-----------------------------------------------------------------------
 
 # For testing:
