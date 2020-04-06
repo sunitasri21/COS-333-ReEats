@@ -65,9 +65,10 @@ hr {
   </head>
 
   <body>
-    <div class="title" >
-
-    <hr style="background-color: #1e1e28">
+<div style="padding: 40px 40px" class="title" >
+ 
+   <!--  <hr style="background-color: #1e1e28">
+  </hr> -->
 
     
  <!--    <form action="/" method="get">
@@ -76,14 +77,16 @@ hr {
           style = "padding-left: 575px"
           ><strong>Chennai Chimney
         </strong></label>
-      
+</div>   
 <!--     </form> -->
 
-    <hr color ="black">
+   <!--  <hr style="background-color: #1e1e28">
      </div>
+ -->    
+<!-- </hr> -->
 
     <table cellspacing="2" cellpadding="2" align:"center">
-      <tr>
+      <tr> 
         <th><strong>Food Item</strong></th>
         <th><strong>Description</strong></th>
 <!--         <td><strong>Dietary Restrictions</strong></td>
@@ -103,8 +106,9 @@ hr {
           <td>
               <label for="discount"></label><br>
               <input align = "right" type="text" id="discount" name="discount" value="{{discount}}"><br><br>
-              <input align = "right" type="button" onclick="handleDiscount()" id="submit" name="submit" value={{item.getFood()}}>
-              <script>
+<!--               <input align = "right" type="button" onclick="handleDiscount()" id="submit" name="submit" value={{item.getFood()}}>
+ -->              
+            <script>
             function changeValue() {
                 var newPrice = document.getElementById("price").textContent;
                 var discount = document.getElementById("discount").value;
@@ -113,11 +117,11 @@ hr {
                 count++; 
               }
             </script>
-       </td>x
+       </td>
           <td> 
             <input align = "right" type="button" onclick="changeValue()" id="submit" name="submit" value="Apply">
             <label id="newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>
-          </td>
+          </td> 
         </tr>
 <!-- <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type=text/javascript>

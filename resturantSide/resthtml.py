@@ -29,8 +29,8 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 # # thread handler
 # yourThread = threading.Thread()
 
-def create_app():
-    app = Flask(__name__,  template_folder='.')
+
+app = Flask(__name__,  template_folder='.')
 
     # def interrupt():
     #     global yourThread
@@ -57,9 +57,9 @@ def create_app():
     # doStuffStart()
     # # When you kill Flask (SIGTERM), clear the trigger for the next thread
     # atexit.register(interrupt)
-    return app
+#     return app
 
-app = create_app()
+# app = create_app()
 
 def handleDiscount(discount):
     #FIGURE OUT HOW TO GET FOOD ID FROM HTML 
@@ -83,9 +83,9 @@ def searchResults():
     try:
         database.connect()
         searchResults = database.menuSearch(restName)
-        if discount != 1:
-            print('hello')
-            handleDiscount(discount, request.args.get(item.getFood()))
+        # if discount != 1:
+        #     print('hello')
+        #     handleDiscount(discount, request.args.get(item.getFood()))
 
     except Exception as e:
         errorMsg =  str(e)
