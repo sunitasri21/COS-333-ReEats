@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+  font-family: 'Source Code Pro';
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #b34444;
+  color: white;
+  font-family: 'Source Code Pro';
+}
+
+hr {
+  background: rgb(30, 30, 40);
+  color: white;
+}
+
+.title{
+  background: rgb(30, 30, 40);
+  color: white;
+  font-family: 'Source Code Pro';
+}
+</style>
+</head>
+
+  <head>
+  <title>Chennai Chimney</title> 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+  <div class="topnav">
+
+     <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+      <a href="#home" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
+
+      <div class="w3-right w3-hide-small">
+
+        <a label href = "/" ></label> <span class="w3-bar-item w3-button">Menu</a>
+
+        <a label href = "/accountPage" ></label> <span class="w3-bar-item w3-button">Account</a>
+
+        <a label href = "/checkoutPage" ></label> <span class="w3-bar-item w3-button">Checkout</a>
+
+        <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
+
+      </div>
+    </div>
+
+    </a>
+     </div>
+
+  </head>
+
+  <body>
+    <div class="title" >
+
+    <hr style="background-color: #1e1e28">
+
+    
+ <!--    <form action="/" method="get">
+        <label for="restName"></label><br> -->
+        <label
+          style = "padding-left: 575px"
+          ><strong>Chennai Chimney
+        </strong></label>
+      
+<!--     </form> -->
+
+    <hr color ="black">
+     </div>
+
+    <table cellspacing="2" cellpadding="2" align:"center">
+      <tr>
+        <th><strong>Food Item</strong></th>
+        <th><strong>Description</strong></th>
+<!--         <td><strong>Dietary Restrictions</strong></td>
+ -->    <th><strong>List Price</strong></th>
+        <th><strong>Discount</strong></th>
+        <th><strong>Discounted Price</strong></th>
+        <script>
+            var count = 0;
+        </script>
+      </tr>
+      {% for item in restaurant %}
+        <tr>
+          <td>{{ item.getFood()}}</td>
+          <td>{{ item.getDescription()}}</td>
+          <!-- <td>{{ restaurant.listPrice }}</td> -->
+          <td id="price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
+          <td>
+              <label for="discount"></label><br>
+              <input align = "right" type="text" id="discount" name="discount" value="{{discount}}"><br><br>
+              <script>
+            function changeValue() {
+                var newPrice = document.getElementById("price").textContent;
+                var discount = document.getElementById("discount").value;
+                if (discount < 1) newPrice = newPrice * (1-discount); 
+                document.getElementById("newPrice").textContent = newPrice.toPrecision(3);
+                count++; 
+              }
+            </script>
+       </td>
+          <td> 
+            <input align = "right" type="button" onclick="changeValue()" id="submit" name="submit" value="Apply">
+            <label id="newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>
+          </td>
+        </tr>
+
+      {% endfor %}
+
+    </table>
+  </body>
+</html>

@@ -10,12 +10,63 @@ from restdatabase import Database
 from time import localtime, asctime, strftime
 from flask import Flask, request, make_response, redirect, url_for
 from flask import render_template
+import jinja2
+from sys import exit, argv, stderr
+import os
 
 #-----------------------------------------------------------------------
 
-app = Flask(__name__, template_folder='.')
+template_dir = os.path.join(os.path.dirname(__file__), '.')
+jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
-#-----------------------------------------------------------------------
+# app = Flask(__name__, template_folder='.')
+
+# variables that are accessible from anywhere
+# source: https://stackoverflow.com/questions/14384739/how-can-i-add-a-background-thread-to-flask
+commonDataStruct = {}
+# lock to control access to variable
+dataLock = threading.Lock()
+# thread handler
+yourThread = threading.Thread()
+
+def create_app():
+    app = Flask(__name__,  template_folder='.')
+
+    def interrupt():
+        global yourThread
+        yourThread.cancel()
+
+    def doStuff():
+        global commonDataStruct
+        global yourThread
+        with dataLock:
+        # Do your stuff with commonDataStruct Here
+
+        # Set the next thread to happen
+        yourThread = threading.Timer(POOL_TIME, doStuff, ())
+        yourThread.start()   
+
+    def doStuffStart():
+        # Do initialisation stuff here
+        global yourThread
+        # Create your thread
+        yourThread = threading.Timer(POOL_TIME, doStuff, ())
+        yourThread.start()
+
+    # Initiate
+    doStuffStart()
+    # When you kill Flask (SIGTERM), clear the trigger for the next thread
+    atexit.register(interrupt)
+    return app
+
+app = create_app()
+
+@app.route('/', methods=['GET'])
+def handleDiscount():
+    discount = request.args.get()
+    app.doStuff(discount)
+
+
 @app.route('/', methods=['GET'])
 def searchResults():
     restName = str(request.args.get('restName')) or ""
@@ -45,7 +96,9 @@ def searchResults():
     # for result in searchResults:
     #     discountedPrice.append(discount * result.getPrice())
 
-    html = render_template('restFirstPage.html', restaurant=searchResults, discount=discount)
+    template = jinja_env.get_template("restFirstPage.html")
+
+    html = render_template(template, restaurant=searchResults, discount=discount)
     response = make_response(html)
     return response         
 
