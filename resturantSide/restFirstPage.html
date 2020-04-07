@@ -35,28 +35,55 @@ hr {
 }
 </style>
 
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+
 <script>
-         function applyDiscount(itemNum) {
-          if (itemNum != null) {
-            // var newPrice = document.getElementById("item" + itemNum + "_price").textContent;
-            // var discount = document.getElementById("item" + itemNum + "_discount").value;
-             var newPrice = document.getElementById("item" + itemNum + "_price");
-            var discount = document.getElementById("item" + itemNum + "_discount");
-             if (discount < 1) newPrice = newPrice * (1-discount); 
-             else return;
-          } 
-            // document.getElementById("item" + itemNum + "_newPrice").textContent = newPrice.toPrecision(3);
-            changeValue(itemNum, newPrice);
+
+      function updateDiscount(itemNum, discountVal) {
+          const url = "/updateDiscount";
+          data = {
+            itemNum: itemNum,
+            discountVal: discountVal
           }
 
-        function changeValue(itemNum, newValue) {
-            // var newPrice = document.getElementById("item" + itemNum + "_price").textContent;
-            // var discount = document.getElementById("item" + itemNum + "_discount").value;
-            // if (discount < 1) newPrice = newPrice * (1-discount); 
-            if ((itemNum != null) && (newValue != null)) {
-            document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
-          }
-          }
+          // $.post(url, data, changeValue(data["itemNum"], data["discountVal"]))
+          $.post(url, data);
+          $.get(url, data, changeValue(data["itemNum"], data["discountVal"]))
+           alert(data["discountVal"]);
+
+          // $.ajax({
+          //     type: "POST",
+          //     url: url,
+          //     data: data,
+          //     success: success,
+          //   });
+      }
+
+      function applyDiscount(itemNum) {
+          if (itemNum != null) {
+              // var newPrice = document.getElementById("item" + itemNum + "_price").textContent;
+              // var discount = document.getElementById("item" + itemNum + "_discount").value;
+              // var newPrice = document.getElementById("item" + itemNum + "_price");
+              // alert(newPrice)
+              var discount = document.getElementById("item" + itemNum + "_discount").value;
+          // if (discount < 1) newPrice = newPrice * (1-discount); 
+          // else return;
+          } 
+
+          updateDiscount(itemNum, discount);
+          // document.getElementById("item" + itemNum + "_newPrice").textContent = newPrice.toPrecision(3);
+          // changeValue(itemNum, newPrice);
+      }
+
+      function changeValue(itemNum, newValue) {
+          // var newPrice = document.getElementById("item" + itemNum + "_price").textContent;
+          // var discount = document.getElementById("item" + itemNum + "_discount").value;
+          // if (discount < 1) newPrice = newPrice * (1-discount); 
+          if ((itemNum != null) && (newValue != null)) {
+          document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
+          alert("hello- value")
+        }
+        }
 </script>
 
 </head>
@@ -107,7 +134,8 @@ hr {
     <hr color ="black">
      </div>
 
-    <table cellspacing="2" cellpadding="2" align:"center">
+    <table cellspacing="2" cellpadding="2" style = "align:center">  
+      <!-- align:"center" -->
       <tr>
         <th><strong>Food Item</strong></th>
         <th><strong>Description</strong></th>
@@ -140,18 +168,15 @@ hr {
         <tr>
           <td>{{ item.getFood()}}</td>
           <td>{{ item.getDescription()}}</td>
-          <td id="item{{item.getId}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
+          <td id="item{{item.getId()}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
           <td>
               <label for="discount"></label><br>
-              <input align = "right" type="text" id="item{{item.getId}}_discount" name="discount" value="{{discount}}"><br><br>
-       </td>
+              <input align = "right" type="text" id="item{{item.getId()}}_discount" name="discount" ><br><br>
+          </td>
           <td> 
             <input align = "right" type="button" 
-            onclick="applyDiscount({{item.getId}})" 
-            id="submit" 
-            name="submit" 
-            value="Apply">
-            <label id="item{{item.getId}}_newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>
+            onclick= "applyDiscount({{item.getId()}})" id="submit" name= "submit" value="Apply">
+            <label id="item{{item.getId()}}_newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>
           </td>
         </tr>
 

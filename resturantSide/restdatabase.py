@@ -31,14 +31,14 @@ class Database:
          'WHERE restaurant_name LIKE "Chennai Chimney"'
         cursor.execute(restIdString)
         restId = cursor.fetchone()[0]
-        stmStr = 'SELECT food, description, unit_price FROM menu ' +\
+        stmStr = 'SELECT food, description, unit_price, food_id FROM menu ' +\
         'WHERE menu.restaurant_id = 1;'
         cursor.execute(stmStr)
 
         results = []
         row = cursor.fetchone()
         while row is not None:  
-            result = MenuResult(str(row[0]), str(row[1]), str(row[2]))
+            result = MenuResult(str(row[0]), str(row[1]), str(row[2]), str(row[3]))
             results.append(result);
             row = cursor.fetchone()
         cursor.close()
@@ -50,9 +50,15 @@ class Database:
         print(discount)
         print(food_id)
         stmstr = 'INSERT INTO orders VALUES ?'  +\
-        'WHERE food == ?'
+        'WHERE food_id LIKE ?;'
         cursor = self._connection.cursor() 
-        cursor.execute(stmStr, discounts, food_id)
+        cursor.execute(stmstr, discounts, food_id)
+        stmstr2 = 'SELECT unit_price FROM menu ' +\
+        'WHERE menu.food_id LIKE ?;'
+        cursor.execute(stmstr2, food_id)
+        price = cursor.fetchone()
+        cursor.close()
+        return price 
 
 
 

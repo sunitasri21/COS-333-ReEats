@@ -13,6 +13,7 @@ from flask import render_template
 import jinja2
 from sys import exit, argv, stderr
 import os
+from flask import jsonify
 
 #-----------------------------------------------------------------------
 
@@ -61,12 +62,12 @@ app = Flask(__name__,  template_folder='.')
 
 # app = create_app()
 
-def handleDiscount(discount):
-    #FIGURE OUT HOW TO GET FOOD ID FROM HTML 
-    #food_id = request.args.get('item')
-    inputDiscount(discount, food_id)
-    app.doStuffStart()
-    app.doStuffStart()
+# def handleDiscount(discount):
+#     #FIGURE OUT HOW TO GET FOOD ID FROM HTML 
+#     #food_id = request.args.get('item')
+#     inputDiscount(discount, food_id)
+#     app.doStuffStart()
+#     app.doStuffStart()
 
 
 @app.route('/', methods=['GET'])
@@ -130,9 +131,46 @@ def accountPage():
 def feedbackPage():
     html = render_template('feedbackPage.html')
     response = make_response(html)
-    return response     
+    return response    
 
+# -----------------------------------------------------------------------
 
+# @app.route('api/updateDiscount', methods=['post'])
+# def updateDiscount():
+#     item_num = request.form["itemNum"]
+#     discount_val = request.form["discountVal"]
+
+#     # do whatever
+#     new_value = 1  # or something
+
+#     from flask import jsonify
+#     return jsonify(
+#         {
+#             itemNum=item_num,
+#             newValue=new_value,
+#         }
+#     )
+
+@app.route('/updateDiscount', methods=['POST'])
+def updateDiscount():
+    foodId = request.form["itemNum"]
+    discount = request.form["discountVal"]
+    database = Database()
+    try:
+        database.connect()
+        price = inputDiscount(discount, foodId)
+        newPrice = discount * price
+
+    except Exception as e:
+        errorMsg =  str(e)
+        stderr.write("database error: " + errorMsg)
+        exit(1)
+
+    return jsonify(
+            {
+                item_num: foodId,
+                discountVal: newPrice
+            } )
 #-----------------------------------------------------------------------
 
 if __name__ == '__main__':

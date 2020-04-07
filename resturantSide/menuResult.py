@@ -11,7 +11,8 @@ class MenuResult:
         self.food = food
         self.description = description
         #self.dietary = dietary
-        self.price = price 
+        self.price = price
+        self.food_id = food_id 
 
     def __str__(self):
         return self.food + ', ' + self.description
