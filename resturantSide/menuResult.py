@@ -7,7 +7,7 @@
 
 class MenuResult:
 
-    def __init__(self, food, description, price):
+    def __init__(self, food, description, price, food_id):
         self.food = food
         self.description = description
         #self.dietary = dietary
@@ -29,4 +29,6 @@ class MenuResult:
     def getPrice(self):
         return self.price
 
+    def getId(self):
+        return self.food_id
 
