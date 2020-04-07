@@ -47,6 +47,8 @@ class Database:
 
     def inputDiscount(self, discount, food_id):
         cursor = self._connection.cursor() 
+        print(discount)
+        print(food_id)
         stmstr2 = 'SELECT unit_price FROM menu ' +\
         'WHERE menu.food_id LIKE ?'
         cursor.execute(stmstr2, food_id)
