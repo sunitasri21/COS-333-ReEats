@@ -46,39 +46,23 @@ hr {
             discountVal: discountVal
           }
 
-          // $.post(url, data, changeValue(data["itemNum"], data["discountVal"]))
+          // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
           $.post(url, data);
-          $.get(url, data, changeValue(data["itemNum"], data["discountVal"]))
-           alert(data["discountVal"]);
-
-          // $.ajax({
-          //     type: "POST",
-          //     url: url,
-          //     data: data,
-          //     success: success,
-          //   });
+          // $.get(url, data, changeValue(data["itemNum"], data["discountVal"]))
+          //  alert(data["discountVal"]);
+          $.get(url, data2);
+           alert(data2["discountVal"]);
       }
 
       function applyDiscount(itemNum) {
           if (itemNum != null) {
-              // var newPrice = document.getElementById("item" + itemNum + "_price").textContent;
-              // var discount = document.getElementById("item" + itemNum + "_discount").value;
-              // var newPrice = document.getElementById("item" + itemNum + "_price");
-              // alert(newPrice)
               var discount = document.getElementById("item" + itemNum + "_discount").value;
-          // if (discount < 1) newPrice = newPrice * (1-discount); 
-          // else return;
           } 
 
           updateDiscount(itemNum, discount);
-          // document.getElementById("item" + itemNum + "_newPrice").textContent = newPrice.toPrecision(3);
-          // changeValue(itemNum, newPrice);
       }
 
       function changeValue(itemNum, newValue) {
-          // var newPrice = document.getElementById("item" + itemNum + "_price").textContent;
-          // var discount = document.getElementById("item" + itemNum + "_discount").value;
-          // if (discount < 1) newPrice = newPrice * (1-discount); 
           if ((itemNum != null) && (newValue != null)) {
           document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
           alert("hello- value")

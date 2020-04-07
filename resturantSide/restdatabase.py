@@ -46,19 +46,20 @@ class Database:
         return results
 
     def inputDiscount(self, discount, food_id):
-        #CHECK NEW TABLE NAME
-        print(discount)
-        print(food_id)
-        stmstr = 'INSERT INTO orders VALUES ?'  +\
-        'WHERE food_id LIKE ?;'
         cursor = self._connection.cursor() 
-        cursor.execute(stmstr, discounts, food_id)
         stmstr2 = 'SELECT unit_price FROM menu ' +\
-        'WHERE menu.food_id LIKE ?;'
+        'WHERE menu.food_id LIKE ?'
         cursor.execute(stmstr2, food_id)
         price = cursor.fetchone()
+        # stmstr = 'INSERT INTO order.discount VALUES ?'  +\
+        # 'WHERE food_id LIKE ?'
+        # cursor.execute(stmstr, discounts, food_id)
+        # teststmstr = 'SELECT order.discount FROM order'  +\
+        # 'WHERE food_id LIKE ?'
+        # cursor.execute(teststmstr, food_id)
+        # print(cursor.fetchone())
         cursor.close()
-        return price 
+        return price[0]
 
 
 
