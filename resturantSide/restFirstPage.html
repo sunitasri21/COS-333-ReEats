@@ -45,9 +45,12 @@ hr {
             itemNum: itemNum,
             discountVal: discountVal
           }
-
           // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
           $.post(url, data);
+          .done(function(data) { 
+            document.getElementById("item" + data.itemNum + "_newPrice").textContent = 
+            data.newPrice.toPrecision(3);              
+             alert(data.newPrice);
           // $.get(url, data, changeValue(data["itemNum"], data["discountVal"]))
           //  alert(data["discountVal"]);
           // $.get(url, data2);
