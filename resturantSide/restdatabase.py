@@ -53,7 +53,7 @@ class Database:
         price = cursor.fetchone()
         quantity = 1
         newPrice = (1 - float(discount)) * float(price[0])
-        stmstr = 'INSERT INTO order (food_id, discount, unit_price, newPrice, quantity) VALUES (?, ?, ?, ?, ?);'
+        stmstr = 'INSERT INTO order_table (food_id, discount, unit_price, new_price, quantity) VALUES (?, ?, ?, ?, ?);'
         #stmstr = 'INSERT INTO order.discount VALUES ?'  +\
         #'WHERE food_id LIKE ?'
         arguments = (food_id, discount, price[0], newPrice, quantity)
@@ -67,7 +67,7 @@ class Database:
 
     def pullNewPrice(self, food_id):
         cursor = self._connection.cursor() 
-        stmstr = 'SELECT newPrice FROM order ' +\
+        stmstr = 'SELECT new_price FROM order_table, menu ' +\
         'WHERE menu.food_id LIKE ?'
         cursor.execute(stmstr, food_id)
         newPrice = cursor.fetchone()
