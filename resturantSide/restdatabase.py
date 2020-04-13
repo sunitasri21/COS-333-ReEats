@@ -52,11 +52,11 @@ class Database:
         cursor.execute(stmstr2, food_id)
         price = cursor.fetchone()
         quantity = 1
-        newPrice = (1 - float(discount)) * float(price)
-        stmstr = 'INSERT INTO order (food_id, discount, unit_price, newPrice, quantity) VALUES ?;'
+        newPrice = (1 - float(discount)) * float(price[0])
+        stmstr = 'INSERT INTO order (food_id, discount, unit_price, newPrice, quantity) VALUES (?, ?, ?, ?, ?);'
         #stmstr = 'INSERT INTO order.discount VALUES ?'  +\
         #'WHERE food_id LIKE ?'
-        arguments = [food_id, discount, price, newPrice, quantity]
+        arguments = (food_id, discount, price[0], newPrice, quantity)
         cursor.execute(stmstr, arguments) 
         # teststmstr = 'SELECT order.discount FROM order'  +\
         # 'WHERE food_id LIKE ?'

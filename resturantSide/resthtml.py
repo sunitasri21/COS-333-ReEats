@@ -81,19 +81,29 @@ def updateDiscount():
         database.connect()
         database.inputDiscount(discount, foodId)
         newPrice = database.pullNewPrice(foodId)
+        retVal = jsonify(
+            itemNum=foodId,
+            discountVal=newPrice
+            )
+            # {
+            #     "itemNum": foodId,
+            #     "discountVal": newPrice
+            # } )
 
     except Exception as e:
         errorMsg =  str(e)
         stderr.write("database error: " + errorMsg)
-        exit(1)
+        raise e
+        # exit(1)
 
     # newPrice = (1 - float(discount)) * float(price)
     # return jsonify(
-    #         {
-    #             "itemNum": foodId,
-    #             "discountVal": newPrice
-    #         } )
-    return newPrice 
+    #     {
+    #         "itemNum": foodId,
+    #         "discountVal": newPrice
+    #     } )
+    return retVal, 200
+    # return newPrice 
 #-----------------------------------------------------------------------
 
 if __name__ == '__main__':

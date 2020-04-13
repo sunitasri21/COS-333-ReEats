@@ -39,18 +39,31 @@ hr {
 
 <script>
 
+     function changeValue(itemNum, newValue) {
+            if ((itemNum != null) && (newValue != null)) {
+            document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
+            alert("hello- value");
+          }
+          }
+
       function updateDiscount(itemNum, discountVal) {
           const url = "/updateDiscount";
           data = {
             itemNum: itemNum,
             discountVal: discountVal
           }
+
+          // changeValue(itemNum, discountVal);
+
           // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
-          $.post(url, data);
-          .done(function(data) { 
-            document.getElementById("item" + data.itemNum + "_newPrice").textContent = 
-            data.newPrice.toPrecision(3);              
-             alert(data.newPrice);
+          $.post(url, data)
+            .done(function(data) { 
+              changeValue(data.itemNum, data.discountVal)
+              // document.getElementById("item" + data.itemNum + "_newPrice").textContent = 
+              // data.newPrice.toPrecision(3);              
+              // alert(data.newPrice);
+            })
+
           // $.get(url, data, changeValue(data["itemNum"], data["discountVal"]))
           //  alert(data["discountVal"]);
           // $.get(url, data2);
@@ -62,15 +75,15 @@ hr {
               var discount = document.getElementById("item" + itemNum + "_discount").value;
           } 
 
-          updateDiscount(itemNum, discount);
+          updateDiscount(itemNum, parseFloat(discount));
       }
 
-      function changeValue(itemNum, newValue) {
-          if ((itemNum != null) && (newValue != null)) {
-          document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
-          alert("hello- value")
-        }
-        }
+      // function changeValue(itemNum, newValue) {
+      //     if ((itemNum != null) && (newValue != null)) {
+      //     document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
+      //     alert("hello- value");
+      //   }
+      //   }
 </script>
 
 </head>
