@@ -67,6 +67,41 @@ hr {
           updateDiscount(itemNum, parseFloat(discount));
       }
 
+      function getDiscount(itemNum) {
+          const url = "/getNewPrice";
+          data = {
+            itemNum: itemNum,
+          }
+
+          // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
+          
+          alert("before posting")
+
+          $.post(url, data)
+            .done(function(data) { 
+              return data.discountVal
+            })
+          
+          alert("after posting")
+      }
+
+      function submitChecks() {
+          const url = "/confirmationPage";
+          data = {
+            itemNum: itemNum,
+          }
+          
+          alert("before posting")
+
+          $.post(url, data)
+            .done(function(data) { 
+              return data.discountVal
+            })
+          
+          alert("after posting")
+      }
+      
+
 </script>
 
 </head>
@@ -92,7 +127,7 @@ hr {
         <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
 
         <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
-          
+
       </div>
     </div>
 
@@ -111,7 +146,7 @@ hr {
         <label for="restName"></label><br> -->
         <label
           style = "padding-left: 575px"
-          ><strong>Chennai Chimney
+          ><strong>Chennai Chimney: Order Confirmation
         </strong></label>
       
 <!--     </form> -->
@@ -119,38 +154,37 @@ hr {
     <hr color ="black">
      </div>
 
+    <form action="/confirmationPage", method="post"></form>
     <table cellspacing="2" cellpadding="2" style = "align:center">  
       <!-- align:"center" -->
       <tr>
-        <th><strong>Food Item</strong></th>
-        <th><strong>Description</strong></th>
+        <th><strong>Item No.</strong></th>
+        <th><strong>Name</strong></th>
 <!--         <td><strong>Dietary Restrictions</strong></td>
  -->    <th><strong>List Price</strong></th>
-        <th><strong>Discount</strong></th>
-        <th><strong>Discounted Price</strong></th>
-
+        <!-- <th><strong>Discount</strong></th> -->
+        <!-- <th><strong>Discounted Price</strong></th> -->
+        <!-- <th><strong>Select</strong></th> -->
        </tr>
-      {% for item in restaurant %}
+      {% for item in foodList %}
         <tr>
-          <td>{{ item.getFood()}}</td>
-          <td>{{ item.getDescription()}}</td>
-          <script>
-            var {id} = item.getId()
-          </script>
-          <td id="item{{item.getId()}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
-          <td>
-              <label for="discount"></label><br>
-              <input align = "right" type="text" id="item{{item.getId()}}_discount" name="discount" ><br><br>
-          </td>
-          <td> 
-            <input align = "right" type="button" 
-            onclick= "applyDiscount({{item.getId()}})" id="submit" name= "submit" value="Apply">
-            <label id="item{{item.getId()}}_newPrice" value="{{newPrice}}"> </label>
-          </td>
+          <td>{{ item[0]}}</td>
+          <td>{{ item[2]}}</td>
+          <td>{{ item[1]}}</td>
         </tr>
-
       {% endfor %}
+<!-- 
+      <div class="bottomnav">
+        <a label href="/restFP"
+        >Are you a restaurant owner? Click here!</label>
+      </a>
+    </div>
 
     </table>
+    <p align="center">
+    <input type="submit" value="Submit" onclick="submitChecks()">
+    </p>
+    </form> -->
+
   </body>
 </html>
