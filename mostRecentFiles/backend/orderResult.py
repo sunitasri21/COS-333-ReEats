@@ -1,18 +1,19 @@
 #!/usr/bin/env python
 
 #-----------------------------------------------------------------------
-# result.py
-# Author: Bob Dondero
+# OrderResult.py
+# Author: Arjun Krishnan
 #-----------------------------------------------------------------------
 
-class MenuResult:
+class OrderResult:
 
-    def __init__(self, food, description, price, food_id):
+    def __init__(self, food, description, price, food_id, discount):
         self.food = food
         self.description = description
         #self.dietary = dietary
         self.price = price
         self.food_id = food_id 
+        self.discount = discount 
 
     def __str__(self):
         return self.food + ', ' + self.description
@@ -32,4 +33,7 @@ class MenuResult:
 
     def getId(self):
         return self.food_id
+
+    def getDiscount(self):
+        return self.discount
 

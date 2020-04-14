@@ -62,37 +62,35 @@ hr {
      </div>
 
   </head>
+
   <body>
 
-    <div class="title" >
-
+    <div class="title" > 
     <hr color ="black">
- <!--    <form action="/" method="get">
-        <label for="restName"></label><br> -->
+
         <label
           style = "padding-left: 575px"
-          ><strong>Preview
+          ><strong>Please Login:
         </strong></label>
-<!--     </form> -->
 
     <hr color ="black">
-    </div>
+    
+<div class="login-page">
+  <div class="form">
 
-    <table cellspacing="2" cellpadding="2" align:"center">
-      <tr>
-        <td style = "padding-left: 170px"><strong>Food Item</strong></td>
-        <td style = "padding-left: 170px"><strong>List Price</strong></td>
-        <td style = "padding-left: 170px"><strong>Discount</strong></td>
-        <td style = "padding-left: 170px"><strong>Discounted Price</strong></td>
-      </tr>
-      {% for item in restaurant %}
-        <tr>
-          <td style = "padding-left: 170px">{{ item.getFood()}}</td>
-          <td style = "padding-left: 170px">{{ item.getListPrice()}}</td>
-          <td style = "padding-left: 170px" id="price"> {{item.getDiscount() }} </td>
-          <td style = "padding-left: 170px" id="price"> {{item.getPrice() }} </td>
-        </tr>
-      {% endfor %}
-    </table>
+    <form action="" method="post">
+        
+        <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+         <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+        <input class="btn btn-default" type="submit" value="Login">
+        <hr>
+       </form>
+        {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+  </div>
+</div>
   </body>
 </html>

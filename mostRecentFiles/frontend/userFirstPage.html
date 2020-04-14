@@ -42,7 +42,6 @@ hr {
      function changeValue(itemNum, newValue) {
             if ((itemNum != null) && (newValue != null)) {
             document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
-            alert("hello- value");
           }
           }
 
@@ -53,21 +52,11 @@ hr {
             discountVal: discountVal
           }
 
-          // changeValue(itemNum, discountVal);
-
           // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
           $.post(url, data)
             .done(function(data) { 
               changeValue(data.itemNum, data.discountVal)
-              // document.getElementById("item" + data.itemNum + "_newPrice").textContent = 
-              // data.newPrice.toPrecision(3);              
-              // alert(data.newPrice);
             })
-
-          // $.get(url, data, changeValue(data["itemNum"], data["discountVal"]))
-          //  alert(data["discountVal"]);
-          // $.get(url, data2);
-          //  alert(data2["discountVal"]);
       }
 
       function applyDiscount(itemNum) {
@@ -78,12 +67,41 @@ hr {
           updateDiscount(itemNum, parseFloat(discount));
       }
 
-      // function changeValue(itemNum, newValue) {
-      //     if ((itemNum != null) && (newValue != null)) {
-      //     document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
-      //     alert("hello- value");
-      //   }
-      //   }
+      function getDiscount(itemNum) {
+          const url = "/getNewPrice";
+          data = {
+            itemNum: itemNum,
+          }
+
+          // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
+          
+          alert("before posting")
+
+          $.post(url, data)
+            .done(function(data) { 
+              return data.discountVal
+            })
+          
+          alert("after posting")
+      }
+
+      // function submitChecks() {
+      //     const url = "/confirmationPage";
+      //     data = {
+      //       itemNum: itemNum,
+      //     }
+          
+      //     alert("before posting")
+
+      //     $.post(url, data)
+      //       .done(function(data) { 
+      //         return data.discountVal
+      //       })
+          
+      //     alert("after posting")
+      // }
+      
+
 </script>
 
 </head>
@@ -107,6 +125,8 @@ hr {
         <a label href = "/checkoutPage" ></label> <span class="w3-bar-item w3-button">Checkout</a>
 
         <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
+
+        <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
 
       </div>
     </div>
@@ -134,6 +154,7 @@ hr {
     <hr color ="black">
      </div>
 
+    <form action="/confirmationPage", method="post">
     <table cellspacing="2" cellpadding="2" style = "align:center">  
       <!-- align:"center" -->
       <tr>
@@ -141,47 +162,37 @@ hr {
         <th><strong>Description</strong></th>
 <!--         <td><strong>Dietary Restrictions</strong></td>
  -->    <th><strong>List Price</strong></th>
-        <th><strong>Discount</strong></th>
+        <!-- <th><strong>Discount</strong></th> -->
         <th><strong>Discounted Price</strong></th>
-
-
-     <!--  </tr>
-      {% for item in restaurant %}
-        <tr>
-          <td>{{ item.getFood()}}</td>
-          <td>{{ item.getDescription()}}</td>
-          <td id="item{{loop.index}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
-          <td>
-              <label for="discount"></label><br>
-              <input align = "right" type="text" id="item{{loop.index}}_discount" name="discount" value="{{discount}}"><br><br>
-       </td>
-          <td> 
-            <input align = "right" type="button" onclick="changeValue({{loop.index}})" id="submit" name="submit" value="Apply">
-            <label id="item{{loop.index}}_newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>
-          </td>
-        </tr>
-
-      {% endfor %} -->
-
+        <th><strong>Select</strong></th>
        </tr>
       {% for item in restaurant %}
+      {% if item.getDiscount() != 0 and item.getDiscount() != item.getPrice() %}
         <tr>
           <td>{{ item.getFood()}}</td>
           <td>{{ item.getDescription()}}</td>
           <td id="item{{item.getId()}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
-          <td>
-              <label for="discount"></label><br>
-              <input align = "right" type="text" id="item{{item.getId()}}_discount" name="discount" ><br><br>
-          </td>
-          <td> 
-            <input align = "right" type="button" 
-            onclick= "applyDiscount({{item.getId()}})" id="submit" name= "submit" value="Apply">
-            <label id="item{{item.getId()}}_newPrice" value="{{newPrice}}"> {{item.getPrice() * discount}} </label>
+          <td id="item{{item.getId()}}_discount" value={{item.getDiscount()}}> {{item.getDiscount()}} </td>
+          <!-- source = https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_checkbox -->
+          <!-- <td><input type="checkbox" id="item{{item.getId()}}_check" name="check_list[]" value={{item.getId()}}> -->
+          <td><input type="checkbox" name="check_list[]" value={{item.getId()}}>
+          <label for="vehicle1"> </label><br>
           </td>
         </tr>
-
+      {% endif %}
       {% endfor %}
 
+      <div class="bottomnav">
+        <a label href="/restFP"
+        >Are you a restaurant owner? Click here!</label>
+      </a>
+    </div>
+
     </table>
+    <p align="center">
+    <input type="submit" value="Submit" onclick="submitChecks()">
+    </p>
+    </form>
+
   </body>
 </html>

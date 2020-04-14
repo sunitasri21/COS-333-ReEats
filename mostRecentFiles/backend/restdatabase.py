@@ -9,6 +9,7 @@ from sqlite3 import connect
 from sys import stderr
 from os import path
 from menuResult import MenuResult
+from orderResult import OrderResult
 
 #-----------------------------------------------------------------------
 
@@ -39,24 +40,52 @@ class Database:
         row = cursor.fetchone()
         while row is not None:  
             result = MenuResult(str(row[0]), str(row[1]), str(row[2]), str(row[3]))
-            results.append(result);
+            results.append(result)
+            row = cursor.fetchone()
+        cursor.close()
+
+        return results
+    
+    def menuSearchUser(self, restName):
+        cursor = self._connection.cursor() 
+        restIdString = 'SELECT restaurant_id FROM restaurants ' +\
+         'WHERE restaurant_name LIKE "Chennai Chimney"'
+        cursor.execute(restIdString)
+        restId = cursor.fetchone()[0]
+        print("HELLO")
+        stmStr = 'SELECT menu.food, menu.description, menu.unit_price, menu.food_id, new_price FROM menu, order_table ' +\
+        'WHERE menu.food_id = order_table.food_id;'
+        cursor.execute(stmStr)
+
+        results = []
+        row = cursor.fetchone()
+        while row is not None:  
+            result = OrderResult(str(row[0]), str(row[1]), str(row[2]), str(row[3]), str(row[4]))
+            results.append(result)
             row = cursor.fetchone()
         cursor.close()
 
         return results
 
-    def inputDiscount(self, discount, food_id):
+    def inputDiscount(self, discount, foodid):
         cursor = self._connection.cursor() 
         stmstr2 = 'SELECT unit_price FROM menu ' +\
         'WHERE menu.food_id LIKE ?'
-        cursor.execute(stmstr2, food_id)
+        cursor.execute(stmstr2, foodid)
         price = cursor.fetchone()
         quantity = 1
         newPrice = (1 - float(discount)) * float(price[0])
-        stmstr = 'INSERT INTO order_table (food_id, discount, unit_price, new_price, quantity) VALUES (?, ?, ?, ?, ?);'
+        stmstr = 'UPDATE order_table SET discount = ?, unit_price = ?, new_price = ?, quantity = ? ' +\
+        'WHERE food_id LIKE ?;'
+        
+        # stmstr = 'INSERT INTO order_table (discount, unit_price, new_price, quantity, food_id) VALUES (?, ?, ?, ?, ?);'
+
+        # 'WHERE food_id LIKE ?
+
+        print(str(foodid) + " " + str(discount))
         #stmstr = 'INSERT INTO order.discount VALUES ?'  +\
         #'WHERE food_id LIKE ?'
-        arguments = (food_id, discount, price[0], newPrice, quantity)
+        arguments = (discount, price[0], newPrice, quantity, foodid)
         cursor.execute(stmstr, arguments) 
         # teststmstr = 'SELECT order.discount FROM order'  +\
         # 'WHERE food_id LIKE ?'
@@ -68,10 +97,12 @@ class Database:
     def pullNewPrice(self, food_id):
         cursor = self._connection.cursor() 
         stmstr = 'SELECT new_price FROM order_table, menu ' +\
-        'WHERE menu.food_id LIKE ?'
+        'WHERE menu.food_id LIKE ?;'
         cursor.execute(stmstr, food_id)
         newPrice = cursor.fetchone()
         cursor.close()
+        print(newPrice[0])
+        print("hello")
         return newPrice[0]
 
 
