@@ -18,13 +18,13 @@ from flask import g
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
-template_dir = os.path.join(os.path.dirname(__file__), 'frontend')
+template_dir = os.path.join(os.path.dirname(__file__), '../frontend')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
 # -----------------------------------------------------------------------
 
 def create_app():
-    app = Flask(__name__,  template_folder='frontend')
+    app = Flask(__name__,  template_folder='../frontend')
 
     with app.app_context():
         get_db()
