@@ -105,6 +105,17 @@ class Database:
         print("hello")
         return newPrice[0]
 
+    def pullName(self, food_id):
+        cursor = self._connection.cursor() 
+        stmstr = 'SELECT food FROM menu ' +\
+        'WHERE menu.food_id LIKE ?;'
+        cursor.execute(stmstr, food_id)
+        newPrice = cursor.fetchone()
+        cursor.close()
+        print(newPrice[0])
+        print("hello")
+        return newPrice[0]
+
 
 #-----------------------------------------------------------------------
 
