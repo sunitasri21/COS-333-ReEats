@@ -54,8 +54,6 @@ hr {
         <a label href = "/checkoutPage" ></label> <span class="w3-bar-item w3-button">Checkout</a>
 
         <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
-          
-        <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
 
       </div>
     </div>
@@ -72,28 +70,27 @@ hr {
 
         <label
           style = "padding-left: 575px"
-          ><strong>Account
+          ><strong>Please Login:
         </strong></label>
 
     <hr color ="black">
-    </div>
+    
+<div class="login-page">
+  <div class="form">
 
-    <table cellspacing="2" cellpadding="2" align:"center">
-      <tr>
-        <td style = "padding-left: 120px"><strong>username</strong></td>
-        <td style = "padding-left: 120px"><strong>email</strong></td>
-<!--         <td><strong>Dietary Restrictions</strong></td>
- -->    <td style = "padding-left: 120px"><strong>password</strong></td>
-        <td style = "padding-left: 120px"><strong>payment details</strong></td>
-      </tr>
-       <tr>
-        <td style = "padding-left: 120px">chennai_chimney</td>
-        <td style = "padding-left: 120px">chennaichimney@gmail.com</td>
-<!--         <td><strong>Dietary Restrictions</strong></td>
- -->    <td style = "padding-left: 120px">*******</td>
-        <td style = "padding-left: 120px"><a href="https://www.venmo.com/Noa-Zarur"> link your venmo </a></td>
-      </tr>
-    </table>
+    <form action="" method="post">
+        
+        <input type="text" placeholder="Username" name="username" value="{{
+          request.form.username }}">
+         <input type="password" placeholder="Password" name="password" value="{{
+          request.form.password }}">
+        <input class="btn btn-default" type="submit" value="Login">
+        <hr>
+       </form>
+        {% if error %}
+        <p class="error"><strong>Error:</strong> {{ error }}
+      {% endif %}
+  </div>
+</div>
   </body>
 </html>
-
