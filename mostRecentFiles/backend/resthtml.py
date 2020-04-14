@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+
 #-----------------------------------------------------------------------
 # resthtml.py
 # Author: Sunita Srivatsan
@@ -8,8 +9,10 @@ import flask
 from sys import argv, stderr
 from restdatabase import Database
 from time import localtime, asctime, strftime
-from flask import Flask, request, make_response, redirect, url_for
-from flask import render_template
+from flask import Flask, request, make_response, redirect, url_for, session, abort
+
+
+from flask import render_template, flash
 import jinja2
 from sys import exit, argv, stderr
 import os
@@ -21,6 +24,8 @@ template_dir = os.path.join(os.path.dirname(__file__), '../frontend')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
 app = Flask(__name__,  template_folder='../frontend/')
+
+
 
 @app.route('/', methods=['GET'])
 def searchResults():
@@ -43,7 +48,11 @@ def searchResults():
 
     html = render_template(template, restaurant=searchResults, discount=discount)
     response = make_response(html)
-    return response         
+    
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response       
 
 # -----------------------------------------------------------------------
 
@@ -51,7 +60,12 @@ def searchResults():
 def checkoutPage():
     html = render_template('checkoutPage.html')
     response = make_response(html)
-    return response
+    
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response 
+
 
 # -----------------------------------------------------------------------
 
@@ -59,7 +73,11 @@ def checkoutPage():
 def accountPage():
     html = render_template('accountPage.html')
     response = make_response(html)
-    return response     
+    
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response    
 
 # -----------------------------------------------------------------------
 
@@ -67,8 +85,31 @@ def accountPage():
 def feedbackPage():
     html = render_template('feedbackPage.html')
     response = make_response(html)
-    return response    
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response   
 
+# -----------------------------------------------------------------------
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            session['logged_in'] = True
+            return redirect(url_for('accountPage'))
+    return render_template('login.html', error=error) 
+
+# -----------------------------------------------------------------------
+
+@app.route("/logout")
+def logout():
+    session['logged_in'] = False
+    return login()
+    
 # -----------------------------------------------------------------------
 
 @app.route('/updateDiscount', methods=['POST'])
@@ -102,4 +143,5 @@ if __name__ == '__main__':
         stderr.write('Error: port is not an integer')
         print('Usage: ' + argv[0] + ' integer port number')
         raise Exception("port is not an integer")
+    app.secret_key = os.urandom(12)    
     app.run(host='localhost', port=int(argv[1]), debug=True)
