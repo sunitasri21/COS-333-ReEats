@@ -55,6 +55,14 @@ def checkoutPage():
 
 # -----------------------------------------------------------------------
 
+@app.route('/restFirstPage', methods=['GET'])
+def restFirstPage():
+    html = render_template('restFirstPage.html')
+    response = make_response(html)
+    return response
+
+# -----------------------------------------------------------------------
+
 @app.route('/accountPage', methods=['GET'])
 def accountPage():
     html = render_template('accountPage.html')
