@@ -107,7 +107,8 @@ class Database:
         cursor = self._connection.cursor() 
         stmstr = 'SELECT food FROM menu ' +\
         'WHERE menu.food_id LIKE ?;'
-        cursor.execute(stmstr, food_id)
+        food_id = int(food_id)
+        cursor.execute(stmstr, (food_id, ))
         newPrice = cursor.fetchone()
         cursor.close()
         return newPrice[0]
