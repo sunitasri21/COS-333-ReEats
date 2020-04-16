@@ -161,24 +161,68 @@ def feedbackPage():
         return response     
 # -----------------------------------------------------------------------
 
+# -----------------------------------------------------------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    error = None
-    if request.method == 'POST':
-        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
-            error = 'Invalid Credentials. Please try again.'
-        else:
+    # Output message if something goes wrong...
+    msg = ''
+    # Check if "username" and "password" POST requests exist (user submitted form)
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
+        # Create variables for easy access
+        username = request.form['username']
+        password = request.form['password']    
+        # Check if account exists using MySQL
+        database = Database()
+        database.connect()
+        restaurant, user = database.account_search(username, password)
+        # If restaurant account exists in accounts table in out database
+        if restaurant:
+            # Create session data, we can access this data in other routes
             session['logged_in'] = True
+            session['username'] = restaurant[1]  
+            session['id'] = restaurant[0]
+            session['restaurant_name'] = database.restaurant_search(restaurant[0])
+            # Redirect to home page
             return redirect(url_for('accountPage'))
-    return make_response(render_template('login.html', error=error))
+        elif user:
+            session['logged_in'] = True
+            session['id'] = user['id']
+            session['username'] = user['username']
+            return 'User Logged in successfully!'
+        else:          
+            # Account doesnt exist or username/password incorrect
+            msg = 'Incorrect username/password!'
+    # Show the login form with message (if any)
+    return render_template('login.html', msg=msg)    
 
 # -----------------------------------------------------------------------
-
 @app.route("/logout")
 def logout():
+    # Remove session data, this will log the user out
     session['logged_in'] = False
-    return login()
-    
+    session.pop('id', None)
+    session.pop('username', None)
+    session.pop('restaurant_name', None)
+    # Redirect to login page
+    return redirect(url_for('login'))
+
+# -----------------------------------------------------------------------
+@app.route('/login/register', methods=['GET', 'POST'])
+def register():
+    # Output message if something goes wrong...
+    msg = ''
+    # Check if "username", "password" and "email" POST requests exist (user submitted form)
+    if request.method == 'POST' and 'username' in request.form and 'password' in request.form and 'email' in request.form:
+        # Create variables for easy access
+        username = request.form['username']
+        password = request.form['password']
+        email = request.form['email']
+    elif request.method == 'POST':
+        # Form is empty... (no POST data)
+        msg = 'Please fill out the form!'
+    # Show registration form with message (if any)
+    return render_template('register.html', msg=msg)
+
 # -----------------------------------------------------------------------
 
 @app.route('/updateDiscount', methods=['POST'])
