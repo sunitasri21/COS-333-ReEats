@@ -16,6 +16,9 @@ body {
   	box-shadow: 0 0 9px 0 #cc6666;
   	margin: 100px auto;
 }
+.msg{
+    color: red;
+}
 .login h1, .register h1 {
   	text-align: center;
   	color: #cc6666;
