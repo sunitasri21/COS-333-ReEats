@@ -41,11 +41,11 @@ hr {
 </head>
 
   <head>
-  <title>Chennai Chimney</title>   
+  <title>Register</title>   
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-  <link rel="stylesheet" href="static/login.css" type="text/css">
+      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+      <link rel="stylesheet" href="static/login.css" type="text/css">
   <div class="topnav">
 
      <div class="w3-bar w3-white w3-wide w3-padding w3-card">
@@ -62,26 +62,21 @@ hr {
         <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
 
       </div>
-    </div>
-
-    </a>
      </div>
-
-  </head>
+      </div>
+   </head>
 
   <body>
 
     <div class="title" > 
 
-
-    
-<div class="login">
-			<h1>Please Login</h1>
+<div class="register">
+			<h1>Register</h1>
 			<div class="links">
-				<a href="{{ url_for('login') }}" class="active">Login</a>
-				<a href="{{ url_for('register') }}">Register</a>
+				<a href="{{ url_for('login') }}">Login</a>
+				<a href="{{ url_for('register') }}" class="active">Register</a>
 			</div>
-			<form action="{{ url_for('login') }}" method="post">
+			<form action="{{ url_for('register') }}" method="post" autocomplete="off">
 				<label for="username">
 					<i class="fas fa-user"></i>
 				</label>
@@ -90,12 +85,13 @@ hr {
 					<i class="fas fa-lock"></i>
 				</label>
 				<input type="password" name="password" placeholder="Password" id="password" required>
+				<label for="email">
+					<i class="fas fa-envelope"></i>
+				</label>
+				<input type="email" name="email" placeholder="Email" id="email" required>
 				<div class="msg">{{ msg }}</div>
-
-
-				<input type="submit" value="Login">
+				<input type="submit" value="Register">
 			</form>
 		</div>
-  </body>
+	</body>
 </html>
-
