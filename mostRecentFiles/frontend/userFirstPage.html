@@ -172,7 +172,7 @@ hr {
           <td>{{ item.getFood()}}</td>
           <td>{{ item.getDescription()}}</td>
           <td id="item{{item.getId()}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
-          <td id="item{{item.getId()}}_discount" value={{item.getDiscount()}}> {{item.getDiscount()}} </td>
+          <td id="item{{item.getId()}}_discount" value={{item.getDiscount()}}> {{item.getNewPrice()}} </td>
           <!-- source = https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_checkbox -->
           <!-- <td><input type="checkbox" id="item{{item.getId()}}_check" name="check_list[]" value={{item.getId()}}> -->
           <td><input type="checkbox" name="check_list[]" value={{item.getId()}}>

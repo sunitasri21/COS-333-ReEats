@@ -87,12 +87,12 @@ hr {
         <td style = "padding-left: 170px"><strong>Discount</strong></td>
         <td style = "padding-left: 170px"><strong>Discounted Price</strong></td>
       </tr>
-      {% for item in restaurant %}
+      {% for item in items %}
         <tr>
           <td style = "padding-left: 170px">{{ item.getFood()}}</td>
-          <td style = "padding-left: 170px">{{ item.getListPrice()}}</td>
-          <td style = "padding-left: 170px" id="price"> {{item.getDiscount() }} </td>
-          <td style = "padding-left: 170px" id="price"> {{item.getPrice() }} </td>
+          <td style = "padding-left: 170px">{{item.getPrice()}}</td>
+          <td style = "padding-left: 170px" id="price"> {{item.getDiscount()}} </td>
+          <td style = "padding-left: 170px" id="price"> {{item.getNewPrice()}} </td>
         </tr>
       {% endfor %}
     </table>
