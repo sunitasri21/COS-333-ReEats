@@ -183,12 +183,12 @@ def login():
             session['id'] = restaurant[0]
             session['restaurant_name'] = database.restaurant_search(restaurant[0])
             # Redirect to home page
-            return redirect(url_for('accountPage'))
+            return redirect(url_for('restPage'))
         elif user:
             session['logged_in'] = True
-            session['id'] = user['id']
-            session['username'] = user['username']
-            return 'User Logged in successfully!'
+            session['id'] = user[0]
+            session['username'] = user[1]
+            return redirect(url_for('searchResults'))
         else:          
             # Account doesnt exist or username/password incorrect
             msg = 'Incorrect username/password!'
