@@ -26,6 +26,26 @@ class Database:
                     
     def disconnect(self):
         self._connection.close()
+        
+    def account_search(self, username, password):
+        cursor = self._connection.cursor() 
+        rest_string = 'SELECT * FROM restaurant_accounts WHERE username LIKE ? AND password LIKE ?'
+        user_string = 'SELECT * FROM user_accounts WHERE username LIKE ? AND password LIKE ?'
+        cursor.execute(rest_string, (username, password,))
+        rest = cursor.fetchone()
+        cursor.execute(user_string, (username, password,))
+        user = cursor.fetchone()
+        cursor.close()
+        return rest, user
+    
+    def restaurant_search(self, restaurant_id):
+        cursor = self._connection.cursor() 
+        restString = 'SELECT restaurant_name FROM restaurants ' +\
+         'WHERE restaurant_id = ?'
+        cursor.execute(restString, (restaurant_id,))
+        restaurant_name = cursor.fetchone()[0]
+        cursor.close()
+        return restaurant_name
 
     def menuSearch(self, restName):
         cursor = self._connection.cursor() 
