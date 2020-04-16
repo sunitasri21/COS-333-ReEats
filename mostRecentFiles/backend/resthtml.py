@@ -18,13 +18,13 @@ from flask import g
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
-template_dir = os.path.join(os.path.dirname(__file__), 'frontend')
+template_dir = os.path.join(os.path.dirname(__file__), '../frontend')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
 # -----------------------------------------------------------------------
 
 def create_app():
-    app = Flask(__name__,  template_folder='frontend')
+    app = Flask(__name__,  template_folder='../frontend')
 
     with app.app_context():
         get_db()
@@ -151,15 +151,43 @@ def feedbackPage():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
+    # if request.method == 'POST':
+    #     if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+    #         error = 'Invalid Credentials. Please try again.'
+    #     else:
+    #         session['logged_in'] = True
+    #         return redirect(url_for('accountPage'))
+    return make_response(render_template('login.html', error=error))
+
+# -----------------------------------------------------------------------
+
+@app.route('/restLogIn', methods=['GET', 'POST'])
+def restLogIn():
+    error = None
     if request.method == 'POST':
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'Invalid Credentials. Please try again.'
         else:
             session['logged_in'] = True
-            return redirect(url_for('accountPage'))
-    return make_response(render_template('login.html', error=error))
+            return redirect(url_for('restPage'))
+    return make_response(render_template('restLogIn.html', error=error))
 
 # -----------------------------------------------------------------------
+
+@app.route('/userLogIn', methods=['GET', 'POST'])
+def userLogIn():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            session['logged_in'] = True
+            return redirect(url_for('searchResults'))
+    return make_response(render_template('userLogIn.html', error=error))
+
+# -----------------------------------------------------------------------
+
+
 
 @app.route("/logout")
 def logout():
