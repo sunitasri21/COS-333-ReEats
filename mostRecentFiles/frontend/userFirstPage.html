@@ -3,7 +3,9 @@
 
 <head>
 <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
+<link rel="stylesheet" href="static/userPage.css" type="text/css">
 <style>
+
 table {
   border-collapse: collapse;
   width: 100%;
@@ -33,6 +35,31 @@ hr {
   color: white;
   font-family: 'Source Code Pro';
 }
+
+input[type="submit"] {
+  font-family: "Source Code Pro";
+  width: 17%;
+  background: #cc6666;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 24px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition: all 0.3s;
+  margin-top: -4px;
+  margin-left:  1172px;
+  margin-right: 400px;
+  font-weight: 700;
+  display: block;
+  float: none;
+  text-align: center;
+}
+input [type="submit"]:hover {
+  background: #cc4949;
+}
+
 </style>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
@@ -107,7 +134,7 @@ hr {
 </head>
 
   <head>
-  <title>Chennai Chimney</title> 
+  <title>Chennai Chimney: Available Discounts</title> 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
@@ -118,13 +145,13 @@ hr {
 
       <div class="w3-right w3-hide-small">
 
-        <a label href = "/" ></label> <span class="w3-bar-item w3-button">Menu</a>
+        <a label href = "/userFP" ></label> <span class="w3-bar-item w3-button">Menu</a>
 
-        <a label href = "/accountPage" ></label> <span class="w3-bar-item w3-button">Account</a>
+        <a label href = "/userAccount" ></label> <span class="w3-bar-item w3-button">Account</a>
 
-        <a label href = "/checkoutPage" ></label> <span class="w3-bar-item w3-button">Checkout</a>
+        <a label href = "/userFP" ></label> <span class="w3-bar-item w3-button">Checkout</a>
 
-        <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
+        <a label href = "/userFeedback" ></label> <span class="w3-bar-item w3-button">Feedback</a>
 
         <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
 
@@ -164,8 +191,22 @@ hr {
  -->    <th><strong>List Price</strong></th>
         <!-- <th><strong>Discount</strong></th> -->
         <th><strong>Discounted Price</strong></th>
+        <th><strong>Quantity Available</strong></th>
+        <th><strong>Order Quantity</strong></th>
         <th><strong>Select</strong></th>
        </tr>
+      {% if restaurant|length == 0%}
+      <td>
+        No active discounts available at this time!
+      </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      <td> </td>
+      {% endif %}
+
       {% for item in restaurant %}
       {% if item.getDiscount() != 0 and item.getDiscount() != item.getPrice() %}
         <tr>
@@ -173,8 +214,13 @@ hr {
           <td>{{ item.getDescription()}}</td>
           <td id="item{{item.getId()}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
           <td id="item{{item.getId()}}_discount" value={{item.getDiscount()}}> {{item.getNewPrice()}} </td>
+          <td id="item{{item.getId()}}_quantity" value={{item.getQuantity()}}> {{item.getQuantity()}} </td>
           <!-- source = https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_checkbox -->
           <!-- <td><input type="checkbox" id="item{{item.getId()}}_check" name="check_list[]" value={{item.getId()}}> -->
+          <td>
+            <label for="quantity"></label><br>
+            <input align = "right" style="width:70%"  type="text" id="item{{item.getId()}}_quantity" name="item{{item.getId()}}_quantity" ><br><br>
+          </td>
           <td><input type="checkbox" name="check_list[]" value={{item.getId()}}>
           <label for="vehicle1"> </label><br>
           </td>
@@ -182,17 +228,17 @@ hr {
       {% endif %}
       {% endfor %}
 
-      <div class="bottomnav">
+      <!-- <div class="bottomnav">
         <a label href="/restFP"
         >Are you a restaurant owner? Click here!</label>
       </a>
-    </div>
+    </div> -->
 
     </table>
     <p align="center">
-    <input type="submit" value="Submit" onclick="submitChecks()">
+    <input type="submit" value="SUBMIT" onclick="submitChecks()">
     </p>
-    </form>
+  </form>
 
   </body>
 </html>

@@ -45,10 +45,11 @@ hr {
           }
           }
 
-      function updateDiscount(itemNum, discountVal) {
+      function updateDiscount(itemNum, quantity, discountVal) {
           const url = "/updateDiscount";
           data = {
             itemNum: itemNum,
+            quantity: quantity,
             discountVal: discountVal
           }
 
@@ -62,9 +63,10 @@ hr {
       function applyDiscount(itemNum) {
           if (itemNum != null) {
               var discount = document.getElementById("item" + itemNum + "_discount").value;
+              var quantity = document.getElementById("item" + itemNum + "_quantity").value;
           } 
 
-          updateDiscount(itemNum, parseFloat(discount));
+          updateDiscount(itemNum, parseInt(quantity), parseFloat(discount));
       }
 
 </script>
@@ -83,13 +85,13 @@ hr {
 
       <div class="w3-right w3-hide-small">
 
-        <a label href = "/" ></label> <span class="w3-bar-item w3-button">Menu</a>
+        <a label href = "/restFP" ></label> <span class="w3-bar-item w3-button">Menu</a>
 
-        <a label href = "/accountPage" ></label> <span class="w3-bar-item w3-button">Account</a>
+        <a label href = "/restAccount" ></label> <span class="w3-bar-item w3-button">Account</a>
 
-        <a label href = "/checkoutPage" ></label> <span class="w3-bar-item w3-button">Checkout</a>
+        <a label href = "/restDiscount" ></label> <span class="w3-bar-item w3-button">Discounts</a>
 
-        <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
+        <a label href = "/restFeedback" ></label> <span class="w3-bar-item w3-button">Feedback</a>
 
         <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
           
@@ -126,6 +128,7 @@ hr {
         <th><strong>Description</strong></th>
 <!--         <td><strong>Dietary Restrictions</strong></td>
  -->    <th><strong>List Price</strong></th>
+        <th><strong>Quantity</strong></th>
         <th><strong>Discount</strong></th>
         <th><strong>Discounted Price</strong></th>
 
@@ -139,8 +142,12 @@ hr {
           </script>
           <td id="item{{item.getId()}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
           <td>
+            <label for="quantity"></label><br>
+            <input align = "right" style="width:70%"  type="text" id="item{{item.getId()}}_quantity" name="quantity" ><br><br>
+          </td>
+          <td>
               <label for="discount"></label><br>
-              <input align = "right" type="text" id="item{{item.getId()}}_discount" name="discount" ><br><br>
+              <input align = "right" style="width:70%" type="text" id="item{{item.getId()}}_discount" name="discount" ><br><br>
           </td>
           <td> 
             <input align = "right" type="button" 

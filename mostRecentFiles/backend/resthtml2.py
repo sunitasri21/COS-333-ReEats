@@ -45,8 +45,8 @@ def get_db():
 app = create_app()
 
 # -----------------------------------------------------------------------
-
 @app.route('/', methods=['GET'])
+@app.route('/userFP', methods=['GET'])
 def searchResults():
     restName = str(request.args.get('restName')) or ""
     discount = request.args.get('discount', default=1) 
@@ -102,7 +102,7 @@ def restPage():
 
 # -----------------------------------------------------------------------
 
-@app.route('/checkoutPage', methods=['GET'])
+@app.route('/restDiscount', methods=['GET'])
 def checkoutPage():
     database = get_db()
     try:
@@ -122,7 +122,7 @@ def checkoutPage():
         stderr.write("database error: " + errorMsg)
         raise e
 
-    template = jinja_env.get_template("checkoutPage.html")
+    template = jinja_env.get_template("restDiscount.html")
 
     html = render_template(template, items=results)
     response = make_response(html)
@@ -141,9 +141,9 @@ def checkoutPage():
 
 # -----------------------------------------------------------------------
 
-@app.route('/accountPage', methods=['GET'])
-def accountPage():
-    html = render_template('accountPage.html')
+@app.route('/restAccount', methods=['GET'])
+def restAccount():
+    html = render_template('restAccount.html')
     response = make_response(html)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -151,9 +151,9 @@ def accountPage():
         return response     
 # -----------------------------------------------------------------------
 
-@app.route('/feedbackPage', methods=['GET'])
-def feedbackPage():
-    html = render_template('feedbackPage.html')
+@app.route('/userAccount', methods=['GET'])
+def userAccount():
+    html = render_template('userAccount.html')
     response = make_response(html)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -161,6 +161,23 @@ def feedbackPage():
         return response     
 # -----------------------------------------------------------------------
 
+@app.route('/userFeedback', methods=['GET'])
+def userFeedback():
+    html = render_template('userFeedback.html')
+    response = make_response(html)
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response  
+# -----------------------------------------------------------------------
+@app.route('/restFeedback', methods=['GET'])
+def restFeedback():
+    html = render_template('restFeedback.html')
+    response = make_response(html)
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response  
 # -----------------------------------------------------------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -228,10 +245,11 @@ def register():
 @app.route('/updateDiscount', methods=['POST'])
 def updateDiscount():
     foodId = request.form["itemNum"]
+    quantity = request.form["quantity"]
     discount = request.form["discountVal"]
     database = get_db()
     try:
-        database.inputDiscount(discount, foodId)
+        database.inputDiscount(discount, quantity, foodId)
 
         # database.connect()
         newPrice = database.pullNewPrice(foodId)
@@ -276,13 +294,18 @@ def confirmationPage():
     database = get_db()
 
     food_list = []
+    total_value = 0
     
     for value in check_list:
         try:
             # database.connect()
             newPrice = database.pullNewPrice(value)
+            name = "item" + str(value) + "_quantity"
+            quantity = request.form[name]
             foodName = database.pullName(value)
-            food_list.append((value, newPrice, foodName))
+            food_list.append((value, newPrice, foodName, float(quantity)))
+            total_value = total_value + float(quantity) * newPrice
+            database.updateQuantity(quantity, value)
             print(value)
 
         except Exception as e:
@@ -290,9 +313,9 @@ def confirmationPage():
             stderr.write("database error: " + errorMsg)
             raise e
 
-    template = jinja_env.get_template("confirmationPage.html")
+    template = jinja_env.get_template("userConfirmation.html")
 
-    html = render_template(template, foodList = food_list)
+    html = render_template(template, foodList = food_list, total = total_value)
     response = make_response(html)
     if not session.get('logged_in'):
         return redirect(url_for('login'))

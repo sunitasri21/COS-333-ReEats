@@ -118,13 +118,13 @@ hr {
 
       <div class="w3-right w3-hide-small">
 
-        <a label href = "/" ></label> <span class="w3-bar-item w3-button">Menu</a>
+        <a label href = "/userFP" ></label> <span class="w3-bar-item w3-button">Menu</a>
 
-        <a label href = "/accountPage" ></label> <span class="w3-bar-item w3-button">Account</a>
+        <a label href = "/userAccount" ></label> <span class="w3-bar-item w3-button">Account</a>
 
-        <a label href = "/checkoutPage" ></label> <span class="w3-bar-item w3-button">Checkout</a>
+        <a label href = "/userFP" ></label> <span class="w3-bar-item w3-button">Checkout</a>
 
-        <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
+        <a label href = "/userFeedback" ></label> <span class="w3-bar-item w3-button">Feedback</a>
 
         <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
 
@@ -162,18 +162,37 @@ hr {
         <th><strong>Name</strong></th>
 <!--         <td><strong>Dietary Restrictions</strong></td>
  -->    <th><strong>List Price</strong></th>
+        <th><strong>Quantity</strong></th>
+        <th><strong>Subtotal</strong></th>
         <!-- <th><strong>Discount</strong></th> -->
         <!-- <th><strong>Discounted Price</strong></th> -->
         <!-- <th><strong>Select</strong></th> -->
        </tr>
+
+
       {% for item in foodList %}
         <tr>
           <td>{{ item[0]}}</td>
           <td>{{ item[2]}}</td>
           <td>{{ item[1]}}</td>
+          <td>{{ item[3]|int}}</td>
+          <td>{{"%.2f"|format(item[3]*item[1])}}</td>
         </tr>
       {% endfor %}
-<!-- 
+
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total:{{"%.2f"|format(total)}}</td>
+      </tr>
+      
+
+
+
+
+    <!-- 
       <div class="bottomnav">
         <a label href="/restFP"
         >Are you a restaurant owner? Click here!</label>

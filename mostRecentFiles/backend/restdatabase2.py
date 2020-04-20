@@ -26,7 +26,7 @@ class Database:
                     
     def disconnect(self):
         self._connection.close()
-        
+    
     def account_search(self, username, password):
         cursor = self._connection.cursor() 
         rest_string = 'SELECT * FROM restaurant_accounts WHERE username LIKE ? AND password LIKE ?'
@@ -73,7 +73,7 @@ class Database:
          'WHERE restaurant_name LIKE "Chennai Chimney"'
         cursor.execute(restIdString)
         restId = cursor.fetchone()[0]
-        stmStr = 'SELECT food, description, unit_price, food_id, discount, new_price FROM menu'
+        stmStr = 'SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM menu'
         # 'WHERE menu.food_id = order_table.food_id;'
         cursor.execute(stmStr)
 
@@ -81,15 +81,16 @@ class Database:
         row = cursor.fetchone()
         while row is not None:  
             discount = row[4]
-            if discount is not None:
-                result = OrderResult(food=str(row[0]), description=str(row[1]), unit_price=str(row[2]), food_id=str(row[3]), new_price=str(row[5]))
+            quantity = row[6]
+            if discount is not None and quantity != 0:
+                result = OrderResult(food=str(row[0]), description=str(row[1]), unit_price=str(row[2]), food_id=str(row[3]), new_price=str(row[5]), quantity=quantity)
                 results.append(result)
             row = cursor.fetchone()
         cursor.close()
 
         return results
 
-    def inputDiscount(self, discount, foodid):
+    def inputDiscount(self, discount, quantity, foodid):
         cursor = self._connection.cursor() 
         stmstr2 = 'SELECT food, unit_price FROM menu ' +\
         'WHERE menu.food_id LIKE ?'
@@ -100,13 +101,50 @@ class Database:
         result = cursor.fetchone()
         food = result[0]
         price = result[1]
-        quantity = 1
+        quantity = int(quantity)
+        if quantity == None:
+            quantity = 1
+        if discount == None:
+            discount = 0.0
+        print(quantity)
         newPrice = (1 - float(discount)) * float(price)
         newPrice = '{:.2f}'.format(newPrice)
         stmstr = 'UPDATE menu SET discount = ?, new_price = ?, quantity = ? ' +\
         'WHERE menu.food_id LIKE ?;'
         arguments = (discount, newPrice, quantity, foodid) 
         if (discount >= 0 and discount <= 1):
+            cursor.execute(stmstr, arguments) 
+        self._connection.commit()
+        cursor.close()
+        return 
+
+    def updateQuantity(self, quantity, foodid):
+        cursor = self._connection.cursor() 
+        stmstr2 = 'SELECT quantity FROM menu ' +\
+        'WHERE menu.food_id LIKE ?'
+        foodid = int(foodid)
+        cursor.execute(stmstr2, (foodid, ))
+        result = cursor.fetchone()
+        originalQuantity = result[0]
+
+        # result = cursor.fetchone()
+        # food = result[0]
+        # price = result[1]
+        # quantity = int(quantity)
+        # if quantity == None:
+        #     quantity = 1
+        # if discount == None:
+        #     discount = 0.0
+        # print(quantity)
+        # newPrice = (1 - float(discount)) * float(price)
+        # newPrice = '{:.2f}'.format(newPrice)
+        stmstr = 'UPDATE menu SET quantity = ? ' +\
+        'WHERE menu.food_id LIKE ?;'
+
+        newQuant = int(originalQuantity) - int(quantity)   
+
+        arguments = (newQuant, foodid) 
+        if (originalQuantity >= int(quantity)):
             cursor.execute(stmstr, arguments) 
         self._connection.commit()
         cursor.close()

@@ -47,13 +47,13 @@ hr {
 
       <div class="w3-right w3-hide-small">
 
-        <a label href = "/" ></label> <span class="w3-bar-item w3-button">Menu</a>
+        <a label href = "/restFP" ></label> <span class="w3-bar-item w3-button">Menu</a>
 
-        <a label href = "/accountPage" ></label> <span class="w3-bar-item w3-button">Account</a>
+        <a label href = "/restAccount" ></label> <span class="w3-bar-item w3-button">Account</a>
 
-        <a label href = "/checkoutPage" ></label> <span class="w3-bar-item w3-button">Checkout</a>
+        <a label href = "/restDiscount" ></label> <span class="w3-bar-item w3-button">Discounts</a>
 
-        <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
+        <a label href = "/restFeedback" ></label> <span class="w3-bar-item w3-button">Feedback</a>
 
         <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
 
@@ -73,7 +73,7 @@ hr {
         <label for="restName"></label><br> -->
         <label
           style = "padding-left: 575px"
-          ><strong>Preview
+          ><strong>All Active Discounts
         </strong></label>
 <!--     </form> -->
 
@@ -82,18 +82,22 @@ hr {
 
     <table cellspacing="2" cellpadding="2" align:"center">
       <tr>
-        <td style = "padding-left: 170px"><strong>Food Item</strong></td>
+        <td style = "padding-left: 50px"><strong>Food Item</strong></td>
+        <td style = "padding-left: 170px"><strong>Quantity</strong></td>
         <td style = "padding-left: 170px"><strong>List Price</strong></td>
         <td style = "padding-left: 170px"><strong>Discount</strong></td>
         <td style = "padding-left: 170px"><strong>Discounted Price</strong></td>
       </tr>
       {% for item in items %}
+      {% if item.getQuantity()|int != 0 %}
         <tr>
-          <td style = "padding-left: 170px">{{ item.getFood()}}</td>
+          <td style = "padding-left: 50px">{{ item.getFood()}}</td>
+          <td style = "padding-left: 170px">{{item.getQuantity()}}</td>
           <td style = "padding-left: 170px">{{item.getPrice()}}</td>
           <td style = "padding-left: 170px" id="price"> {{item.getDiscount()}} </td>
           <td style = "padding-left: 170px" id="price"> {{item.getNewPrice()}} </td>
         </tr>
+      {% endif %}
       {% endfor %}
     </table>
   </body>

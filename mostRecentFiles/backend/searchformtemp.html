@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Registrar's Office Class Search</title>  
+      <!-- is the title correct??? -->
+   </head>
+
+   <body>
+      <h1>Registrar's Office: Class Search</h1>
+      <hr>
+      <table>
+         <tr>
+            <td align="right"><input type="text" id="dept">Department</td>
+            <td alighn="right"><input type="text" id="number">Number</td>
+            <td align="right"><input type="text" id="area">Area</td>
+            <td align="right"><input type="text" id="title">Title</td>
+         </tr>
+      </table>
+
+      <p id="resultsParagraph"></p>
+         
+      <hr>
+      Created by Rohan Joshi and Vedika Patwari 
+      <hr> 
+
+      <script src=
+"https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js">
+      </script>
+
+      <script>
+         
+         function setup()
+         {
+            $('#dept').focus();
+            $('#dept').on('input', getResults);
+         }
+         
+         function handleResponse(response)
+         { 
+            $('#resultsParagraph').html(response);
+         }
+          
+         let request = null;
+         
+         function getResults()
+         {    
+            let dept = $('#dept').val();
+            dept = encodeURIComponent(dept);
+            let url = '/searchresults?dept=' + dept
+            if (request != null)
+               request.abort();
+            request = $.ajax(
+               {
+                  type: "GET",
+                  url: url,
+                  success: handleResponse
+               }
+            );
+         }
+         
+         $('document').ready(setup);
+         
+      </script>
+   </body>
+</html>

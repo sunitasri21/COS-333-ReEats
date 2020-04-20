@@ -6,7 +6,7 @@
   	-moz-osx-font-smoothing: grayscale;
 }
 body {
-    background-image: url("https://www.jakpost.travel/wimages/large/136-1368753_10227e-food-on-the-table-top-hd-wallpaper.jpg"); 
+    background-image: url("https://jooinn.com/images/table-with-food-5.jpg"); 
     background-size: cover;
   	margin: 0;
 }
@@ -15,9 +15,6 @@ body {
   	background-color: #ffffff;
   	box-shadow: 0 0 9px 0 #cc6666;
   	margin: 100px auto;
-}
-.msg{
-    color: red;
 }
 .login h1, .register h1 {
   	text-align: center;
