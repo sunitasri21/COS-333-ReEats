@@ -154,7 +154,7 @@ hr {
     <hr color ="black">
      </div>
 
-    <form action="/confirmationPage", method="post"></form>
+    <form action="/confirmationPage", method="post">
     <table cellspacing="2" cellpadding="2" style = "align:center">  
       <!-- align:"center" -->
       <tr>
@@ -187,10 +187,16 @@ hr {
         <td></td>
         <td>Total:{{"%.2f"|format(total)}}</td>
       </tr>
+    </table>
+  </form>
       
-
-
-
+    <img style = "align:center" 
+          id='barcode' 
+          src="{{orderid}}" 
+          alt="" 
+          title="qrcode" 
+          width="200" 
+          height="200" />
 
     <!-- 
       <div class="bottomnav">

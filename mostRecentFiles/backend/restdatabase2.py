@@ -207,6 +207,27 @@ class Database:
         cursor.close()
         return results
 
+    def inputOrderId(self, user_id, food, food_id, order_id, quantity, newPrice):
+        cursor = self._connection.cursor() 
+        # user_id = int(user_id)
+        quantity = int(quantity)
+        newPrice = float(newPrice)
+        food_id = int(food_id)
+        stmstr = 'UPDATE order_table SET new_price = ?, order_id = ?, quantity = ?, food = ? '+\
+        'WHERE food_id = ?;'
+        arguments = (newPrice, order_id, quantity, food, food_id)
+        cursor.execute(stmstr, arguments)
+        # stmstr2 = 'REPLACE INTO order_join (user_id, order_id) VALUES (?, ?);'
+        # arguments2 = (user_id, order_id)
+        # cursor.execute(stmstr2, arguments2)
+        self._connection.commit()
+
+        cursor.close()
+
+
+
+
+
 #-----------------------------------------------------------------------
 
 # For testing:

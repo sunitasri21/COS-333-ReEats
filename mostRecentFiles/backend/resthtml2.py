@@ -15,6 +15,7 @@ import os
 import re
 from flask import jsonify
 from flask import g
+import random
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
@@ -236,6 +237,7 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
+        user_id = random.randInt()
         # Check if account exists in the database: 
         database = Database()
         database.connect()
@@ -251,7 +253,7 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            database.add_user(username, password, email)
+            database.add_user(username, password, email, user_id)
             msg = 'You have successfully registered!'        
     elif request.method == 'POST':
         # Form is empty... (no POST data)
@@ -311,7 +313,9 @@ def confirmationPage():
     check_list = request.form.getlist("check_list[]")
     print(check_list)
     database = get_db()
-
+    order_id = createOrderId()
+    user_id = session.get('id')
+    print(user_id)
     food_list = []
     total_value = 0
     
@@ -325,6 +329,8 @@ def confirmationPage():
             food_list.append((value, newPrice, foodName, float(quantity)))
             total_value = total_value + float(quantity) * newPrice
             database.updateQuantity(quantity, value)
+
+            database.inputOrderId(user_id, foodName, value, order_id, quantity, newPrice)
             print(value)
 
         except Exception as e:
@@ -333,13 +339,23 @@ def confirmationPage():
             raise e
 
     template = jinja_env.get_template("userConfirmation.html")
+    link = "https://api.qrserver.com/v1/create-qr-code/?data=" + str(order_id) + "&amp;size=100x100"
 
-    html = render_template(template, foodList = food_list, total = total_value)
+    html = render_template(template, foodList = food_list, total = total_value, orderid = link)
     response = make_response(html)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
         return response     
+
+def createOrderId():
+    letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    orderId = ""
+    for i in range(6):
+        orderId += letters[int(random.random()*len(letters))]
+    return orderId
+
+
 #-----------------------------------------------------------------------
 @app.teardown_appcontext
 def teardown_db(error):
