@@ -1,76 +1,33 @@
 <!DOCTYPE html>
 <html>
-  <head>      
-    <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
-    <link rel="stylesheet" href="static/login.css" type="text/css">
-<style>
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  text-align: left;
-  padding: 8px;
-  font-family: 'Source Code Pro';
-}
-
-tr:nth-child(even){background-color: #f2f2f2}
-
-th {
-  background-color: #b34444;
-  color: white;
-  font-family: 'Source Code Pro';
-}
-
-hr {
-  background: rgb(30, 30, 40);
-  color: white;
-}
-
-.title{
-  background: rgb(30, 30, 40);
-  color: white;
-  font-family: 'Source Code Pro';
-}  
-.error {
-  color: red;
-  font-family: 'Source Code Pro';
-}
-</style>
-</head>
-
-  <head>
-  <title>Register</title>   
+	<head>
+		<meta charset="utf-8">
+		<title>Register</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+	</head>
+	<body>
+          <head>
+  <title>Chennai Chimney</title>   
       <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-      <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-      <link rel="stylesheet" href="static/login.css" type="text/css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="static/login.css" type="text/css">
   <div class="topnav">
 
      <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-      <a href="#home" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
+      <a href="/" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
 
-      <div class="w3-right w3-hide-small">
 
-        <a label href = "/" ></label> <span class="w3-bar-item w3-button">Menu</a>
-
-        <a label href = "/accountPage" ></label> <span class="w3-bar-item w3-button">Account</a>
-
-        <a label href = "/checkoutPage" ></label> <span class="w3-bar-item w3-button">Checkout</a>
-
-        <a label href = "/feedbackPage" ></label> <span class="w3-bar-item w3-button">Feedback</a>
 
       </div>
+    </div>
+
+    </a>
      </div>
-      </div>
-   </head>
 
-  <body>
-
-    <div class="title" > 
-
-<div class="register">
+  </head>
+		<div class="register">
 			<h1>Register</h1>
 			<div class="links">
 				<a href="{{ url_for('login') }}">Login</a>

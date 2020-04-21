@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<title>W3.CSS Template</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+  font-family: 'Source Code Pro';
+}
+ 
+.error {
+  color: red;
+  font-family: 'Source Code Pro';
+}
+body {
+  background-image: url("https://jooinn.com/images/table-with-food-5.jpg"); 
+  background-size: cover;
+  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+.column {
+  float: left;
+  width: 33.3%;
+  margin-bottom: 16px;
+  padding: 0 8px;
+}
+
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 8px;
+}
+.lol {
+  background-color: white;  
+    }
+
+.about {
+  padding: 50px;
+  text-align: center;
+  background-color: #474e5d;
+  color: white;
+}
+
+.container {
+  padding: 0 16px;
+}
+
+.container::after, .row::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.title {
+  color: grey;
+}
+
+.button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:hover {
+  background-color: #555;
+}
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+}
+</style>
+<body>
+
+<!-- Navbar (sit on top) -->
+<div class="w3-bar w3-white w3-wide w3-padding w3-card">
+      <a href="#home" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
+         <div class="w3-right w3-hide-small">
+        <a label href = "/login" ></label> <span class="w3-bar-item w3-button">Login</a>
+      </div>
+</div>
+
+ <br>
+
+<!-- Page content -->
+<div class="w3-content" style="max-width:1100px">
+
+  <!-- About Section -->
+  <div class="w3-container m6 w3-padding-large w3-white">
+      <h1 class="w3-center">About ReEats</h1><br>
+      <h5 class="w3-center">Created in 2020</h5>
+      <p class="w3-large"></p>
+    </div>
+  
+  <hr>
+<div class="w3-container m6 w3-padding-large w3-white">  
+<h2 style="text-align:center">Our Team</h2>
+<div class="row">
+  <div class="column">
+    <div class="card">
+       <div class="container">
+        <h2>Sunita Srivatsan</h2>
+        <p class="title"></p>
+        <p></p>
+        <p>sunitas@princeton.edu</p>
+      </div>
+    </div>
+  </div>
+    
+  <div class="column">
+    <div class="card">
+       <div class="container">
+        <h2>Beatrice Caruntu</h2>
+        <p class="title"></p>
+        <p></p>
+        <p>bcaruntu@princeton.edu</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="column">
+    <div class="card">
+       <div class="container">
+        <h2>Arjun Sai Krishnan</h2>
+        <p class="title"></p>
+        <p></p>
+        <p>ak36@princeton.edu</p>
+      </div>
+    </div>
+  </div>
+    
+  <div class="column">
+    <div class="card">
+       <div class="container">
+        <h2>Vedika Patwari</h2>
+        <p class="title"></p>
+        <p></p>
+        <p>vpatwari@princeton.edu</p>
+      </div>
+    </div>
+  </div>
+  
+    
+  <div class="column">
+    <div class="card">
+       <div class="container">
+        <h2>Noa Zarur</h2>
+        <p class="title"></p>
+        <p></p>
+        <p>nzarur@princeton.edu</p>
+      </div>
+    </div>
+  </div>
+</div>
+    </div> 
+
+</body>
+</html>
