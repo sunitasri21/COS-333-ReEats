@@ -7,7 +7,7 @@
 
 class OrderResult:
 
-    def __init__(self, food_id=1, discount='', unit_price=1, new_price=1, quantity=1, food='', description=''):
+    def __init__(self, food_id=1, discount='', unit_price=1, new_price=1, quantity=1, food='', description='', order_id=''):
         self.food = food
         self.food_id = food_id 
         self.discount = discount
@@ -16,6 +16,7 @@ class OrderResult:
         self.new_price = new_price 
         self.quantity = quantity 
         self.description = description
+        self.order_id = order_id
 
     def __str__(self):
         return self.food 
@@ -42,4 +43,7 @@ class OrderResult:
 
     def getDiscount(self):
         return self.discount
+
+    def getOrderId(self):
+        return self.order_id
 

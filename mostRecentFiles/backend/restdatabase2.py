@@ -186,6 +186,115 @@ class Database:
         cursor.close()
         return results
 
+    # def createOrderId():
+    #     function makeid():
+    #          var result           = '';
+    #          var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    #          var charactersLength = characters.length;
+    #         for i in range(6):
+    #             result += characters.charAt(Math.floor(Math.random() * charactersLength)); 
+    #         return result;
+
+    #     orderId = makeid():
+
+    #     cursor.close()
+    #     return orderId
+
+    def inputOrderId(self, userid, price, quantity, foodid, food, orderid, confirmed):
+        cursor = self._connection.cursor() 
+        userid = int(userid)
+        foodid = int(foodid)
+        price = float(price)
+        orderid = orderid
+        quantity = int(quantity)
+        qrCode = ''
+
+        stmstr = 'REPLACE INTO order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id)VALUES (?, ?, ?, ?, ?, ?, ?);'
+        arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
+        cursor.execute(stmstr, arguments)
+
+        # stmstr2 = 'REPLACE INTO order_join (order_id, qrCode, user_id)VALUES (?, ?, ?); ' 
+        # arguments2 = (orderid, qrCode, userid) 
+        # cursor.execute(stmstr2, arguments2)
+
+        self._connection.commit()
+        cursor.close()
+        return 
+
+
+    def confirmedOrder(self, userid, confirmed, orderid,foodid):
+        cursor = self._connection.cursor() 
+        userid = int(userid)
+        foodid = int(foodid)
+        orderid = orderid
+
+        stmstr = 'UPDATE order_table SET confirmed = ?, order_id = ? ' +\
+        'WHERE food_id = ?;'
+        arguments = (confirmed. orderid, foodid)
+        cursor.execute(stmstr, arguments)
+
+        stmstr2 = 'REPLACE INTO order_join (order_id, qrCode, user_id)VALUES (?, ?, ?); ' 
+        arguments2 = (orderid, qrCode, userid) 
+        cursor.execute(stmstr2, arguments2)
+
+        stmstr3 = 'SELECT food, new_price, quantity FROM order_table;'
+        'WHERE confirmed = 1;'
+        cursor.execute(stmstr3)
+        results = []
+        total_value = 0.0
+        row = cursor.fetchone()
+        while row is not None: 
+            result = OrderResult(food = str(row[0]), new_price = str(row[1]), quantity = str(row[2]))
+            results.append(result)
+            total_value = total_value + row[2] * row[1]
+        row = cursor.fetchone()
+
+        self._connection.commit()
+        cursor.close()
+        return results, total_value
+
+    def pullOrderId(self, user_id):
+        cursor = self._connection.cursor() 
+        stmstr = 'SELECT order_id FROM order_join ' +\
+        'WHERE order_join.user_id LIKE ?;'
+        user_id = int(user_id)
+        cursor.execute(stmstr, user_id) 
+        orderId = cursor.fetchone()
+        cursor.close()
+        return orderId[0]
+
+    def pullConfirmedOrders(self, user_id, orderid):
+        cursor = self._connection.cursor() 
+        stmstr = 'SELECT order_id FROM order_join ' +\
+        'WHERE order_join.user_id LIKE ?;'
+        user_id = int(user_id)
+        cursor.execute(stmstr, user_id) 
+        orderId = cursor.fetchone()
+        cursor.close()
+        return orderId[0]
+
+    # def createQrCode():
+    #     cht=qr
+    #     chl=Hello+world
+    #     choe=UTF-8
+    #     orderId = makeid():
+
+    #     cursor.close()
+    #     return qrCode
+
+
+    # def getQrCode(self, order_id):
+    #     cursor = self._connection.cursor() 
+    #     stmstr = 'SELECT qrCode FROM order_join ' +\
+    #     'WHERE order_join.order_id LIKE ?;'
+    #     order_id = int(order_id)
+    #     cursor.execute(stmstr, order_id)
+    #     qrCode = cursor.fetchone()
+    #     cursor.close()
+    #     print(qrCode[0])
+    #     print("qr code retreived")
+    #     return qrCode[0]
+
 #-----------------------------------------------------------------------
 
 # For testing:

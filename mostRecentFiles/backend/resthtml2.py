@@ -15,6 +15,7 @@ from sys import exit, argv, stderr
 import os
 from flask import jsonify
 from flask import g
+import random
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
@@ -264,7 +265,66 @@ def updateDiscount():
         raise e
 
     return retVal, 200
+
+# -----------------------------------------------------------------------
+
+# @app.route('/orderId', methods=['POST'])
+# def getQrCode():
+#     foodId = request.form["itemNum"]
+#     quantity = request.form["quantity"]
+#     discount = request.form["discountVal"]
+#     database = get_db()
+#     try:
+#         database.inputDiscount(discount, quantity, foodId)
+
+#         # database.connect()
+#         newPrice = database.pullNewPrice(foodId)
+#         retVal = jsonify(
+#             itemNum=foodId,
+#             discountVal=newPrice
+#             )
+
+#     except Exception as e:
+#         errorMsg =  str(e)
+#         stderr.write("database error: " + errorMsg)
+#         raise e
+
+#     return retVal, 200
+# -----------------------------------------------------------------------
+
+def createOrderId():
+
+    orderId           = ''
+    characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    charactersLength = len(characters)
+    for i in range(6):
+        orderId += characters[int(random.random() * charactersLength)]
+    return orderId
 #-----------------------------------------------------------------------
+# @app.route('/pullOrderId', methods=['POST'])
+# def getNewPrice():
+#     foodId = request.form["itemNum"]
+#     database = get_db()
+#     url = "https://api.qrserver.com/v1/create-qr-code/?data=HelloWorld&amp;size=100x100"
+#     try:
+#         # database.connect()
+#         newPrice = database.pullOrderId(foodId)
+#         retVal = jsonify(
+#             itemNum=foodId,
+#             discountVal=newPrice
+#             )
+
+#     except Exception as e:
+#         errorMsg =  str(e)
+#         stderr.write("database error: " + errorMsg)
+#         raise e
+
+#     print("bungun")
+
+#     return retVal, 400
+
+#-----------------------------------------------------------------------
+
 @app.route('/getNewPrice', methods=['POST'])
 def getNewPrice():
     foodId = request.form["itemNum"]
@@ -290,11 +350,15 @@ def getNewPrice():
 @app.route('/confirmationPage', methods=['POST'])
 def confirmationPage():
     check_list = request.form.getlist("check_list[]")
+    if check_list == None:
+        check_list = []
     print(check_list)
     database = get_db()
 
     food_list = []
     total_value = 0
+
+    orderid = ""
     
     for value in check_list:
         try:
@@ -306,6 +370,9 @@ def confirmationPage():
             food_list.append((value, newPrice, foodName, float(quantity)))
             total_value = total_value + float(quantity) * newPrice
             database.updateQuantity(quantity, value)
+            userid = session['id']
+            confirmed = 0
+            database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
             print(value)
 
         except Exception as e:
@@ -314,13 +381,68 @@ def confirmationPage():
             raise e
 
     template = jinja_env.get_template("userConfirmation.html")
+    # template2 = jinja_env.get_template("qrCodePage.html")
 
-    html = render_template(template, foodList = food_list, total = total_value)
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
+
+    html = render_template(template, foodList = food_list, total = total_value, orderid = url)
+    # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
     response = make_response(html)
+    # response2 = make_response(html2)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        return response     
+        return response
+
+#-----------------------------------------------------------------------
+@app.route('/qrCodePage', methods=['POST'])
+def qrCodePage():
+    confirmedFood_list = request.form.getlist("confirmedFood_list[]")
+    if confirmedFood_list == None:
+        confirmedFood_list = []
+    print(confirmedFood_list)
+    database = get_db()
+
+    results = []
+    total_value = 0
+
+    userid = session['id']
+
+    orderid = createOrderId()
+
+    confirmed = 1
+
+    for value in confirmedFood_list:
+        try:
+            # database.connect()
+            #newPrice = database.pullNewPrice(value)
+            # name = "item" + str(value) + "_quantity"
+            #quantity = request.form[name]
+            # foodName = database.pullName(value)
+            # food_list.append((value, newPrice, foodName, float(quantity)))
+            #total_value = total_value + float(quantity) * newPrice
+            # database.updateQuantity(quantity, value)
+            results, total_value = database.confirmedOrder(userid, confirmed, orderid, value)
+            print(results)
+
+        except Exception as e:
+            errorMsg =  str(e)
+            stderr.write("database error: " + errorMsg)
+            raise e
+
+    template2 = jinja_env.get_template("qrCodePage.html")
+
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
+
+    html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
+    response2 = make_response(html2)
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response2
+
+
+
 #-----------------------------------------------------------------------
 @app.teardown_appcontext
 def teardown_db(error):
