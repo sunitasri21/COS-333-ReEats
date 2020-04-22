@@ -237,7 +237,6 @@ def register():
         username = request.form['username']
         password = request.form['password']
         email = request.form['email']
-        user_id = random.randInt()
         # Check if account exists in the database: 
         rest, user = database.account_search(username)
         # If account exists show error and validation checks
@@ -251,7 +250,7 @@ def register():
             msg = 'Please fill out the form!'
         else:
             # Account doesnt exists and the form data is valid, now insert new account into accounts table
-            database.add_user(username, password, email, user_id)
+            database.add_user(None, username, password, email)
             msg = 'You have successfully registered!'        
     elif request.method == 'POST':
         # Form is empty... (no POST data)
@@ -353,7 +352,7 @@ def createOrderId():
         orderId += letters[int(random.random()*len(letters))]
     return orderId
 
-def deleteOrder(): 
+#def deleteOrder(): 
     
 
 

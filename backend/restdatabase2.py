@@ -51,10 +51,10 @@ class Database:
         return rest, user
     
     # Adds a new user to the database during Registration
-    def add_user(self, username, password, email):
+    def add_user(self, user_id, username, password, email):
         cursor = self._connection.cursor() 
-        add_string = 'INSERT INTO user_accounts VALUES ( ? , ? , ? );'
-        cursor.execute(add_string, (username, password, email,))
+        add_string = 'INSERT INTO user_account VALUES (?, ? , ? , ? );'
+        cursor.execute(add_string, (user_id, username, password, email,))
         self._connection.commit()
         cursor.close()
         return
