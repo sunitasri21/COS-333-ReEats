@@ -184,6 +184,7 @@ def restFeedback():
 # -----------------------------------------------------------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    database = get_db()
     # Output message if something goes wrong...
     msg = ''
     # Check if "username" and "password" POST requests exist (user submitted form)
@@ -192,8 +193,6 @@ def login():
         username = request.form['username']
         password = request.form['password']    
         # Check if account exists using MySQL
-        database = Database()
-        database.connect()
         restaurant, user = database.account_login(username, password)
         # If restaurant account exists in accounts table in out database
         if restaurant:
@@ -229,6 +228,7 @@ def logout():
 # -----------------------------------------------------------------------
 @app.route('/login/register', methods=['GET', 'POST'])
 def register():
+    database = get_db()
     # Output message if something goes wrong...
     msg = ''
     # Check if "username", "password" and "email" POST requests exist (user submitted form)
@@ -239,8 +239,6 @@ def register():
         email = request.form['email']
         user_id = random.randInt()
         # Check if account exists in the database: 
-        database = Database()
-        database.connect()
         rest, user = database.account_search(username)
         # If account exists show error and validation checks
         if rest or user:
@@ -354,6 +352,9 @@ def createOrderId():
     for i in range(6):
         orderId += letters[int(random.random()*len(letters))]
     return orderId
+
+def deleteOrder(): 
+    
 
 
 #-----------------------------------------------------------------------
