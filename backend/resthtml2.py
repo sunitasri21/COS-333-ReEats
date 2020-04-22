@@ -156,7 +156,11 @@ def restAccount():
 
 @app.route('/userAccount', methods=['GET'])
 def userAccount():
-    html = render_template('userAccount.html')
+    username = session.get('username')
+    email = session.get('email')
+    password = session.get('password')
+    html = render_template('userAccount.html', username=username, email=email, password=password)
+
     response = make_response(html)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -198,7 +202,7 @@ def login():
         if restaurant:
             # Create session data, we can access this data in other routes
             session['logged_in'] = True
-            session['username'] = restaurant[1]  
+            session['username1'] = restaurant[1]  
             session['id'] = restaurant[0]
             session['restaurant_name'] = database.restaurant_search(restaurant[0])
             # Redirect to home page
@@ -207,6 +211,8 @@ def login():
             session['logged_in'] = True
             session['id'] = user[0]
             session['username'] = user[1]
+            session['password'] = user[2]
+            session['email'] = user[3]
             return redirect(url_for('searchResults'))
         else:          
             # Account doesnt exist or username/password incorrect
@@ -304,7 +310,6 @@ def getNewPrice():
 
     return retVal, 400
 #-----------------------------------------------------------------------
-#-----------------------------------------------------------------------
 @app.route('/confirmationPage', methods=['POST'])
 def confirmationPage():
     check_list = request.form.getlist("check_list[]")
@@ -344,18 +349,52 @@ def confirmationPage():
         return redirect(url_for('login'))
     else:
         return response     
-
+#-----------------------------------------------------------------------
 def createOrderId():
     letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     orderId = ""
     for i in range(6):
         orderId += letters[int(random.random()*len(letters))]
     return orderId
-
-#def deleteOrder(): 
+#-----------------------------------------------------------------------
+# @app.route('/userCheckout', methods=['POST'])
+# def userCheckoutPage():
+#     check_list = request.form.getlist("check_list[]")
+#     print(check_list)
+#     database = get_db()
+#     order_id = createOrderId()
+#     user_id = session.get('id')
+#     print(user_id)
+#     food_list = []
+#     total_value = 0
     
+#     for value in check_list:
+#         try:
+#             # database.connect()
+#             newPrice = database.pullNewPrice(value)
+#             name = "item" + str(value) + "_quantity"
+#             quantity = request.form[name]
+#             foodName = database.pullName(value)
+#             food_list.append((value, newPrice, foodName, float(quantity)))
+#             total_value = total_value + float(quantity) * newPrice
+#             database.updateQuantity(quantity, value)
 
+#             database.inputOrderId(user_id, foodName, value, order_id, quantity, newPrice)
+#             print(value)
 
+#         except Exception as e:
+#             errorMsg =  str(e)
+#             stderr.write("database error: " + errorMsg)
+#             raise e
+
+#     template = jinja_env.get_template("userCheckout.html")
+
+#     html = render_template(template)
+#     response = make_response(html)
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login'))
+#     else:
+#         return response     
 #-----------------------------------------------------------------------
 @app.teardown_appcontext
 def teardown_db(error):
