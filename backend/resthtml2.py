@@ -12,10 +12,13 @@ from flask import render_template, flash
 import jinja2
 from sys import exit, argv, stderr
 import os
-import re
 from flask import jsonify
 from flask import g
 import random
+from time import localtime, asctime, strftime
+from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
+
+
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
@@ -26,6 +29,8 @@ jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
 def create_app():
     app = Flask(__name__,  template_folder='../frontend')
+    app.secret_key = "WEFWEFGEWDNFEJNJK2938Rdnjenfcjv"
+
 
     with app.app_context():
         get_db()
@@ -44,10 +49,30 @@ def get_db():
     return g.db
 
 app = create_app()
+# -----------------------------------------------------------------------
 
+login_manager = LoginManager()
+login_manager.init_app(app)
+app.config['TESTING'] = False
+# -----------------------------------------------------------------------
+class User(UserMixin):
+    def __init__ (self, username, password, userid, admin, email):
+        self.username = username
+        self.password = password
+        self.id = userid 
+        self.admin = admin
+        self.email = email
 # -----------------------------------------------------------------------
 @app.route('/', methods=['GET'])
+def firstPage():
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return redirect(url_for('userFP')) 
+
 @app.route('/userFP', methods=['GET'])
+@login_required
+
 def searchResults():
     restName = str(request.args.get('restName')) or ""
     discount = request.args.get('discount', default=1) 
@@ -69,15 +94,14 @@ def searchResults():
         # User is loggedin show them the home page
         template = jinja_env.get_template("userFirstPage.html")    
         html = render_template(template, restaurant=searchResults, discount=discount, username=session['username'])
-        response = make_response(html)        
-        return response
-    else:
-        template = jinja_env.get_template("about.html")
-        html = render_template(template)
-        response = make_response(html)   
-        return response
+        response = make_response(html)
+        if not session.get('logged_in'):
+            return redirect(url_for('login'))
+        else:
+            return response     
 # -----------------------------------------------------------------------
 @app.route('/restFP', methods=['GET'])
+@login_required
 def restPage():
     restName = str(request.args.get('restName')) or ""
     discount = request.args.get('discount', default=1) 
@@ -106,6 +130,8 @@ def restPage():
 # -----------------------------------------------------------------------
 
 @app.route('/restDiscount', methods=['GET'])
+@login_required
+
 def checkoutPage():
     database = get_db()
     try:
@@ -145,6 +171,8 @@ def checkoutPage():
 # -----------------------------------------------------------------------
 
 @app.route('/restAccount', methods=['GET'])
+@login_required
+
 def restAccount():
     html = render_template('restAccount.html')
     response = make_response(html)
@@ -155,6 +183,8 @@ def restAccount():
 # -----------------------------------------------------------------------
 
 @app.route('/userAccount', methods=['GET'])
+@login_required
+
 def userAccount():
     username = session.get('username')
     email = session.get('email')
@@ -169,6 +199,8 @@ def userAccount():
 # -----------------------------------------------------------------------
 
 @app.route('/userFeedback', methods=['GET'])
+@login_required
+
 def userFeedback():
     html = render_template('userFeedback.html')
     response = make_response(html)
@@ -178,6 +210,8 @@ def userFeedback():
         return response  
 # -----------------------------------------------------------------------
 @app.route('/restFeedback', methods=['GET'])
+@login_required
+
 def restFeedback():
     html = render_template('restFeedback.html')
     response = make_response(html)
@@ -185,6 +219,19 @@ def restFeedback():
         return redirect(url_for('login'))
     else:
         return response  
+# -----------------------------------------------------------------------
+
+@login_manager.user_loader
+def load_user(id):
+    database = get_db()
+    restaurant, user = database.user_search(id)
+    if restaurant:
+        restUser = User(restaurant[1], restaurant[2], restaurant[0], True, None)
+        return restUser
+    if user:
+        userUser = User(user[1], user[2], user[0], True, None)
+        return userUser
+
 # -----------------------------------------------------------------------
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -195,24 +242,29 @@ def login():
     if request.method == 'POST' and 'username' in request.form and 'password' in request.form:
         # Create variables for easy access
         username = request.form['username']
-        password = request.form['password']    
+        unhashed_password = request.form['password']    
         # Check if account exists using MySQL
-        restaurant, user = database.account_login(username, password)
+        restaurant, user = database.account_search(username, unhashed_password)
         # If restaurant account exists in accounts table in out database
         if restaurant:
+            restUser = User(restaurant[1], unhashed_password, restaurant[0], True, None)
             # Create session data, we can access this data in other routes
             session['logged_in'] = True
             session['username1'] = restaurant[1]  
             session['id'] = restaurant[0]
             session['restaurant_name'] = database.restaurant_search(restaurant[0])
+            login_user(restUser)
             # Redirect to home page
             return redirect(url_for('restPage'))
         elif user:
+            userUser = User(user[1], unhashed_password, user[0], True, None)
             session['logged_in'] = True
             session['id'] = user[0]
             session['username'] = user[1]
             session['password'] = user[2]
             session['email'] = user[3]
+            login_user(userUser)
+
             return redirect(url_for('searchResults'))
         else:          
             # Account doesnt exist or username/password incorrect
@@ -228,6 +280,7 @@ def logout():
     session.pop('id', None)
     session.pop('username', None)
     session.pop('restaurant_name', None)
+    logout_user()
     # Redirect to login page
     return redirect(url_for('login'))
 
@@ -289,6 +342,15 @@ def updateDiscount():
 
     return retVal, 200
 #-----------------------------------------------------------------------
+def createOrderId():
+
+    orderId           = ''
+    characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    charactersLength = len(characters)
+    for i in range(6):
+        orderId += characters[int(random.random() * charactersLength)]
+    return orderId
+#-----------------------------------------------------------------------
 @app.route('/getNewPrice', methods=['POST'])
 def getNewPrice():
     foodId = request.form["itemNum"]
@@ -311,15 +373,18 @@ def getNewPrice():
     return retVal, 400
 #-----------------------------------------------------------------------
 @app.route('/confirmationPage', methods=['POST'])
+@login_required
 def confirmationPage():
     check_list = request.form.getlist("check_list[]")
+    if check_list == None:
+        check_list = []
     print(check_list)
     database = get_db()
-    order_id = createOrderId()
-    user_id = session.get('id')
-    print(user_id)
+
     food_list = []
     total_value = 0
+
+    orderid = ""
     
     for value in check_list:
         try:
@@ -331,8 +396,9 @@ def confirmationPage():
             food_list.append((value, newPrice, foodName, float(quantity)))
             total_value = total_value + float(quantity) * newPrice
             database.updateQuantity(quantity, value)
-
-            database.inputOrderId(user_id, foodName, value, order_id, quantity, newPrice)
+            userid = session['id']
+            confirmed = 0
+            database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
             print(value)
 
         except Exception as e:
@@ -341,14 +407,66 @@ def confirmationPage():
             raise e
 
     template = jinja_env.get_template("userConfirmation.html")
-    link = "https://api.qrserver.com/v1/create-qr-code/?data=" + str(order_id) + "&amp;size=100x100"
+    # template2 = jinja_env.get_template("qrCodePage.html")
 
-    html = render_template(template, foodList = food_list, total = total_value, orderid = link)
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
+
+    html = render_template(template, foodList = food_list, total = total_value, orderid = url)
+    # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
     response = make_response(html)
+    # response2 = make_response(html2)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        return response     
+        return response
+
+#-----------------------------------------------------------------------
+@app.route('/qrCodePage', methods=['POST'])
+def qrCodePage():
+    confirmedFood_list = request.form.getlist("confirmedFood_list[]")
+    if confirmedFood_list == None:
+        confirmedFood_list = []
+    print(confirmedFood_list)
+    database = get_db()
+
+    results = []
+    total_value = 0
+
+    userid = session['id']
+
+    orderid = createOrderId()
+
+    confirmed = 1
+
+    for value in confirmedFood_list:
+        try:
+            # database.connect()
+            #newPrice = database.pullNewPrice(value)
+            # name = "item" + str(value) + "_quantity"
+            #quantity = request.form[name]
+            # foodName = database.pullName(value)
+            # food_list.append((value, newPrice, foodName, float(quantity)))
+            #total_value = total_value + float(quantity) * newPrice
+            # database.updateQuantity(quantity, value)
+            results, total_value = database.confirmedOrder(userid, confirmed, orderid, value)
+            print(results)
+
+        except Exception as e:
+            errorMsg =  str(e)
+            stderr.write("database error: " + errorMsg)
+            raise e
+
+    template2 = jinja_env.get_template("qrCodePage.html")
+
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
+
+    html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
+    response2 = make_response(html2)
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response2
+
 #-----------------------------------------------------------------------
 def createOrderId():
     letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"

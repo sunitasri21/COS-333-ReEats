@@ -39,16 +39,28 @@ class Database:
         return rest, user
     
     # Searches for an username in the accounts table 
-    def account_search(self, username):
+    def account_search(self, username, password):
         cursor = self._connection.cursor() 
-        rest_string = 'SELECT * FROM restaurant_accounts WHERE username LIKE ?;'
-        user_string = 'SELECT * FROM user_account WHERE username LIKE ?;'
-        cursor.execute(rest_string, (username,))
+        rest_string = 'SELECT * FROM restaurant_accounts WHERE username LIKE ? AND password LIKE ?'
+        user_string = 'SELECT * FROM user_accounts WHERE username LIKE ? AND password LIKE ?'
+        cursor.execute(rest_string, (username, password,))
         rest = cursor.fetchone()
-        cursor.execute(user_string, (username,))
+        cursor.execute(user_string, (username, password,))
         user = cursor.fetchone()
         cursor.close()
         return rest, user
+    
+    def user_search(self, username):
+        cursor = self._connection.cursor() 
+        rest_string = 'SELECT * FROM restaurant_accounts WHERE restaurant_id LIKE ?'
+        user_string = 'SELECT * FROM user_accounts WHERE user_id LIKE ?'
+        cursor.execute(rest_string, (username))
+        rest = cursor.fetchone()
+        cursor.execute(user_string, (username))
+        user = cursor.fetchone()
+        cursor.close()
+        return rest, user
+
     
     # Adds a new user to the database during Registration
     def add_user(self, user_id, username, password, email):
@@ -207,27 +219,78 @@ class Database:
         cursor.close()
         return results
 
-    def inputOrderId(self, user_id, food, food_id, order_id, quantity, newPrice):
+    def inputOrderId(self, userid, price, quantity, foodid, food, orderid, confirmed):
         cursor = self._connection.cursor() 
-        # user_id = int(user_id)
+        userid = int(userid)
+        foodid = int(foodid)
+        price = float(price)
+        orderid = orderid
         quantity = int(quantity)
-        newPrice = float(newPrice)
-        food_id = int(food_id)
-        stmstr = 'UPDATE order_table SET new_price = ?, order_id = ?, quantity = ?, food = ? '+\
-        'WHERE food_id = ?;'
-        arguments = (newPrice, order_id, quantity, food, food_id)
+        qrCode = ''
+
+        stmstr = 'REPLACE INTO order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id)VALUES (?, ?, ?, ?, ?, ?, ?);'
+        arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
         cursor.execute(stmstr, arguments)
-        # stmstr2 = 'REPLACE INTO order_join (user_id, order_id) VALUES (?, ?);'
-        # arguments2 = (user_id, order_id)
+
+        # stmstr2 = 'REPLACE INTO order_join (order_id, qrCode, user_id)VALUES (?, ?, ?); ' 
+        # arguments2 = (orderid, qrCode, userid) 
         # cursor.execute(stmstr2, arguments2)
+
         self._connection.commit()
-
         cursor.close()
+        return 
 
 
+    def confirmedOrder(self, userid, confirmed, orderid,foodid):
+        cursor = self._connection.cursor() 
+        userid = int(userid)
+        foodid = int(foodid)
+        orderid = orderid
 
+        stmstr = 'UPDATE order_table SET confirmed = ?, order_id = ? ' +\
+        'WHERE food_id = ?;'
+        arguments = (confirmed. orderid, foodid)
+        cursor.execute(stmstr, arguments)
 
+        stmstr2 = 'REPLACE INTO order_join (order_id, qrCode, user_id)VALUES (?, ?, ?); ' 
+        arguments2 = (orderid, qrCode, userid) 
+        cursor.execute(stmstr2, arguments2)
 
+        stmstr3 = 'SELECT food, new_price, quantity FROM order_table;'
+        'WHERE confirmed = 1;'
+        cursor.execute(stmstr3)
+        results = []
+        total_value = 0.0
+        row = cursor.fetchone()
+        while row is not None: 
+            result = OrderResult(food = str(row[0]), new_price = str(row[1]), quantity = str(row[2]))
+            results.append(result)
+            total_value = total_value + row[2] * row[1]
+        row = cursor.fetchone()
+
+        self._connection.commit()
+        cursor.close()
+        return results, total_value
+
+    def pullOrderId(self, user_id):
+        cursor = self._connection.cursor() 
+        stmstr = 'SELECT order_id FROM order_join ' +\
+        'WHERE order_join.user_id LIKE ?;'
+        user_id = int(user_id)
+        cursor.execute(stmstr, user_id) 
+        orderId = cursor.fetchone()
+        cursor.close()
+        return orderId[0]
+
+    def pullConfirmedOrders(self, user_id, orderid):
+        cursor = self._connection.cursor() 
+        stmstr = 'SELECT order_id FROM order_join ' +\
+        'WHERE order_join.user_id LIKE ?;'
+        user_id = int(user_id)
+        cursor.execute(stmstr, user_id) 
+        orderId = cursor.fetchone()
+        cursor.close()
+        return orderId[0]
 #-----------------------------------------------------------------------
 
 # For testing:

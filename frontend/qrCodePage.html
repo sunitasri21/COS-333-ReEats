@@ -86,7 +86,7 @@ hr {
       }
 
       function submitChecks() {
-          const url = "/confirmationPage";
+          const url = "/qrCodePage";
           data = {
             itemNum: itemNum,
           }
@@ -100,9 +100,24 @@ hr {
           
           alert("after posting")
       }
+
+        //  function sendQrCode(orderNum, qrCode) {
+        // const url = "/getQrCode";
+        // data = {
+        //   itemNum: itemNum,
+        //   qrCode: qrCode
+        // }
+
+        // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
+      //   $.post(url, data)
+      //     .done(function(data) { 
+      //       changeValue(data.itemNum, data.discountVal)
+      //     })
+      // }
       
 
 </script>
+
 
 </head>
 
@@ -134,6 +149,17 @@ hr {
     </a>
   </div>
 
+  <title>Testing QR code</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <!-- <script type="text/javascript">
+            function generateBarCode()
+            {
+                var nric = $('#text').val();
+                var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=50x50';
+                $('#barcode').attr('src', url);
+            }
+        </script> -->
+
   </head>
 
   <body>
@@ -154,7 +180,7 @@ hr {
     <hr color ="black">
      </div>
 
-    <form action="/confirmationPage", method="post"></form>
+   <!--  <form action="/qrCodePage", method="post"></form> -->
     <table cellspacing="2" cellpadding="2" style = "align:center">  
       <!-- align:"center" -->
       <tr>
@@ -172,11 +198,11 @@ hr {
 
       {% for item in foodList %}
         <tr>
-          <td>{{ item[0]}}</td>
-          <td>{{ item[2]}}</td>
-          <td>{{ item[1]}}</td>
-          <td>{{ item[3]|int}}</td>
-          <td>{{"%.2f"|format(item[3]*item[1])}}</td>
+          <td>{{ item.getId()}}</td>
+          <td>{{ item.getFood()}}</td>
+          <td>{{ item.getNewPrice()}}</td>
+          <td>{{ item.getQuantity()}}</td>
+          <td>{{"%.2f"|format(item.getQuantity()*item.getNewPrice())}}</td>
         </tr>
       {% endfor %}
 
@@ -187,24 +213,22 @@ hr {
         <td></td>
         <td>Total:{{"%.2f"|format(total)}}</td>
       </tr>
-      
-
-
-    <input type="submit" value="Submit" onclick="submitChecks()">
-    </p>
-
-    <!-- 
-      <div class="bottomnav">
-        <a label href="/restFP"
-        >Are you a restaurant owner? Click here!</label>
-      </a>
-    </div>
 
     </table>
-    <p align="center">
-    <input type="submit" value="Submit" onclick="submitChecks()">
-    </p>
-    </form> -->
+
+     <label
+     style = "align-content: "
+    style = "padding-left: 575px"
+    ><strong>Please present the follow QR code at resturant
+  </strong></label>
+
+  <p 
+    onblur='generateBarCode();' />
+   <img id='barcode'  
+    src={{orderid}} 
+    alt="" 
+    width="200" 
+    height="200" /></p>
 
   </body>
 </html>
