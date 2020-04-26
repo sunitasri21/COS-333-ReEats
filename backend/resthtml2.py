@@ -68,7 +68,7 @@ def firstPage():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        return redirect(url_for('userFP')) 
+        return redirect(url_for('searchResults')) 
 
 @app.route('/userFP', methods=['GET'])
 @login_required
@@ -405,7 +405,7 @@ def confirmationPage():
             stderr.write("database error: " + errorMsg)
             raise e
 
-    template = jinja_env.get_template("UserConfirmation.html")
+    template = jinja_env.get_template("userConfirmation.html")
     # template2 = jinja_env.get_template("qrCodePage.html")
 
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
