@@ -37,91 +37,18 @@ hr {
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
 
-<script>
-
-     function changeValue(itemNum, newValue) {
-            if ((itemNum != null) && (newValue != null)) {
-            document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
-          }
-          }
-
-      function updateDiscount(itemNum, discountVal) {
-          const url = "/updateDiscount";
-          data = {
-            itemNum: itemNum,
-            discountVal: discountVal
-          }
-
-          // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
-          $.post(url, data)
-            .done(function(data) { 
-              changeValue(data.itemNum, data.discountVal)
-            })
-      }
-
-      function applyDiscount(itemNum) {
-          if (itemNum != null) {
-              var discount = document.getElementById("item" + itemNum + "_discount").value;
-          } 
-
-          updateDiscount(itemNum, parseFloat(discount));
-      }
-
-      function getDiscount(itemNum) {
-          const url = "/getNewPrice";
-          data = {
-            itemNum: itemNum,
-          }
-
-          // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
-          
-          alert("before posting")
-
-          $.post(url, data)
-            .done(function(data) { 
-              return data.discountVal
-            })
-          
-          alert("after posting")
-      }
-
-      function submitChecks() {
-          const url = "/qrCodePage";
-          data = {
-            itemNum: itemNum,
-          }
-          
-          alert("before posting")
-
-          $.post(url, data)
-            .done(function(data) { 
-              return data.discountVal
-            })
-          
-          alert("after posting")
-      }
-
-        //  function sendQrCode(orderNum, qrCode) {
-        // const url = "/getQrCode";
-        // data = {
-        //   itemNum: itemNum,
-        //   qrCode: qrCode
-        // }
-
-        // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
-      //   $.post(url, data)
-      //     .done(function(data) { 
-      //       changeValue(data.itemNum, data.discountVal)
-      //     })
-      // }
-      
-
+<script type="text/javascript">
+    function generateBarCode()
+    {
+        var nric = $('#text').val();
+        var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=50x50';
+        $('#barcode').attr('src', url);
+    }
 </script>
-
 
 </head>
 
-  <head>
+<head>
   <title>Chennai Chimney</title> 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -180,7 +107,7 @@ hr {
     <hr color ="black">
      </div>
 
-   <!--  <form action="/qrCodePage", method="post"></form> -->
+   <!--  <form id="payment-form"action="/qrCodePage", method="post"></form> -->
     <table cellspacing="2" cellpadding="2" style = "align:center">  
       <!-- align:"center" -->
       <tr>
@@ -202,7 +129,7 @@ hr {
           <td>{{ item.getFood()}}</td>
           <td>{{ item.getNewPrice()}}</td>
           <td>{{ item.getQuantity()}}</td>
-          <td>{{"%.2f"|format(item.getQuantity()*item.getNewPrice())}}</td>
+          <td>{{"%.2f"|format(item.getNewPrice()|float * item.getQuantity()|float)}}</td>
         </tr>
       {% endfor %}
 
@@ -222,13 +149,24 @@ hr {
     ><strong>Please present the follow QR code at resturant
   </strong></label>
 
-  <p 
+  <!-- <p 
     onblur='generateBarCode();' />
    <img id='barcode'  
     src={{orderid}} 
     alt="" 
     width="200" 
-    height="200" /></p>
+    height="200" /></p> -->
+
+   <a id="text" 
+      style="Width:20%"
+      onblur='generateBarCode();'></a> 
+
+    <img id='barcode' 
+          src="{{orderid}}" 
+          alt=""  
+          width="150" 
+          height="150" />
+
 
   </body>
 </html>

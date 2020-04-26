@@ -66,51 +66,51 @@ input [type="submit"]:hover {
 
 <script>
 
-     function changeValue(itemNum, newValue) {
-            if ((itemNum != null) && (newValue != null)) {
-            document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
-          }
-          }
+     // function changeValue(itemNum, newValue) {
+     //        if ((itemNum != null) && (newValue != null)) {
+     //        document.getElementById("item" + itemNum + "_newPrice").textContent = newValue.toPrecision(3);
+     //      }
+     //      }
 
-      function updateDiscount(itemNum, discountVal) {
-          const url = "/updateDiscount";
-          data = {
-            itemNum: itemNum,
-            discountVal: discountVal
-          }
+      // function updateDiscount(itemNum, discountVal) {
+      //     const url = "/updateDiscount";
+      //     data = {
+      //       itemNum: itemNum,
+      //       discountVal: discountVal
+      //     }
 
           // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
-          $.post(url, data)
-            .done(function(data) { 
-              changeValue(data.itemNum, data.discountVal)
-            })
-      }
+      //     $.post(url, data)
+      //       .done(function(data) { 
+      //         changeValue(data.itemNum, data.discountVal)
+      //       })
+      // }
 
-      function applyDiscount(itemNum) {
-          if (itemNum != null) {
-              var discount = document.getElementById("item" + itemNum + "_discount").value;
-          } 
+      // function applyDiscount(itemNum) {
+      //     if (itemNum != null) {
+      //         var discount = document.getElementById("item" + itemNum + "_discount").value;
+      //     } 
 
-          updateDiscount(itemNum, parseFloat(discount));
-      }
+      //     updateDiscount(itemNum, parseFloat(discount));
+      // }
 
-      function getDiscount(itemNum) {
-          const url = "/getNewPrice";
-          data = {
-            itemNum: itemNum,
-          }
+      // function getDiscount(itemNum) {
+      //     const url = "/getNewPrice";
+      //     data = {
+      //       itemNum: itemNum,
+      //     }
 
           // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
           
-          alert("before posting")
+      //     alert("before posting")
 
-          $.post(url, data)
-            .done(function(data) { 
-              return data.discountVal
-            })
+      //     $.post(url, data)
+      //       .done(function(data) { 
+      //         return data.discountVal
+      //       })
           
-          alert("after posting")
-      }
+      //     alert("after posting")
+      // }
 
       // function submitChecks() {
       //     const url = "/confirmationPage";

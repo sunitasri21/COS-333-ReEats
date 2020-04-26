@@ -228,48 +228,43 @@ class Database:
         quantity = int(quantity)
         qrCode = ''
 
-        stmstr = 'REPLACE INTO order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id)VALUES (?, ?, ?, ?, ?, ?, ?);'
+        stmstr = 'INSERT INTO order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id) VALUES (?, ?, ?, ?, ?, ?, ?);'
         arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
         cursor.execute(stmstr, arguments)
 
-        # stmstr2 = 'REPLACE INTO order_join (order_id, qrCode, user_id)VALUES (?, ?, ?); ' 
-        # arguments2 = (orderid, qrCode, userid) 
-        # cursor.execute(stmstr2, arguments2)
+        stmstr2 = 'REPLACE INTO order_join (order_id, qrCode, user_id) VALUES (?, ?, ?); ' 
+        arguments2 = (orderid, qrCode, userid) 
+        cursor.execute(stmstr2, arguments2)
 
         self._connection.commit()
         cursor.close()
         return 
 
 
-    def confirmedOrder(self, userid, confirmed, orderid,foodid):
+    def confirmedOrder(self, userid, orderid, confirmed):
         cursor = self._connection.cursor() 
         userid = int(userid)
-        foodid = int(foodid)
-        orderid = orderid
+        confirmed = int(confirmed)
 
-        stmstr = 'UPDATE order_table SET confirmed = ?, order_id = ? ' +\
-        'WHERE food_id = ?;'
-        arguments = (confirmed. orderid, foodid)
-        cursor.execute(stmstr, arguments)
-
-        stmstr2 = 'REPLACE INTO order_join (order_id, qrCode, user_id)VALUES (?, ?, ?); ' 
-        arguments2 = (orderid, qrCode, userid) 
-        cursor.execute(stmstr2, arguments2)
-
-        stmstr3 = 'SELECT food, new_price, quantity FROM order_table;'
-        'WHERE confirmed = 1;'
-        cursor.execute(stmstr3)
+        stmstr3 = 'SELECT food, new_price, quantity FROM order_table ' +\
+        'WHERE user_id LIKE ? ' +\
+        'AND order_id LIKE ? ' +\
+        'AND confirmed LIKE ?;'
+        arguments3 = (userid, orderid, confirmed)
+        print(stmstr3)
+        print(arguments3)
+        cursor.execute(stmstr3, arguments3)
         results = []
         total_value = 0.0
         row = cursor.fetchone()
         while row is not None: 
+            print(row)
             result = OrderResult(food = str(row[0]), new_price = str(row[1]), quantity = str(row[2]))
             results.append(result)
             total_value = total_value + row[2] * row[1]
-        row = cursor.fetchone()
-
-        self._connection.commit()
+            row = cursor.fetchone()
         cursor.close()
+        print(results, 'hi')
         return results, total_value
 
     def pullOrderId(self, user_id):
