@@ -36,26 +36,31 @@ hr {
 </style>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+<script src="https://js.stripe.com/v3/"></script>
+
 
 <script>
 
       function submitChecks() {
+         // var sessionid = {{CHECKOUT_SESSION_ID}};
+         var stripe = Stripe('pk_test_d3OIYzLIan4NGotYARF05gcp00VcXEXPPI');
+          stripe.redirectToCheckout({sessionId: '{{CHECKOUT_SESSION_ID}}'}).then(function(result) {
+            alert("done")
+            finalPage(); 
+          });
+        }
+
+      function finalPage() {
           const url = "/qrCodePage";
-          alert(document.getElementById("id").textContent)
           data = {
             orderId: document.getElementById("id").textContent,
-          }
+          };
           
-          var request = null; 
-
           function handleResponse(response)
           { 
             $("html").html(response);
-          }
-
-          if (request != null)
-            request.abort();
-
+          };
+          if (request != null) request.abort();
           request = $.ajax(
                {
                   type: "POST",
@@ -64,7 +69,39 @@ hr {
                   success: handleResponse
                }
             );
-      }
+         
+          // If `redirectToCheckout` fails due to a browser or network
+          // error, display the localized error message to your customer
+          // using `result.error.message`.
+
+
+        }
+
+          // const url = "/qrCodePage";
+          // alert(document.getElementById("id").textContent)
+          // data = {
+          //   orderId: document.getElementById("id").textContent,
+          // }
+          
+          // var request = null; 
+
+          // function handleResponse(response)
+          // { 
+          //   $("html").html(response);
+          // }
+
+          // if (request != null)
+          //   request.abort();
+
+          // request = $.ajax(
+          //      {
+          //         type: "POST",
+          //         url: url,
+          //         data: data,
+          //         success: handleResponse
+          //      }
+      //       );
+      // }
       
 
 </script>
@@ -156,7 +193,7 @@ hr {
 
 
     <p align="center">
-    <input type="submit" value="SUBMIT" onclick="submitChecks()">
+    <input type="submit" value="SUBMIT" onclick="submitChecks()"> 
     </p>
   </form>
 </head>

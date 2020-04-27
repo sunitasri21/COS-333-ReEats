@@ -17,8 +17,7 @@ from flask import g
 import random
 from time import localtime, asctime, strftime
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
-
-
+import stripe
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
@@ -371,6 +370,30 @@ def getNewPrice():
     print("bungun")
 
     return retVal, 400
+
+# @app.route('/payment', methods=['POST'])
+# def payment():
+    # stripe.api_key = 'sk_test_AwX9JLUwBYsuh9qhVFQISrDL00WRZ6jKh4'
+
+    # session2 = stripe.checkout.Session.create(
+    #   payment_method_types=['card'],
+    #   line_items=[{
+    #     'name': 'T-shirt',
+    #     'description': 'Comfortable cotton t-shirt',
+    #     'images': ['https://example.com/t-shirt.png'],
+    #     'amount': int(total_value*100),
+    #     'currency': 'usd',
+    #     'quantity': 1
+    #   }],
+    #   success_url='http://www.gmail.com',
+    #   cancel_url='http://www.facebook.com',
+    # )
+
+    # CHECKOUT_SESSION_ID=session2["id"]
+    # print('sessioncreated', session2)
+    # print(session2['id'])
+
+
 #-----------------------------------------------------------------------
 @app.route('/confirmationPage', methods=['POST'])
 @login_required
@@ -392,39 +415,59 @@ def confirmationPage():
             name = "item" + str(value) + "_quantity"
             quantity = request.form[name]
             foodName = database.pullName(value)
-            food_list.append((value, newPrice, foodName, float(quantity)))
             total_value = total_value + float(quantity) * newPrice
             database.updateQuantity(quantity, value)
             userid = session['id']
             confirmed = 1
             database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
-            print(value)
+            food_list.append((value, newPrice, foodName, float(quantity)))
 
         except Exception as e:
             errorMsg =  str(e)
             stderr.write("database error: " + errorMsg)
             raise e
 
+    stripe.api_key = 'sk_test_AwX9JLUwBYsuh9qhVFQISrDL00WRZ6jKh4'
+
+    session2 = stripe.checkout.Session.create(
+      payment_method_types=['card'],
+      line_items=[{
+        'name': 'Your Order Total',
+        # 'images': ['/static/foodimage.png'],
+        'amount': int(total_value*100),
+        'currency': 'usd',
+        'quantity': 1
+      }],
+      success_url='http://localhost:12345/qrCodePage',
+      cancel_url='http://localhost:12345/userFP'
+    )
+
+    sessionId = session2["id"]
+
     template = jinja_env.get_template("userConfirmation.html")
     # template2 = jinja_env.get_template("qrCodePage.html")
 
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
 
-    html = render_template(template, foodList = food_list, total = total_value, orderId = orderid)
+    html = render_template(template, foodList = food_list, total = total_value, orderId = orderid, CHECKOUT_SESSION_ID = sessionId)
     # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
     response = make_response(html)
-    # response2 = make_response(html2)
+    # response.set_cookie('foodList', food_list)
+    response.set_cookie('total', str(total_value))
+    response.set_cookie('orderId', orderid)
+    response.set_cookie('CHECKOUT_SESSION_ID', sessionId)
+
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
         return response
 
 #-----------------------------------------------------------------------
-@app.route('/qrCodePage', methods=['POST'])
+@app.route('/qrCodePage', methods=['GET'])
 @login_required
 def qrCodePage():
-    orderid = request.form["orderId"]
-    print(orderid)
+    # orderid = request.form["orderId"]
+    orderid = request.cookies.get('orderId')
     # if confirmedFood_list == None:
     #     confirmedFood_list = []
     # print(confirmedFood_list)
@@ -435,13 +478,10 @@ def qrCodePage():
 
     userid = session['id']
 
-    # orderid = createOrderId()
-
     confirmed = 1
 
     try:
         results, total_value = database.confirmedOrder(userid, orderid, confirmed)
-        print(results)
 
     except Exception as e:
         errorMsg =  str(e)
