@@ -20,7 +20,7 @@ class Database:
         self._connection = None
 
     def connect(self):
-        DATABASE_NAME = 'reeats.db'    
+        DATABASE_NAME = 'backend/reeats.db'    
         # DATABASE_NAME = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
         if not path.isfile(DATABASE_NAME):
             raise Exception("database reeats.db not found")
