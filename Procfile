@@ -1,1 +1,1 @@
-web: gunicorn resthtml2:app
+web: gunicorn backend/resthtml2:app
