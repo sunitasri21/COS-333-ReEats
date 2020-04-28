@@ -32,15 +32,6 @@ def create_app():
     app = Flask(__name__,  template_folder='../frontend')
     app.secret_key = "WEFWEFGEWDNFEJNJK2938Rdnjenfcjv"
 
-    if dev:
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reeats.db'
-    else:
-        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
-
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-    db_sql = SQLAlchemy(app)
-
     with app.app_context():
         get_db()
 
@@ -58,6 +49,16 @@ def get_db():
     return g.db
 
 app = create_app()
+
+if dev:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reeats.db'
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db_sql = SQLAlchemy(app)
+
 # -----------------------------------------------------------------------
 
 login_manager = LoginManager()
