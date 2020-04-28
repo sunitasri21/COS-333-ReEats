@@ -18,18 +18,26 @@ import random
 from time import localtime, asctime, strftime
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 import stripe
+from flask_sqlalchemy import SQLAlchemy
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
 template_dir = os.path.join(os.path.dirname(__file__), '../frontend')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
+dev = True 
 # -----------------------------------------------------------------------
 
 def create_app():
     app = Flask(__name__,  template_folder='../frontend')
     app.secret_key = "WEFWEFGEWDNFEJNJK2938Rdnjenfcjv"
 
+    if dev:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reeats.db'
+    else:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
+
+    db_sql = SQLAlchemy(app)
 
     with app.app_context():
         get_db()
