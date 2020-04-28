@@ -1,1 +1,1 @@
-web: gunicorn --pythonpath backend resthtml2:app
+web: gunicorn resthtml2:app
