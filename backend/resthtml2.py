@@ -25,7 +25,7 @@ from flask_sqlalchemy import SQLAlchemy
 template_dir = os.path.join(os.path.dirname(__file__), '../frontend')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
-dev = True 
+dev = False
 # -----------------------------------------------------------------------
 
 def create_app():
