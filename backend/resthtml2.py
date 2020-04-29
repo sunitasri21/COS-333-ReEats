@@ -18,6 +18,7 @@ import random
 from time import localtime, asctime, strftime
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 import stripe
+import re
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
@@ -296,7 +297,7 @@ def register():
         password = request.form['password']
         email = request.form['email']
         # Check if account exists in the database: 
-        rest, user = database.account_search(username)
+        rest, user = database.account_search(username, password)
         # If account exists show error and validation checks
         if rest or user:
             msg = 'Account already exists!'
