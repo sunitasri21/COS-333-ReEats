@@ -18,6 +18,7 @@ import random
 from time import localtime, asctime, strftime
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 import stripe
+import re
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
@@ -296,7 +297,7 @@ def register():
         password = request.form['password']
         email = request.form['email']
         # Check if account exists in the database: 
-        rest, user = database.account_search(username)
+        rest, user = database.account_search(username, password)
         # If account exists show error and validation checks
         if rest or user:
             msg = 'Account already exists!'
@@ -428,13 +429,11 @@ def confirmationPage():
             raise e
 
     stripe.api_key = 'sk_test_AwX9JLUwBYsuh9qhVFQISrDL00WRZ6jKh4'
-    stripe.api_key = 'sk_test_4eC39HqLyjWDarjtT1zdp7dc'
 
     username=session['email']
 
     session2 = stripe.checkout.Session.create(
       payment_method_types=['card'],
-      receipt_email=['username'],
       line_items=[{
         'name': 'Your Order Total',
         # 'images': ['/static/foodimage.png'],
