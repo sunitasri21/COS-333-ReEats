@@ -428,9 +428,13 @@ def confirmationPage():
             raise e
 
     stripe.api_key = 'sk_test_AwX9JLUwBYsuh9qhVFQISrDL00WRZ6jKh4'
+    stripe.api_key = 'sk_test_4eC39HqLyjWDarjtT1zdp7dc'
+
+    username=session['email']
 
     session2 = stripe.checkout.Session.create(
       payment_method_types=['card'],
+      receipt_email=['username'],
       line_items=[{
         'name': 'Your Order Total',
         # 'images': ['/static/foodimage.png'],
