@@ -105,6 +105,20 @@ def searchResults():
         else:
             return response     
 # -----------------------------------------------------------------------
+@app.route('/userabout', methods=['GET'])
+
+def userabout():
+    html = render_template('userAbout.html')
+    response = make_response(html)
+    return response  
+# -----------------------------------------------------------------------
+@app.route('/restabout', methods=['GET'])
+
+def restabout():
+    html = render_template('restAbout.html')
+    response = make_response(html)
+    return response  
+# -----------------------------------------------------------------------
 @app.route('/restFP', methods=['GET'])
 @login_required
 def restPage():
