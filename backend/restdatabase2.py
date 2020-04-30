@@ -192,7 +192,7 @@ class Database:
 
         arguments = (newQuant, foodid) 
         if (int(originalQuantity) >= int(quantity)):
-            cursor.execute("UPDATE _menu SET quantity = %s WHERE food_id = %s", (newQuant, foodid, ));  
+            cursor.execute("UPDATE _menu SET quantity = %d WHERE food_id = %d", (newQuant, foodid, ));  
         self._connection.commit()
         cursor.close()
         return 
@@ -200,7 +200,7 @@ class Database:
     def pullNewPrice(self, food_id):
         cursor = self._connection.cursor() 
         food_id = int(food_id)
-        cursor.execute("SELECT new_price FROM _menu WHERE food_id = %s", (food_id, )) 
+        cursor.execute("SELECT new_price FROM _menu WHERE food_id = %d", (food_id, )) 
         newPrice = cursor.fetchone()
         cursor.close()
         return newPrice[0]
@@ -208,7 +208,7 @@ class Database:
     def pullName(self, food_id):
         cursor = self._connection.cursor() 
         food_id = int(food_id)
-        cursor.execute("SELECT food FROM _menu WHERE food_id = %s", (food_id, ))
+        cursor.execute("SELECT food FROM _menu WHERE food_id = %d", (food_id, ))
         newPrice = cursor.fetchone()
         cursor.close()
         return newPrice[0]
@@ -239,7 +239,7 @@ class Database:
         confirmed = int(confirmed)
 
         arguments3 = (userid, orderid, confirmed)
-        cursor.execute("SELECT food, new_price, quantity FROM _order_table WHERE user_id = %s AND order_id = %s AND confirmed = %s", (userid, orderid, confirmed, )); 
+        cursor.execute("SELECT food, new_price, quantity FROM _order_table WHERE user_id = %d AND order_id = %s AND confirmed = %d", (userid, orderid, confirmed, )); 
         results = []
         total_value = 0.0
         row = cursor.fetchone()
