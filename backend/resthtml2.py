@@ -134,7 +134,7 @@ def restabout():
 @login_required
 def restPage():
     restName = str(request.args.get('restName')) or ""
-    discount = request.args.get('discount', default=1) 
+    discount = float(request.args.get('discount', default=1))
      
     database = get_db()
 
@@ -359,7 +359,7 @@ def updateDiscount():
         database.inputDiscount(discount, quantity, foodId)
 
         # database.connect()
-        newPrice = database.pullNewPrice(foodId)
+        newPrice = float(database.pullNewPrice(foodId))
         retVal = jsonify(
             itemNum=foodId,
             discountVal=newPrice
@@ -446,7 +446,7 @@ def confirmationPage():
             name = "item" + str(value) + "_quantity"
             quantity = request.form[name]
             foodName = database.pullName(value)
-            total_value = total_value + float(quantity) * newPrice
+            total_value = float(total_value) + float(quantity) * float(newPrice)
             database.updateQuantity(quantity, value)
             userid = session['id']
             confirmed = 1

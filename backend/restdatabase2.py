@@ -9,34 +9,32 @@ from sqlite3 import connect
 from sys import stderr
 from os import path
 from orderResult2 import OrderResult
-from flask_sqlalchemy import SQLAlchemy
-import os 
 import psycopg2
-# from menuResult import MenuResult
+
+# from menuResult import MenuResults
+
 #-----------------------------------------------------------------------
 
 class Database:
     def __init__(self):
         self._connection = None
 
-    def connect(self):
-        DATABASE_NAME = 'backend/reeats.db'    
-        # DATABASE_NAME = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
+    def connect(self):      
+        DATABASE_URL = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
+        conn_string = "host='localhost' dbname='reeats6' user='arjunsaikrishnan' password='waterside2007'"
         # if not path.isfile(DATABASE_NAME):
         #     raise Exception("database reeats.db not found")
-        # self._connection = psycopg2.connect(DATABASE_NAME)
-        self._connection = connect(DATABASE_NAME)
+        # self._connection = connect(DATABASE_NAME)
+        self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
                     
     def disconnect(self):
         self._connection.close()
-    
+
     def account_login(self, username, password):
         cursor = self._connection.cursor() 
-        rest_string = 'SELECT * FROM restaurant_accounts WHERE username LIKE ? AND password LIKE ?;'
-        user_string = 'SELECT * FROM user_account WHERE username LIKE ? AND password LIKE ?;'
-        cursor.execute(rest_string, (username, password,))
+        cursor.execute("SELECT * FROM _restaurant_accounts WHERE username = %s AND password = %s", (username, password, )); 
         rest = cursor.fetchone()
-        cursor.execute(user_string, (username, password,))
+        cursor.execute("SELECT * FROM _user_account WHERE username = %s AND password = %s", (username, password, )); 
         user = cursor.fetchone()
         cursor.close()
         return rest, user
@@ -44,54 +42,67 @@ class Database:
     # Searches for an username in the accounts table 
     def account_search(self, username, password):
         cursor = self._connection.cursor() 
-        rest_string = 'SELECT * FROM restaurant_accounts WHERE username LIKE ? AND password LIKE ?'
-        user_string = 'SELECT * FROM user_account WHERE username LIKE ? AND password LIKE ?'
-        cursor.execute(rest_string, (username, password,))
+        cursor.execute("SELECT * FROM _restaurant_accounts WHERE username = %s AND password = %s", (username, password, )); 
         rest = cursor.fetchone()
-        cursor.execute(user_string, (username, password,))
-        user = cursor.fetchone()
-        cursor.close()
-        return rest, user
-    
-    def user_search(self, username):
-        cursor = self._connection.cursor() 
-        rest_string = 'SELECT * FROM restaurant_accounts WHERE restaurant_id LIKE ?'
-        user_string = 'SELECT * FROM user_account WHERE user_id LIKE ?'
-        cursor.execute(rest_string, (username))
-        rest = cursor.fetchone()
-        cursor.execute(user_string, (username))
+        cursor.execute("SELECT * FROM _user_account WHERE username = %s AND password = %s", (username, password, )); 
         user = cursor.fetchone()
         cursor.close()
         return rest, user
 
-    
-    # Adds a new user to the database during Registration
-    def add_user(self, user_id, username, password, email):
+    def user_search(self, username):
         cursor = self._connection.cursor() 
-        add_string = 'INSERT INTO user_account VALUES (?, ? , ? , ? );'
-        cursor.execute(add_string, (user_id, username, password, email,))
-        self._connection.commit()
+        cursor.execute("SELECT * FROM _restaurant_accounts WHERE restaurant_id = %s", (username, )); 
+        rest = cursor.fetchone()
+        cursor.execute("SELECT * FROM _user_account WHERE user_id = %s", (username, ))
+        user = cursor.fetchone()
         cursor.close()
-        return
-    
+        return rest, user
+
     def restaurant_search(self, restaurant_id):
         cursor = self._connection.cursor() 
-        restString = 'SELECT restaurant_name FROM restaurants ' +\
-         'WHERE restaurant_id = ?'
-        cursor.execute(restString, (restaurant_id,))
+        cursor.execute("SELECT restaurant_name FROM _restaurants WHERE restaurant_id = %s", (restaurant_id, ))
         restaurant_name = cursor.fetchone()[0]
         cursor.close()
         return restaurant_name
 
+    def pullOrderId(self, user_id):
+        cursor = self._connection.cursor() 
+        user_id = int(user_id)
+        cursor.execute("SELECT order_id FROM _order_join WHERE user_id = %s", (user_id, ))
+        orderId = cursor.fetchone()
+        cursor.close()
+        return orderId[0]
+
+    def pullConfirmedOrders(self, user_id, orderid):
+        cursor = self._connection.cursor() 
+        user_id = int(user_id)
+        cursor.execute("SELECT order_id FROM _order_join WHERE user_id = %s", (user_id, )); 
+        orderId = cursor.fetchone()
+        cursor.close()
+        return orderId[0]
+
+    def previewAllDiscounts(self):
+        cursor = self._connection.cursor() 
+        stmstr = 'SELECT discount, unit_price, new_price, quantity, food FROM _menu;'
+        cursor.execute(stmstr)
+        results = []
+        row = cursor.fetchone()
+        while row is not None: 
+            discount = row[0]
+            if discount is not None:
+                result = OrderResult(discount=str(row[0]), unit_price=str(row[1]), new_price=str(row[2]), quantity=str(row[3]), food=str(row[4]))
+                results.append(result)
+            row = cursor.fetchone()
+        cursor.close()
+        return results
+
     def menuSearch(self, restName):
         cursor = self._connection.cursor() 
-        restIdString = 'SELECT restaurant_id FROM restaurants ' +\
-         'WHERE restaurant_name LIKE "Chennai Chimney"'
-        cursor.execute(restIdString)
+        rest_name = 'Chennai Chimney'
+        cursor.execute("SELECT restaurant_id FROM _restaurants WHERE restaurant_name = %s", (rest_name, ))
         restId = cursor.fetchone()[0]
-        stmStr = 'SELECT food, description, unit_price, food_id FROM menu ' +\
-        'WHERE menu.restaurant_id = 1;'
-        cursor.execute(stmStr)
+        menu_id = '1'
+        cursor.execute("SELECT food, description, unit_price, food_id FROM _menu WHERE restaurant_id = %s ORDER BY food_id ASC", (menu_id, ))
 
         results = []
         row = cursor.fetchone()
@@ -102,23 +113,23 @@ class Database:
         cursor.close()
 
         return results
-    
+
     def menuSearchUser(self, restName):
         cursor = self._connection.cursor() 
-        restIdString = 'SELECT restaurant_id FROM restaurants ' +\
-         'WHERE restaurant_name LIKE "Chennai Chimney"'
-        cursor.execute(restIdString)
+        rest_name = 'Chennai Chimney'
+        cursor.execute("SELECT restaurant_id FROM _restaurants WHERE restaurant_name = %s", (rest_name, ))
         restId = cursor.fetchone()[0]
-        stmStr = 'SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM menu'
         # 'WHERE menu.food_id = order_table.food_id;'
-        cursor.execute(stmStr)
+        cursor.execute("SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM _menu")
 
         results = []
         row = cursor.fetchone()
         while row is not None:  
             discount = row[4]
+            # print("d: " + str(discount))
             quantity = row[6]
-            if discount is not None and quantity != 0:
+            # print("q: " + str(quantity))
+            if (discount is not None and discount != '') and (quantity != '' and quantity != '0'):
                 result = OrderResult(food=str(row[0]), description=str(row[1]), unit_price=str(row[2]), food_id=str(row[3]), new_price=str(row[5]), quantity=quantity)
                 results.append(result)
             row = cursor.fetchone()
@@ -126,12 +137,18 @@ class Database:
 
         return results
 
+    # Adds a new user to the database during Registration
+    def add_user(self, user_id, username, password, email):
+        cursor = self._connection.cursor() 
+        cursor.execute("INSERT INTO _user_account (user_id, username, password, email) VALUES (%s, %s , %s , %s)", (user_id, username, password, email,)); 
+        self._connection.commit()
+        cursor.close()
+        return 
+
     def inputDiscount(self, discount, quantity, foodid):
         cursor = self._connection.cursor() 
-        stmstr2 = 'SELECT food, unit_price FROM menu ' +\
-        'WHERE menu.food_id LIKE ?'
         foodid = int(foodid)
-        cursor.execute(stmstr2, (foodid, ))
+        cursor.execute("SELECT food, unit_price FROM _menu WHERE food_id = %s", (foodid, )); 
         discount = float(discount)
 
         result = cursor.fetchone()
@@ -145,21 +162,17 @@ class Database:
         print(quantity)
         newPrice = (1 - float(discount)) * float(price)
         newPrice = '{:.2f}'.format(newPrice)
-        stmstr = 'UPDATE menu SET discount = ?, new_price = ?, quantity = ? ' +\
-        'WHERE menu.food_id LIKE ?;'
         arguments = (discount, newPrice, quantity, foodid) 
         if (discount >= 0 and discount <= 1):
-            cursor.execute(stmstr, arguments) 
+            cursor.execute("UPDATE _menu SET discount = %s, new_price = %s, quantity = %s WHERE food_id= %s", (discount, newPrice, quantity, foodid, )); 
         self._connection.commit()
         cursor.close()
         return 
 
     def updateQuantity(self, quantity, foodid):
         cursor = self._connection.cursor() 
-        stmstr2 = 'SELECT quantity FROM menu ' +\
-        'WHERE menu.food_id LIKE ?'
         foodid = int(foodid)
-        cursor.execute(stmstr2, (foodid, ))
+        cursor.execute("SELECT quantity FROM _menu WHERE food_id = %s", (foodid, )); 
         result = cursor.fetchone()
         originalQuantity = result[0]
 
@@ -174,53 +187,31 @@ class Database:
         # print(quantity)
         # newPrice = (1 - float(discount)) * float(price)
         # newPrice = '{:.2f}'.format(newPrice)
-        stmstr = 'UPDATE menu SET quantity = ? ' +\
-        'WHERE menu.food_id LIKE ?;'
 
         newQuant = int(originalQuantity) - int(quantity)   
 
         arguments = (newQuant, foodid) 
-        if (originalQuantity >= int(quantity)):
-            cursor.execute(stmstr, arguments) 
+        if (int(originalQuantity) >= int(quantity)):
+            cursor.execute("UPDATE _menu SET quantity = %s WHERE food_id = %s", (newQuant, foodid, ));  
         self._connection.commit()
         cursor.close()
         return 
 
-
     def pullNewPrice(self, food_id):
         cursor = self._connection.cursor() 
-        stmstr = 'SELECT new_price FROM menu ' +\
-        'WHERE menu.food_id LIKE ?;'
         food_id = int(food_id)
-        cursor.execute(stmstr, (food_id, )) 
+        cursor.execute("SELECT new_price FROM _menu WHERE food_id = %s", (food_id, )) 
         newPrice = cursor.fetchone()
         cursor.close()
         return newPrice[0]
 
     def pullName(self, food_id):
         cursor = self._connection.cursor() 
-        stmstr = 'SELECT food FROM menu ' +\
-        'WHERE menu.food_id LIKE ?;'
         food_id = int(food_id)
-        cursor.execute(stmstr, (food_id, ))
+        cursor.execute("SELECT food FROM _menu WHERE food_id = %s", (food_id, ))
         newPrice = cursor.fetchone()
         cursor.close()
         return newPrice[0]
-
-    def previewAllDiscounts(self):
-        cursor = self._connection.cursor() 
-        stmstr = 'SELECT discount, unit_price, new_price, quantity, food FROM menu;'
-        cursor.execute(stmstr)
-        results = []
-        row = cursor.fetchone()
-        while row is not None: 
-            discount = row[0]
-            if discount is not None:
-                result = OrderResult(discount=str(row[0]), unit_price=str(row[1]), new_price=str(row[2]), quantity=str(row[3]), food=str(row[4]))
-                results.append(result)
-            row = cursor.fetchone()
-        cursor.close()
-        return results
 
     def inputOrderId(self, userid, price, quantity, foodid, food, orderid, confirmed):
         cursor = self._connection.cursor() 
@@ -231,66 +222,39 @@ class Database:
         quantity = int(quantity)
         qrCode = ''
 
-        stmstr = 'INSERT INTO order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id) VALUES (?, ?, ?, ?, ?, ?, ?);'
         arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
-        cursor.execute(stmstr, arguments)
+        cursor.execute("INSERT INTO _order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
+            (price, quantity, food, foodid, orderid, confirmed, userid, )); 
 
-        stmstr2 = 'REPLACE INTO order_join (order_id, qrCode, user_id) VALUES (?, ?, ?); ' 
         arguments2 = (orderid, qrCode, userid) 
-        cursor.execute(stmstr2, arguments2)
+        cursor.execute("UPDATE _order_join SET order_id = %s, qrCode = %s, user_id = %s", (orderid, qrCode, userid, )); 
 
         self._connection.commit()
         cursor.close()
         return 
-
 
     def confirmedOrder(self, userid, orderid, confirmed):
         cursor = self._connection.cursor() 
         userid = int(userid)
         confirmed = int(confirmed)
 
-        stmstr3 = 'SELECT food, new_price, quantity FROM order_table ' +\
-        'WHERE user_id LIKE ? ' +\
-        'AND order_id LIKE ? ' +\
-        'AND confirmed LIKE ?;'
         arguments3 = (userid, orderid, confirmed)
-        print(stmstr3)
-        print(arguments3)
-        cursor.execute(stmstr3, arguments3)
+        cursor.execute("SELECT food, new_price, quantity FROM _order_table WHERE user_id = %s AND order_id = %s AND confirmed = %s", (userid, orderid, confirmed, )); 
         results = []
         total_value = 0.0
         row = cursor.fetchone()
         while row is not None: 
-            print(row)
+            # print(row)
             result = OrderResult(food = str(row[0]), new_price = str(row[1]), quantity = str(row[2]))
             results.append(result)
             total_value = total_value + row[2] * row[1]
             row = cursor.fetchone()
         cursor.close()
-        print(results, 'hi')
         return results, total_value
 
-    def pullOrderId(self, user_id):
-        cursor = self._connection.cursor() 
-        stmstr = 'SELECT order_id FROM order_join ' +\
-        'WHERE order_join.user_id LIKE ?;'
-        user_id = int(user_id)
-        cursor.execute(stmstr, user_id) 
-        orderId = cursor.fetchone()
-        cursor.close()
-        return orderId[0]
 
-    def pullConfirmedOrders(self, user_id, orderid):
-        cursor = self._connection.cursor() 
-        stmstr = 'SELECT order_id FROM order_join ' +\
-        'WHERE order_join.user_id LIKE ?;'
-        user_id = int(user_id)
-        cursor.execute(stmstr, user_id) 
-        orderId = cursor.fetchone()
-        cursor.close()
-        return orderId[0]
+
 #-----------------------------------------------------------------------
-
 # For testing:
 
 if __name__ == '__main__':
