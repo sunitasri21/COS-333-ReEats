@@ -445,6 +445,7 @@ def confirmationPage():
             newPrice = database.pullNewPrice(value)
             name = "item" + str(value) + "_quantity"
             quantity = request.form[name]
+            print("q: " + str(quantity))
             foodName = database.pullName(value)
             total_value = float(total_value) + float(quantity) * float(newPrice)
             database.updateQuantity(quantity, value)
