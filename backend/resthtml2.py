@@ -109,7 +109,7 @@ def searchResults():
     if 'logged_in' in session:
         # User is loggedin show them the home page
         template = jinja_env.get_template("userFirstPage.html")    
-        html = render_template(template, restaurant=searchResults, discount=discount, username=session['username'])
+        html = render_template(template, restaurant=searchResults, discount=discount, username=session.get('username'))
         response = make_response(html)
         if not session.get('logged_in'):
             return redirect(url_for('login'))
@@ -204,12 +204,16 @@ def checkoutPage():
 @login_required
 
 def restAccount():
-    html = render_template('restAccount.html')
+    username = session.get('username')
+    email = session.get('email')
+    password = session.get('password')
+    html = render_template('restAccount.html', username=username, email=email, password=password)
+
     response = make_response(html)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        return response     
+        return response         
 # -----------------------------------------------------------------------
 
 @app.route('/userAccount', methods=['GET'])
@@ -280,7 +284,9 @@ def login():
             restUser = User(restaurant[1], unhashed_password, restaurant[0], True, None)
             # Create session data, we can access this data in other routes
             session['logged_in'] = True
-            session['username1'] = restaurant[1]  
+            session['username'] = restaurant[1]  
+            session['password'] = restaurant[2]
+            session['email'] = restaurant[3]
             session['id'] = restaurant[0]
             session['restaurant_name'] = database.restaurant_search(restaurant[0])
             login_user(restUser)
