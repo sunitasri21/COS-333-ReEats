@@ -475,8 +475,8 @@ def confirmationPage():
         'currency': 'usd',
         'quantity': 1
       }],
-      success_url='http://localhost:12345/qrCodePage',
-      cancel_url='http://localhost:12345/userFP'
+      success_url='https://reeats-test1.herokuapp.com/qrCodePage',
+      cancel_url='https://reeats-test1.herokuapp.com/userFP'
     )
 
     sessionId = session2["id"]
@@ -546,8 +546,8 @@ def confirmationPageReloaded():
         'currency': 'usd',
         'quantity': 1
       }],
-      success_url='http://localhost:12345/qrCodePage',
-      cancel_url='http://localhost:12345/userFP'
+      success_url='https://reeats-test1.herokuapp.com/qrCodePage',
+      cancel_url='https://reeats-test1.herokuapp.com/userFP'
     )
 
     sessionId = session2["id"]
@@ -598,7 +598,7 @@ def qrCodePage():
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "http://localhost:12345/qrReroute" + orderid + "&amp;size=100x100"
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute" + orderid + "&amp;size=100x100"
     print(url)
 
     html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
