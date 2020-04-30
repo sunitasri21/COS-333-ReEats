@@ -22,7 +22,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
-template_dir = os.path.join(os.path.dirname(__file__), '.../frontend')
+template_dir = os.path.join(os.path.dirname(__file__), '../frontend')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
 dev = False
