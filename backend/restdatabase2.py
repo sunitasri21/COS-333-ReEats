@@ -247,7 +247,7 @@ class Database:
             # print(row)
             result = OrderResult(food = str(row[0]), new_price = str(row[1]), quantity = str(row[2]))
             results.append(result)
-            total_value = total_value + row[2] * row[1]
+            total_value = float(total_value) + float(row[2]) * float(row[1])
             row = cursor.fetchone()
         cursor.close()
         return results, total_value
