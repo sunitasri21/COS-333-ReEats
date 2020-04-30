@@ -3,38 +3,42 @@
 
 <head>
 <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
+
+
 <style>
-table {
-  border-collapse: collapse;
+body{
+  background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");   
+  background-size: cover;  
+  margin: 0;
+    }
+.fixed_header{
+    width: 1300px;
+    table-layout: fixed;
+    border-collapse: collapse;
+}
+
+.fixed_header tbody{
+  display:block;
   width: 100%;
+  overflow: auto;
+  height: 500px;
 }
 
-th, td {
+.fixed_header thead tr {
+   display: block;
+}
+
+.fixed_header thead {
+  background: black;
+  color:#fff;
+}
+
+.fixed_header th, .fixed_header td {
+  padding: 10px;
   text-align: left;
-  padding: 8px;
-  font-family: 'Source Code Pro';
-}
-
-tr:nth-child(even){background-color: #f2f2f2}
-
-th {
-  background-color: #b34444;
-  color: white;
-  font-family: 'Source Code Pro';
-}
-
-hr {
-  background: rgb(30, 30, 40);
-  color: white;
-}
-
-.title{
-  background: rgb(30, 30, 40);
-  color: white;
-  font-family: 'Source Code Pro';
+  width: 1400px;
 }
 </style>
-
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
 
 <script>
@@ -77,29 +81,15 @@ hr {
   <title>Chennai Chimney</title> 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
-  <div class="topnav">
-
-     <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-      <a href="#home" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
-
-      <div class="w3-right w3-hide-small">
-
-        <a label href = "/restFP" ></label> <span class="w3-bar-item w3-button">Menu</a>
-
-        <a label href = "/restAccount" ></label> <span class="w3-bar-item w3-button">Account</a>
-
-        <a label href = "/restDiscount" ></label> <span class="w3-bar-item w3-button">Discounts</a>
-
-        <a label href = "/restFeedback" ></label> <span class="w3-bar-item w3-button">Feedback</a>
-
-        <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
-          
-      </div>
-    </div>
-
-    </a>
-  </div>
+  <link rel="stylesheet" href="static/table.css" type="text/css">
+    <ul class="topnav">
+        <li><a class="active" href="/restabout"><span class="vertical"><b>Re</b></span>Eats</a></li>
+        <li class="right"><a href="/logout">Logout</a></li>
+        <li class="right"><a href="/restFeedback">Feedback</a></li>
+        <li class="right"><a href="/restFP">Checkout</a></li>
+        <li class="right"><a href="/restAccount">Account</a></li>
+        <li class="right"><a href="/restFP">Menu</a></li>           
+    </ul>
 
   </head>
 
@@ -111,18 +101,18 @@ hr {
     
  <!--    <form action="/" method="get">
         <label for="restName"></label><br> -->
-        <label
-          style = "padding-left: 575px"
-          ><strong>Chennai Chimney
-        </strong></label>
+        <center>
+        <label><strong>Chennai Chimney
+            </strong></label></center>
       
 <!--     </form> -->
 
     <hr color ="black">
      </div>
-
-    <table cellspacing="2" cellpadding="2" style = "align:center">  
+    <center>
+    <table class="fixed_header" cellspacing="2" cellpadding="2">  
       <!-- align:"center" -->
+        <thead>
       <tr>
         <th><strong>Food Item</strong></th>
         <th><strong>Description</strong></th>
@@ -132,7 +122,8 @@ hr {
         <th><strong>Discount</strong></th>
         <th><strong>Discounted Price</strong></th>
 
-       </tr>
+            </tr></thead>
+        <tbody>
       {% for item in restaurant %}
         <tr>
           <td>{{ item.getFood()}}</td>
@@ -157,7 +148,8 @@ hr {
         </tr>
 
       {% endfor %}
+        </tbody>
 
-    </table>
+        </table></center>
   </body>
 </html>

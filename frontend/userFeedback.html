@@ -21,34 +21,55 @@
     background-color: #b34444;
     color: white;
   }
+ul.topnav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+  display: block;
+  color: black;
+  font-size: 20px;
+  font-family: "Source Code Pro";
+  font-weight: 500;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+span.vertical {
+  writing-mode: vertical-rl; 
+}
+ul.topnav li a.active {background-color: #cc6666; color: white}
+ul.topnav li a:hover{background-color: #cc4949;}
+ul.topnav li a.active:hover{background-color: #cc4949;}
+
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px) {
+  ul.topnav li.right, 
+  ul.topnav li {float: none;}
+}
+    
   </style>
   </head>
 
     <head>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 
-    <div class="topnav">
-
-       <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-        <a href="#home" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
-
-        <div class="w3-right w3-hide-small">
-
-          <a label href = "/userFP" ></label> <span class="w3-bar-item w3-button">Menu</a>
-
-          <a label href = "/userAccount" ></label> <span class="w3-bar-item w3-button">Account</a>
-
-          <a label href = "/userFP" ></label> <span class="w3-bar-item w3-button">Checkout</a>
-
-          <a label href = "/userFeedback" ></label> <span class="w3-bar-item w3-button">Feedback</a>
-
-          <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
-
-        </div>
-      </div>
-
-      </a>
-    </div>
+    <ul class="topnav">
+        <li><a class="active" href="/userabout"><span class="vertical"><b>Re</b></span>Eats</a></li>
+        <li class="right"><a href="/logout">Logout</a></li>
+        <li class="right"><a href="/userFeedback">Feedback</a></li>
+        <li class="right"><a href="/userFP">Checkout</a></li>
+        <li class="right"><a href="/userAccount">Account</a></li>
+        <li class="right"><a href="/userFP">Menu</a></li>           
+    </ul>
 
 </head>
 
