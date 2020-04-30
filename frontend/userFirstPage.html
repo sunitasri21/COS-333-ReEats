@@ -4,12 +4,226 @@
 <head>
 <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="static/table.css" type="text/css">
 <style>
 body{
   background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");   
   background-size: cover;  
   margin: 0;
     }
+table {
+  border-collapse: collapse;
+  border: 1px solid black;
+  width: 95%;
+  opacity: 0.9;
+}
+    
+th{
+  background-color: #cc6666;
+  text-align: center;
+  padding: 8px;  
+  color: black;
+  font-family: 'Source Code Pro';
+  border-bottom: 1px solid #ddd;
+}
+td{
+  background-color: white;
+  text-align: center;
+  padding: 20px;  
+  color: black;
+  font-family: 'Source Code Pro';
+  border-bottom: 1px solid #ddd;
+}
+tr:nth-child(even){background-color: #f2f2f2;}
+tr:hover{background-color:red;}
+
+hr {
+  background: rgb(30, 30, 40);
+  color: white;
+}
+
+.title{
+  background: rgb(30, 30, 40);
+  color: white;
+  font-family: 'Source Code Pro';
+}
+/* Create a custom checkbox */
+.checkbox-custom {
+  background-color: blue;
+}
+
+input[type="submit"] {
+  font-family: "Source Code Pro";
+  width: 17%;
+  background: #cc6666;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 24px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition: all 0.3s;
+  margin-top: -4px;
+  margin-left:  1172px;
+  margin-right: 400px;
+  font-weight: 700;
+  display: block;
+  float: none;
+  text-align: center;
+}
+input[type="submit"]:hover {
+  background: #cc4949;
+}
+
+    
+ul.topnav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+  display: block;
+  color: black;
+  font-size: 20px;
+  font-family: "Source Code Pro";
+  font-weight: 500;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+span.vertical {
+  writing-mode: vertical-rl; 
+}
+ul.topnav li a.active {background-color: #cc6666; color: white}
+ul.topnav li a:hover{background-color: #cc4949;}
+ul.topnav li a.active:hover{background-color: #cc4949;}
+
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px) {
+  ul.topnav li.right, 
+  ul.topnav li {float: none;}
+}
+    
+   
+    
+    
+/* Styling Checkbox*/
+.checkbox-label {
+    display: block;
+    position: relative;
+    margin: auto;
+    cursor: pointer;
+    font-size: 22px;
+    height: 24px;
+    width: 24px;
+    clear: both;
+}
+.checkbox-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+.checkbox-label .checkbox-custom {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 24px;
+    width: 24px;
+    background-color: transparent;
+    border-radius: 5px;
+    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+    border: 2px solid black;
+}
+.checkbox-label input:checked ~ .checkbox-custom {
+    background-color: white;
+    border-radius: 5px;
+    -webkit-transform: rotate(0deg) scale(1);
+    -ms-transform: rotate(0deg) scale(1);
+    transform: rotate(0deg) scale(1);
+    border: 2px solid #cc6666;
+}
+.checkbox-label .checkbox-custom::after {
+    position: absolute;
+    content: "";
+    left: 12px;
+    top: 12px;
+    height: 0px;
+    width: 0px;
+    border-radius: 5px;
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(0deg) scale(0);
+    -ms-transform: rotate(0deg) scale(0);
+    transform: rotate(0deg) scale(0);
+    opacity:1;
+    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+}
+.checkbox-label input:checked ~ .checkbox-custom::after {
+  -webkit-transform: rotate(45deg) scale(1);
+  -ms-transform: rotate(45deg) scale(1);
+  transform: rotate(45deg) scale(1);
+  opacity:1;
+  left: 8px;
+  top: 3px;
+  width: 6px;
+  height: 12px;
+  border: solid black;
+  border-width: 0 2px 2px 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+
+
+/* For Ripple Effect */
+.checkbox-label .checkbox-custom::before {
+    position: absolute;
+    content: "";
+    left: 10px;
+    top: 10px;
+    width: 0px;
+    height: 0px;
+    border-radius: 5px;
+    border: 2px solid #FFFFFF;
+    -webkit-transform: scale(0);
+    -ms-transform: scale(0);
+    transform: scale(0);    
+}
+
+.checkbox-label input:checked ~ .checkbox-custom::before {
+    left: -3px;
+    top: -3px;
+    width: 24px;
+    height: 24px;
+    border-radius: 5px;
+    -webkit-transform: scale(3);
+    -ms-transform: scale(3);
+    transform: scale(3);
+    opacity:0;
+    z-index: 999;
+    transition: all 0.3s ease-out;
+    -webkit-transition: all 0.3s ease-out;
+    -moz-transition: all 0.3s ease-out;
+    -ms-transition: all 0.3s ease-out;
+    -o-transition: all 0.3s ease-out;
+}
+
 table {
   border-collapse: collapse;
   border: 1px solid black;
@@ -301,9 +515,9 @@ ul.topnav li.right {float: right;}
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+  <link rel="stylesheet" href="static/table.css" type="text/css">
     <ul class="topnav">
-        <li><a class="active" href="#home"><span class="vertical"><b>Re</b></span>Eats</a></li>
+        <li><a class="active" href="/userabout"><span class="vertical"><b>Re</b></span>Eats</a></li>
         <li class="right"><a href="/logout">Logout</a></li>
         <li class="right"><a href="/userFeedback">Feedback</a></li>
         <li class="right"><a href="/userFP">Checkout</a></li>

@@ -45,7 +45,7 @@ class Database:
     def account_search(self, username, password):
         cursor = self._connection.cursor() 
         rest_string = 'SELECT * FROM restaurant_accounts WHERE username LIKE ? AND password LIKE ?'
-        user_string = 'SELECT * FROM user_accounts WHERE username LIKE ? AND password LIKE ?'
+        user_string = 'SELECT * FROM user_account WHERE username LIKE ? AND password LIKE ?'
         cursor.execute(rest_string, (username, password,))
         rest = cursor.fetchone()
         cursor.execute(user_string, (username, password,))
@@ -56,7 +56,7 @@ class Database:
     def user_search(self, username):
         cursor = self._connection.cursor() 
         rest_string = 'SELECT * FROM restaurant_accounts WHERE restaurant_id LIKE ?'
-        user_string = 'SELECT * FROM user_accounts WHERE user_id LIKE ?'
+        user_string = 'SELECT * FROM user_account WHERE user_id LIKE ?'
         cursor.execute(rest_string, (username))
         rest = cursor.fetchone()
         cursor.execute(user_string, (username))
