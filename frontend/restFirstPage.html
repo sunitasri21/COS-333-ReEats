@@ -18,6 +18,11 @@ table {
   overflow: auto;
 
 }
+table th {
+position:sticky;
+top:0;
+}
+
 input[type="button"] {
   font-family: "Source Code Pro";
   width: 100%;
@@ -200,6 +205,7 @@ input[type=number]::-webkit-outer-spin-button {
     <center>
     <table cellspacing="1" cellpadding="1" style = "align:center">  
       <!-- align:"center" -->
+      <thead>
       <tr>
           <th><strong><div>Food Item</div></strong></th>
           <th><strong><div>Description</div></strong></th>
@@ -211,7 +217,8 @@ input[type=number]::-webkit-outer-spin-button {
           <th><strong><div>Discounted Price</div></strong></th>
 
             </tr>
-
+        </thead>
+        <tbody>
       {% for item in restaurant %}
         <tr>
             <td><strong>{{ item.getFood()}}</strong></td>
@@ -259,7 +266,7 @@ input[type=number]::-webkit-outer-spin-button {
         </tr>
 
       {% endfor %}
-
+        </tbody>
         </table></center>
   </body>
 </html>
