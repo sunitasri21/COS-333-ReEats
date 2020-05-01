@@ -4,13 +4,42 @@
 <head>
 <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
 
-
 <style>
 body{
   background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");   
   background-size: cover;  
   margin: 0;
     }
+    
+table { 
+  border-collapse: collapse;
+  height: 500px;
+  display: inline-block; 
+  overflow: auto;
+
+}
+input[type="button"] {
+  font-family: "Source Code Pro";
+  width: 100%;
+  background: #cc6666;
+  border-radius: 3px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition: all 0.3s;
+  margin-top: -4px;
+  font-weight: 200;
+  display: block;
+  float: none;
+  text-align: center;
+}
+input[type="button"]:hover {
+  background: #cc4949;
+}
+
 
 </style>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
@@ -86,13 +115,12 @@ body{
     <table cellspacing="1" cellpadding="1" style = "align:center">  
       <!-- align:"center" -->
       <tr>
-        <th><strong>Food Item</strong></th>
-        <th><strong>Description</strong></th>
-<!--         <td><strong>Dietary Restrictions</strong></td>
- -->    <th><strong>List Price</strong></th>
-        <th><strong>Quantity</strong></th>
-        <th><strong>Discount</strong></th>
-        <th><strong>Discounted Price</strong></th>
+          <th><strong><div>Food Item</div></strong></th>
+          <th><strong><div>Description</div></strong></th>
+          <th><strong><div>List Price</div></strong></th>
+          <th><strong><div>Quantity</div></strong></th>
+          <th><strong><div>Discount</div></strong></th>
+          <th><strong><div>Discounted Price</div></strong></th>
 
             </tr>
 
