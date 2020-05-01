@@ -3,24 +3,11 @@
   <head>
 <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
 <style>
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-
-th, td {
-  text-align: left;
-  padding: 8px;
-  font-family: 'Source Code Pro';
-}
-
-tr:nth-child(even){background-color: #f2f2f2}
-
-th {
-  background-color: #b34444;
-  color: white;
-  font-family: 'Source Code Pro';
-}
+body{
+  background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");   
+  background-size: cover;  
+  margin: 0;
+    }
 
 hr {
   background: rgb(30, 30, 40);
@@ -39,29 +26,15 @@ hr {
   <title>Chennai Chimney</title> 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-
-  <div class="topnav">
-
-     <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-      <a href="#home" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
-
-      <div class="w3-right w3-hide-small">
-
-        <a label href = "/restFP" ></label> <span class="w3-bar-item w3-button">Menu</a>
-
-        <a label href = "/restAccount" ></label> <span class="w3-bar-item w3-button">Account</a>
-
-        <a label href = "/restDiscount" ></label> <span class="w3-bar-item w3-button">Discounts</a>
-
-        <a label href = "/restFeedback" ></label> <span class="w3-bar-item w3-button">Feedback</a>
-
-        <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
-
-      </div>
-    </div>
-
-    </a>
-     </div>
+  <link rel="stylesheet" href="static/table.css" type="text/css">
+    <ul class="topnav">
+        <li><a class="active" href="/restabout"><span class="vertical"><b>Re</b></span>Eats</a></li>
+        <li class="right"><a href="/logout">Logout</a></li>
+        <li class="right"><a href="/restFeedback">Feedback</a></li>
+        <li class="right"><a href="/restDiscount">Discounts</a></li>
+        <li class="right"><a href="/restAccount">Account</a></li>
+        <li class="right"><a href="/restFP">Menu</a></li>           
+    </ul>
 
   </head>
   <body>
@@ -71,23 +44,22 @@ hr {
     <hr color ="black">
  <!--    <form action="/" method="get">
         <label for="restName"></label><br> -->
-        <label
-          style = "padding-left: 575px"
-          ><strong>All Active Discounts
-        </strong></label>
+        <center>
+        <label><strong>All Active Discounts
+            </strong></label></center>
 <!--     </form> -->
 
     <hr color ="black">
     </div>
-
-    <table cellspacing="2" cellpadding="2" align:"center">
+    <center>
+    <table cellspacing="3" cellpadding="3" style = "align:center">
       <tr>
-        <td style = "padding-left: 50px"><strong>Food Item</strong></td>
-        <td style = "padding-left: 170px"><strong>Quantity</strong></td>
-        <td style = "padding-left: 170px"><strong>List Price</strong></td>
-        <td style = "padding-left: 170px"><strong>Discount</strong></td>
-        <td style = "padding-left: 170px"><strong>Discounted Price</strong></td>
-      </tr>
+        <th style = "padding-left: 50px"><strong>Food Item</strong></th>
+        <th style = "padding-left: 170px"><strong>Quantity</strong></th>
+        <th style = "padding-left: 170px"><strong>List Price</strong></th>
+        <th style = "padding-left: 170px"><strong>Discount</strong></th>
+        <th style = "padding-left: 170px"><strong>Discounted Price</strong></th>
+          </tr>
       {% for item in items %}
       {% if item.getQuantity()|int != 0 %}
         <tr>
@@ -96,9 +68,9 @@ hr {
           <td style = "padding-left: 170px">{{item.getPrice()}}</td>
           <td style = "padding-left: 170px" id="price"> {{item.getDiscount()}} </td>
           <td style = "padding-left: 170px" id="price"> {{item.getNewPrice()}} </td>
-        </tr>
+            </tr>
       {% endif %}
       {% endfor %}
-    </table>
+        </table></center>
   </body>
 </html>
