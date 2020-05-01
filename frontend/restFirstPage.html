@@ -13,7 +13,7 @@ body{
     
 table { 
   border-collapse: collapse;
-  height: 500px;
+  height: 550px;
   display: inline-block; 
   overflow: auto;
 
@@ -27,8 +27,8 @@ input[type="button"] {
   cursor: pointer;
   color: white;
   font-size: 18px;
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
   transition: all 0.3s;
   margin-top: -4px;
   font-weight: 200;
@@ -36,9 +36,83 @@ input[type="button"] {
   float: none;
   text-align: center;
 }
+    
 input[type="button"]:hover {
   background: #cc4949;
 }
+    
+
+    
+input[type="time"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}    
+.time-input {
+  border: 2px solid #ddd;
+  display: inline-flex;
+}   
+.time-input,
+.time-input * {
+  box-sizing: border-box;
+}
+    
+    
+    
+    
+input[type="number"] {
+  -webkit-appearance: textfield;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.number-input {
+  border: 2px solid #ddd;
+  display: inline-flex;
+}
+
+.number-input,
+.number-input * {
+  box-sizing: border-box;
+}
+.number-input button {
+  outline:none;
+  -webkit-appearance: none;
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0;
+  width: 20px;
+  position: relative;
+}
+.number-input button:before,
+.number-input button:after {
+  display: inline-block;
+  position: absolute;
+  content: '';
+  width: 1rem;
+  height: 2px;
+  background-color: #cc6666;
+  transform: translate(-50%, -50%);
+}
+.number-input button.plus:after {
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.number-input input[type=number] {
+  max-width: 5rem;
+  padding: .5rem;
+  border: solid #ddd;
+  border-width: 0 2px;
+  text-align: center;
+}
+
 
 
 </style>
@@ -52,18 +126,20 @@ input[type="button"]:hover {
           }
           }
 
-      function updateDiscount(itemNum, quantity, discountVal) {
+      function updateDiscount(itemNum, quantity, discountVal, startTime, endTime) {
           const url = "/updateDiscount";
           data = {
             itemNum: itemNum,
             quantity: quantity,
-            discountVal: discountVal
+            discountVal: discountVal,
+            startTime: startTime,
+            endTime: endTime
           }
 
           // source:https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/
           $.post(url, data)
             .done(function(data) { 
-              changeValue(data.itemNum, data.discountVal)
+              changeValue(data.itemNum, data.discountVal, data.startTime, data.endTime)
             })
       }
 
@@ -71,9 +147,11 @@ input[type="button"]:hover {
           if (itemNum != null) {
               var discount = document.getElementById("item" + itemNum + "_discount").value;
               var quantity = document.getElementById("item" + itemNum + "_quantity").value;
+              var startTime = document.getElementById("item" + itemNum + "_startTime").value;
+              var endTime = document.getElementById("item" + itemNum + "_endTime").value;
           } 
 
-          updateDiscount(itemNum, parseInt(quantity), parseFloat(discount));
+          updateDiscount(itemNum, parseInt(quantity), parseFloat(discount), startTime, endTime);
       }
 
 </script>
@@ -120,13 +198,15 @@ input[type="button"]:hover {
           <th><strong><div>List Price</div></strong></th>
           <th><strong><div>Quantity</div></strong></th>
           <th><strong><div>Discount</div></strong></th>
+          <th><strong><div>Start Time</div></strong></th>
+          <th><strong><div>Closing Time</div></strong></th>
           <th><strong><div>Discounted Price</div></strong></th>
 
             </tr>
 
       {% for item in restaurant %}
         <tr>
-          <td>{{ item.getFood()}}</td>
+            <td><strong>{{ item.getFood()}}</strong></td>
           <td>{{ item.getDescription()}}</td>
           <script>
             var {id} = item.getId()
@@ -134,15 +214,38 @@ input[type="button"]:hover {
           <td id="item{{item.getId()}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
           <td>
             <label for="quantity"></label><br>
-            <input align = "right" style="width:70%"  type="text" id="item{{item.getId()}}_quantity" name="quantity" ><br><br>
+            <div class="number-input">
+            <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" ></button>
+            <input align = "right"  min="0" max="100" step="1" type="number" id="item{{item.getId()}}_quantity" name="quantity" value="0" >
+            <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+</div><br><br>
           </td>
           <td>
               <label for="discount"></label><br>
-              <input align = "right" style="width:70%" type="text" id="item{{item.getId()}}_discount" name="discount" ><br><br>
+              <div class="number-input">
+              <button onclick="this.parentNode.querySelector('input[type=number]').stepDown()" ></button>
+              
+              <input type="number" align = "right" min="0" max="1" step="0.1" value="0.5" id="item{{item.getId()}}_discount" name="discount" >
+                  <button onclick="this.parentNode.querySelector('input[type=number]').stepUp()" class="plus"></button>
+</div>
+                  <br><br>
           </td>
-          <td> 
+            <td>
+                <div class="time-input">
+                <input type="time" id="item{{item.getId()}}_startTime" name="startTime" value="19:30"
+                       min="09:00" max="23:00" required></div>
+            </td>
+            <td>
+                <div class="time-input">
+                <input type="time" id="item{{item.getId()}}_endTime" name="endTime" value="22:00"
+                       min="09:00" max="23:00" required></div>
+            </td>
+          <td>
+            
             <input align = "right" type="button" 
             onclick= "applyDiscount({{item.getId()}})" id="submit" name= "submit" value="Apply">
+             
+              
             <label id="item{{item.getId()}}_newPrice" value="{{newPrice}}"> </label>
           </td>
         </tr>
