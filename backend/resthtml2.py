@@ -579,7 +579,78 @@ def confirmationPageReloaded():
 
     sessionId = session2["id"]
 
-    template = jinja_env.get_template("userConfirmation.html")
+    template = jinja_env.get_template("userConfirmationReloaded.html")
+    # template2 = jinja_env.get_template("qrCodePage.html")
+
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
+
+    html = render_template(template, foodList = food_list, total = total_value, orderId = orderid, CHECKOUT_SESSION_ID = sessionId)
+    # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
+    response = make_response(html)
+    # response.set_cookie('foodList', food_list)
+    response.set_cookie('total', str(total_value))
+    response.set_cookie('orderId', orderid)
+    response.set_cookie('CHECKOUT_SESSION_ID', sessionId)
+
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response
+
+#-----------------------------------------------------------------------
+@app.route('/confirmationPageReloadedQuantity', methods=['POST'])
+@login_required
+def confirmationPageReloadedQuantity():
+    database = get_db()
+
+    foodName = request.args.get("name")
+    newPrice = request.args.get("price")
+    quantity = request.args.get("quantity")
+    orderid = request.args.get("orderId")
+    foodid = request.args.get("foodId")
+
+    addQuantity = request.args.get("addQuantity")
+    subtractQuantity = request.args.get("subtractQuantity")
+
+    if addQuantity == "+":
+        quantity = quantity + 1
+
+    if subtractQuantity == "-":
+        quantity = quantity - 1
+    
+    userid = session['id']
+    confirmed = 0
+    database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
+
+    try:
+        results, total_value = database.confirmedOrder(userid, orderid, confirmed)
+
+    except Exception as e:
+        errorMsg =  str(e)
+        stderr.write("database error: " + errorMsg)
+        raise e  
+
+    stripe.api_key = 'sk_test_AwX9JLUwBYsuh9qhVFQISrDL00WRZ6jKh4'
+
+    username=session['email']
+
+    session2 = stripe.checkout.Session.create(
+      payment_method_types=['card'],
+      receipt_email=['username'],
+      line_items=[{
+        'name': 'Your Order Total',
+        # 'images': ['/static/foodimage.png'],
+        'amount': int(total_value*100),
+        'currency': 'usd',
+        'quantity': 1
+      }],
+      success_url='https://reeats-test1.herokuapp.com/qrCodePage',
+      cancel_url='https://reeats-test1.herokuapp.com/userFP'
+    )
+
+    sessionId = session2["id"]
+
+    template = jinja_env.get_template("userConfirmationReloaded.html")
     # template2 = jinja_env.get_template("qrCodePage.html")
 
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
