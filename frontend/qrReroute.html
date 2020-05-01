@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+th, td {
+  text-align: left;
+  padding: 8px;
+  font-family: 'Source Code Pro';
+}
+
+tr:nth-child(even){background-color: #f2f2f2}
+
+th {
+  background-color: #b34444;
+  color: white;
+  font-family: 'Source Code Pro';
+}
+
+hr {
+  background: rgb(30, 30, 40);
+  color: white;
+}
+
+.title{
+  background: rgb(30, 30, 40);
+  color: white;
+  font-family: 'Source Code Pro';
+}
+</style>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+
+<script type="text/javascript">
+    function generateBarCode()
+    {
+        var nric = $('#text').val();
+        var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=50x50';
+        $('#barcode').attr('src', url);
+    }
+</script>
+
+</head>
+
+<head>
+  <title>Chennai Chimney</title> 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+
+  <div class="topnav">
+
+     <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+      <a href="#home" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
+
+      <div class="w3-right w3-hide-small">
+
+        <a label href = "/userFP" ></label> <span class="w3-bar-item w3-button">Menu</a>
+
+        <a label href = "/userAccount" ></label> <span class="w3-bar-item w3-button">Account</a>
+
+        <a label href = "/userFP" ></label> <span class="w3-bar-item w3-button">Checkout</a>
+
+        <a label href = "/userFeedback" ></label> <span class="w3-bar-item w3-button">Feedback</a>
+
+        <a label href = "/logout" ></label> <span class="w3-bar-item w3-button">Logout</a>
+
+      </div>
+    </div>
+
+    </a>
+  </div>
+
+  <title>Testing QR code</title>
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <!-- <script type="text/javascript">
+            function generateBarCode()
+            {
+                var nric = $('#text').val();
+                var url = 'https://api.qrserver.com/v1/create-qr-code/?data=' + nric + '&amp;size=50x50';
+                $('#barcode').attr('src', url);
+            }
+        </script> -->
+
+  </head>
+
+  <body>
+    <div class="title" >
+
+    <hr style="background-color: #1e1e28">
+
+    
+ <!--    <form action="/" method="get">
+        <label for="restName"></label><br> -->
+        <label
+          style = "padding-left: 575px"
+          ><strong>Chennai Chimney: Order Confirmation
+        </strong></label>
+      
+<!--     </form> -->
+
+    <hr color ="black">
+     </div>
+
+   <!--  <form id="payment-form"action="/qrCodePage", method="post"></form> -->
+    <table cellspacing="2" cellpadding="2" style = "align:center">  
+      <!-- align:"center" -->
+      <tr>
+        <th><strong>Item No.</strong></th>
+        <th><strong>Name</strong></th>
+<!--         <td><strong>Dietary Restrictions</strong></td>
+ -->    <th><strong>List Price</strong></th>
+        <th><strong>Quantity</strong></th>
+        <th><strong>Subtotal</strong></th>
+        <!-- <th><strong>Discount</strong></th> -->
+        <!-- <th><strong>Discounted Price</strong></th> -->
+        <!-- <th><strong>Select</strong></th> -->
+       </tr>
+
+
+      {% for item in foodList %}
+        <tr>
+          <td>{{ item.getId()}}</td>
+          <td>{{ item.getFood()}}</td>
+          <td>{{ item.getNewPrice()}}</td>
+          <td>{{ item.getQuantity()}}</td>
+          <td>{{"%.2f"|format(item.getNewPrice()|float * item.getQuantity()|float)}}</td>
+        </tr>
+      {% endfor %}
+
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total:{{"%.2f"|format(total)}}</td>
+      </tr>
+
+    </table>
+
+     <label
+     style = "align-content: "
+    style = "padding-left: 575px"
+    ><strong>Please present the following QR code at restaurant:
+  </strong></label>
+
+  <!-- <p 
+    onblur='generateBarCode();' />
+   <img id='barcode'  
+    src={{orderid}} 
+    alt="" 
+    width="200" 
+    height="200" /></p> -->
+
+  <!--  <a id="text" 
+      style="Width:20%"
+      onblur='generateBarCode();'></a> 
+
+    <img id='barcode' 
+          src="{{orderid}}" 
+          alt=""  
+          width="150" 
+          height="150" />
+ -->
+
+  </body>
+</html>
