@@ -222,14 +222,18 @@ class Database:
         quantity = int(quantity)
         qrCode = ''
 
-<<<<<<< HEAD
-        # we had issues with replace so might be insert for stmstr
-        stmstr = 'UPDATE order_table SET new_price=?,  quantity=?, food=?, food_id=?, order_id=?, confirmed=?, user_id=? ' +\
-        'WHERE order_table.food_id LIKE ?;'
-=======
->>>>>>> 315fa5d5e2f03d435cee8f05c5079b00a8dfb913
+# <<<<<<< HEAD
+#         # we had issues with replace so might be insert for stmstr
+#         stmstr = 'UPDATE order_table SET new_price=?,  quantity=?, food=?, food_id=?, order_id=?, confirmed=?, user_id=? ' +\
+#         'WHERE order_table.food_id LIKE ?;'
+# =======
+# >>>>>>> 315fa5d5e2f03d435cee8f05c5079b00a8dfb913
+        # arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
+        # cursor.execute("INSERT INTO _order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
+        #     (price, quantity, food, foodid, orderid, confirmed, userid, )); 
+
         arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
-        cursor.execute("INSERT INTO _order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
+        cursor.execute("UPDATE _order_table SET new_price = %s, quantity =%s, food = %s, food_id=%s, order_id=%s, confirmed=%s, user_id=%s",
             (price, quantity, food, foodid, orderid, confirmed, userid, )); 
 
         arguments2 = (orderid, qrCode, userid) 
