@@ -52,6 +52,30 @@
                   success: handleResponse
                }
             );
+
+       function changeOrder() {
+         const url = "/confirmationPageReloaded";
+          data = {
+            orderId: document.getElementById("id").textContent,
+            foodId: document.getElementById("foodId").textContent,
+            name: document.getElementById("name").textContent,
+            price: document.getElementById("price").textContent,
+            quanity: document.getElementById("quantity").textContent
+          };
+          
+          function handleResponse(response)
+          { 
+            $("html").html(response);
+          };
+          if (request != null) request.abort();
+          request = $.ajax(
+               {
+                  type: "POST",
+                  url: url,
+                  data: data,
+                  success: handleResponse
+               }
+        }
          
           // If `redirectToCheckout` fails due to a browser or network
           // error, display the localized error message to your customer
@@ -131,10 +155,47 @@
         <th><strong>List Price</strong></th>
         <th><strong>Quantity</strong></th>
         <th><strong>Subtotal</strong></th>
+        <th><strong>Remove Item</strong></th>
+
        </tr>
 
+       {% for item in foodList %}
+      <tr>
+        <tr>
+          <td id = "foodId" > {{ item[0]}}</td>
+          <td id = "name" > {{ item[2]}}</td>
+          <td id = "price" > {{ item[1]}}</td>
+          <td id = "quantity" >{{ item[3]|int}}</td>
+          <td>{{"%.2f"|format(item[3]*item[1])}}</td>
+          <td>
+            <a input type="submit" value="X" onclick="changeOrder()"></a>
+          </td>
+        </tr>
+        {% endfor %}
 
-      {% for item in foodList %}
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>Total:{{"%.2f"|format(total)}}</td>
+      </tr>
+
+      </tr> 
+    </table>
+      </center>
+
+    <p align="center">
+    <input type="submit" value="SUBMIT" onclick="submitChecks()"> 
+    </p>
+  </form>
+</head>
+
+  </body>
+</html>
+
+
+      <!-- {% for item in foodList %}
       <tr>
         <tr>
           <td>{{ item[0]}}</td>
@@ -174,4 +235,4 @@
 </head>
 
   </body>
-</html>
+</html> -->
