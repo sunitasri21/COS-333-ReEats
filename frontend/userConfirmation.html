@@ -76,6 +76,58 @@
                   success: handleResponse
                }
         }
+
+        function addQuantity() {
+         const url = "/confirmationPageReloadedQuantity";
+          data = {
+            orderId: document.getElementById("id").textContent,
+            foodId: document.getElementById("foodId").textContent,
+            name: document.getElementById("name").textContent,
+            price: document.getElementById("price").textContent,
+            quantity: document.getElementById("quantity").textContent
+            addQuantity: document.getElementById("addQuantity").value
+            subtractQuantity: ""
+          };
+
+          function handleResponse(response)
+          { 
+            $("html").html(response);
+          };
+          if (request != null) request.abort();
+          request = $.ajax(
+               {
+                  type: "POST",
+                  url: url,
+                  data: data,
+                  success: handleResponse
+               }
+        }
+
+        function subtractQuantity() {
+         const url = "/confirmationPageReloadedQuantity";
+          data = {
+            orderId: document.getElementById("id").textContent,
+            foodId: document.getElementById("foodId").textContent,
+            name: document.getElementById("name").textContent,
+            price: document.getElementById("price").textContent,
+            quantity: document.getElementById("quantity").textContent
+            addQuantity: ""
+            subtractQuantity: document.getElementById("subtractQuantity").value
+          };
+          
+          function handleResponse(response)
+          { 
+            $("html").html(response);
+          };
+          if (request != null) request.abort();
+          request = $.ajax(
+               {
+                  type: "POST",
+                  url: url,
+                  data: data,
+                  success: handleResponse
+               }
+        }
          
           // If `redirectToCheckout` fails due to a browser or network
           // error, display the localized error message to your customer
@@ -156,6 +208,8 @@
         <th><strong>Quantity</strong></th>
         <th><strong>Subtotal</strong></th>
         <th><strong>Remove Item</strong></th>
+        <th><strong>Change Quantity</strong></th>
+
 
        </tr>
 
@@ -169,6 +223,10 @@
           <td>{{"%.2f"|format(item[3]*item[1])}}</td>
           <td>
             <a input type="submit" value="X" onclick="changeOrder()"></a>
+          </td>
+          <td>
+            <a id = "addQuantity" input type="submit" value="+" onclick="addQuantity()"></a>
+            <a id = "subtractQuantity" input type="submit" value="-" onclick="subtractQuantity()"></a>
           </td>
         </tr>
         {% endfor %}
