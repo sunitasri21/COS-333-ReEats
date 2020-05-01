@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<title>About ReEats</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.error {
+  color: red;
+  font-family: 'Source Code Pro';
+}
+body {
+  background-image: url("https://jooinn.com/images/table-with-food-5.jpg"); 
+  background-size: cover;
+  font-family: 'Source Code Pro';
+  margin: 0;
+}
+
+.column {
+  float: left;
+  width: 33%;
+  margin-bottom: 16px;
+}
+.column2 {
+  float: left;
+  width: 50%;
+  margin-bottom: 16px;
+}
+.title {
+  color: grey;
+}
+
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+  .column2 {
+    width: 100%;
+    display: block;
+  }
+}
+    
+ul.topnav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+  display: block;
+  color: black;
+  font-size: 20px;
+  font-family: "Source Code Pro";
+  font-weight: 500;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+span.vertical {
+  writing-mode: vertical-rl; 
+  text-shadow: 2px 2px 5px grey;
+}
+ul.topnav li a.active {background-color: #cc6666; color: white}
+ul.topnav li a:hover{background-color: #cc4949;}
+ul.topnav li a.active:hover{background-color: #cc4949;}
+
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px) {
+  ul.topnav li.right, 
+  ul.topnav li {float: none;}
+}
+.flip-card {
+  position: relative;
+  background-color: transparent;
+  width: 300px;
+  height: 300px;
+  border: 1px solid #f1f1f1;
+  perspective: 1000px; /* Remove this if you don't want the 3D effect */
+}
+
+/* This container is needed to position the front and back side */
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+}
+
+/* Do an horizontal flip when you move the mouse over the flip box container */
+.flip-card:hover .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Position the front and back side */
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden; /* Safari */
+  backface-visibility: hidden;
+}
+
+/* Style the front side (fallback if image is missing) */
+.flip-card-front {
+  background-color: #cc6666;
+  color: black;
+}
+
+/* Style the back side */
+.flip-card-back {
+  padding: 14px 16px;
+  background-color: #cc6666;
+  color: white;
+  transform: rotateY(180deg);
+}
+.w3-container{
+ background-color: rgba(255,255,255, 0.85);   
+ 
+ width: 95%;
+}
+h2{
+  text-shadow: 2px 2px 5px grey;
+}
+p{
+  text-shadow: 2px 2px 5px white;
+  text-align: left;
+}
+</style>
+
+
+ <head>
+  <title>Chennai Chimney: Available Discounts</title> 
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <ul class="topnav">
+        <li><a class="active" href="/about"><span class="vertical"><b>Re</b></span>Eats</a></li>
+        <li class="right"><a href="/login">Login</a></li>
+
+    </ul>
+
+  </head>
+<body>
+    <br>
+    <center>
+  <!-- About Section -->
+  <div class="w3-container">
+      <h2 class="w3-center">About ReEats</h2><br>
+      <p >We aim to connect restaurants, with leftover food at closing time, with college students who will purchase this food at a discounted price. Each day, the restaurants using our application can post a list of available items and select the discounts on each of these items. The students using our app will receive a notification each time a new restaurant posts discounted food items on the app. The student will be able to view the available items per restaurant and choose what they want to eat and from which restaurant. Our app adds a new base of customers for restaurants and enables them to establish a new revenue stream and form new partnerships. For students, our app helps them find cheap food from their favorite restaurants. It’s a win-win for restaurants and students. </p>
+      <h5 class="w3-center">Created in 2020</h5>
+      <p class="w3-large"></p>
+    </div>
+    
+  <br>
+  <div class="w3-container m6 w3-padding-large">       
+      <h2 style="text-align:center">Our Team</h2>
+      <div class="row">
+          <div class="column">
+            <div class="flip-card" opacity=100% >
+              <div class="flip-card-inner">
+                <div class="flip-card-front">
+                  <img src="/static/noa.jpg" alt="Avatar" style="width:300px;height:300px;">
+                 </div>
+                 <div class="flip-card-back">
+                  <h1>Noa Zarur</h1>
+                  <p>nzarur@princeton.edu</p>
+                  <p>Princeton 2021</p>
+                </div>
+              </div>
+          </div>
+          </div>
+          <div class="column">
+            <div class="flip-card" opacity=100% >
+              <div class="flip-card-inner">
+                <div class="flip-card-front">
+                  <img src="/static/sunita.jpg" alt="Avatar" style="width:300px;height:300px;">
+                 </div>
+                 <div class="flip-card-back">
+                  <h1>Sunita Srivatsan</h1>
+                  <p>sunitas@princeton.edu</p>
+                  <p>Princeton 2021</p>
+                </div>
+              </div>
+          </div>
+          </div>
+          <div class="column">
+      <div class="flip-card" opacity=100% >
+  <div class="flip-card-inner">
+    <div class="flip-card-front">
+      <img src="/static/beatrice.jpg" alt="Avatar" style="width:300px;height:300px;">
+    </div>
+    <div class="flip-card-back">
+      <center>
+      <h1>Beatrice Caruntu</h1>
+      <p>bcaruntu@princeton.edu</p>
+      <p>Princeton 2021</p>
+        </center>
+    </div>
+  </div>
+               </div></div>
+      </div>
+        <div class="row">
+           
+             <div class="column2">
+            <div class="flip-card" opacity=100% >
+              <div class="flip-card-inner">
+                <div class="flip-card-front">
+                  <img src="/static/#.jpg" alt="Avatar" style="width:300px;height:300px;">
+                 </div>
+                 <div class="flip-card-back">
+                  <h1>Arjun Sai Krishnan</h1>
+                  <p>ak36@princeton.edu</p>
+                  <p>Princeton 2021</p>
+                </div>
+              </div>
+          </div>
+          </div>
+             <div class="column2">
+            <div class="flip-card" opacity=100% >
+              <div class="flip-card-inner">
+                <div class="flip-card-front">
+                  <img src="/static/#.jpg" alt="Avatar" style="width:300px;height:300px;">
+                 </div>
+                 <div class="flip-card-back">
+                  <h1>Vedika Patwari</h1>
+                  <p>vpatwari@princeton.edu</p>
+                  <p>Princeton 2021</p>
+                </div>
+              </div>
+          </div>
+          </div>
+           
+      </div>
+        </div>
+    </center>
+</body>
+</html>
