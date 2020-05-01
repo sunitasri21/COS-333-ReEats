@@ -130,6 +130,13 @@ def restabout():
     response = make_response(html)
     return response  
 # -----------------------------------------------------------------------
+@app.route('/about', methods=['GET'])
+
+def about():
+    html = render_template('defaultAbout.html')
+    response = make_response(html)
+    return response  
+# -----------------------------------------------------------------------
 @app.route('/restFP', methods=['GET'])
 @login_required
 def restPage():
