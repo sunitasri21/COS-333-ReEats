@@ -10,6 +10,9 @@ from sys import stderr
 from os import path
 from orderResult2 import OrderResult
 import psycopg2
+import time 
+import datetime
+from datetime import date
 
 # from menuResult import MenuResults
 
@@ -22,13 +25,21 @@ class Database:
     def connect(self):      
         DATABASE_URL = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
         conn_string = "host='localhost' dbname='reeats6' user='arjunsaikrishnan' password='waterside2007'"
-        # if not path.isfile(DATABASE_NAME):
+       
+      # if not path.isfile(DATABASE_NAME):
         #     raise Exception("database reeats.db not found")
         # self._connection = connect(DATABASE_NAME)
+       
+        #self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
+        
         self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
-                    
+        
     def disconnect(self):
         self._connection.close()
+        
+        
+   # def expiration(self):
+  #    DELETE FROM expire_table WHERE timestamp < NOW() - INTERVAL '3 hours';
 
     def account_login(self, username, password):
         cursor = self._connection.cursor() 
@@ -120,7 +131,7 @@ class Database:
         cursor.execute("SELECT restaurant_id FROM _restaurants WHERE restaurant_name = %s", (rest_name, ))
         restId = cursor.fetchone()[0]
         # 'WHERE menu.food_id = order_table.food_id;'
-        cursor.execute("SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM _menu")
+        cursor.execute("SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM _menu WHERE NOW() - starttime > INTERVAL '1 minute' ")
 
         results = []
         row = cursor.fetchone()
@@ -145,9 +156,9 @@ class Database:
         cursor.close()
         return 
 
-    def inputDiscount(self, discount, quantity, foodid):
+    def inputDiscount(self, discount, quantity, foodid, startTime, endTime):
         cursor = self._connection.cursor() 
-        foodid = int(foodid)
+        foodid = int(foodid)        
         cursor.execute("SELECT food, unit_price FROM _menu WHERE food_id = %s", (foodid, )); 
         discount = float(discount)
 
@@ -159,16 +170,31 @@ class Database:
             quantity = 1
         if discount == None:
             discount = 0.0
-        print(quantity)
+        #print(quantity)        
+        
+        start = str(date.today()) + " " + startTime      
+        end = str(date.today()) + " " + endTime        
+        
+        
         newPrice = (1 - float(discount)) * float(price)
         newPrice = '{:.2f}'.format(newPrice)
         arguments = (discount, newPrice, quantity, foodid) 
         if (discount >= 0 and discount <= 1):
-            cursor.execute("UPDATE _menu SET discount = %s, new_price = %s, quantity = %s WHERE food_id= %s", (discount, newPrice, quantity, foodid, )); 
+            cursor.execute("UPDATE _menu SET discount = %s, new_price = %s, quantity = %s, starttime = TO_TIMESTAMP( %s, 'YYYY-MM-DD HH24:mi') , endtime = TO_TIMESTAMP(%s,'YYYY-MM-DD HH24:mi')  WHERE food_id= %s", (discount, newPrice, quantity, start, end,  foodid,)); 
         self._connection.commit()
         cursor.close()
         return 
-
+    
+    def updateExpiredDiscounts(self):
+        cursor = self._connection.cursor() 
+        zero_quantity = 0
+        command = "UPDATE _menu SET quantity = %s WHERE NOW() - endtime > INTERVAL '1 minute'"
+        cursor.execute(command, (zero_quantity,));
+        self._connection.commit()
+        cursor.close()
+        return 
+        
+    
     def updateQuantity(self, quantity, foodid):
         cursor = self._connection.cursor() 
         foodid = int(foodid)
