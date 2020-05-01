@@ -87,8 +87,8 @@ def searchResults():
     restName = str(request.args.get('restName')) or ""
     discount = request.args.get('discount', default=1) 
       
-    database = get_db()
-
+    database = get_db()    
+    database.updateExpiredDiscounts()
     foodList = request.cookies.get('foodList')
 
     # response.set_cookie('total', str(total_value))
@@ -142,9 +142,8 @@ def about():
 def restPage():
     restName = str(request.args.get('restName')) or ""
     discount = float(request.args.get('discount', default=1))
-     
     database = get_db()
-
+    database.updateExpiredDiscounts()
     try:
         # database.connect()
         searchResults = database.menuSearch(restName)
@@ -171,6 +170,7 @@ def restPage():
 
 def checkoutPage():
     database = get_db()
+    database.updateExpiredDiscounts()
     try:
         results = database.previewAllDiscounts()
         for result in results:
@@ -367,9 +367,11 @@ def updateDiscount():
     foodId = request.form["itemNum"]
     quantity = request.form["quantity"]
     discount = request.form["discountVal"]
+    startTime = request.form["startTime"]
+    endTime = request.form["endTime"]
     database = get_db()
     try:
-        database.inputDiscount(discount, quantity, foodId)
+        database.inputDiscount(discount, quantity, foodId, startTime, endTime)
 
         # database.connect()
         newPrice = float(database.pullNewPrice(foodId))
