@@ -491,34 +491,48 @@ def confirmationPage():
 @app.route('/confirmationPageReloaded', methods=['POST'])
 @login_required
 def confirmationPageReloaded():
-    check_list = request.form.getlist("check_list[]")
-    if check_list == None:
-        check_list = []
-    print(check_list)
+    # check_list = request.form.getlist("check_list[]")
+    # if check_list == None:
+    #     check_list = []
+    # print(check_list)
     database = get_db()
 
-    food_list = []
-    total_value = 0
-    orderid = createOrderId()
+    # food_list = []
+    # total_value = 0
+    # orderid = createOrderId()
     
-    for value in check_list:
-        try:
-            # database.connect()
-            newPrice = database.pullNewPrice(value)
-            name = "item" + str(value) + "_quantity"
-            quantity = request.form[name]
-            foodName = database.pullName(value)
-            total_value = total_value + float(quantity) * newPrice
-            database.updateQuantity(quantity, value)
-            userid = session['id']
-            confirmed = 1
-            database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
-            food_list.append((value, newPrice, foodName, float(quantity)))
+    # for value in check_list:
+    #     try:
+    #         # database.connect()
+    #         newPrice = database.pullNewPrice(value)
+    #         name = "item" + str(value) + "_quantity"
+    #         quantity = request.form[name]
+    #         foodName = database.pullName(value)
+    #         total_value = total_value + float(quantity) * newPrice
+    #         database.updateQuantity(quantity, value)
+    foodName = request.args.get("name")
+    newPrice = request.args.get("price")
+    quantity = request.args.get("quantity")
+    orderid = request.args.get("orderId")
+    foodid = request.args.get("foodId")
+    
+    userid = session['id']
+    confirmed = 0
+    database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
+    #         food_list.append((value, newPrice, foodName, float(quantity)))
 
-        except Exception as e:
-            errorMsg =  str(e)
-            stderr.write("database error: " + errorMsg)
-            raise e
+    #     except Exception as e:
+    #         errorMsg =  str(e)
+    #         stderr.write("database error: " + errorMsg)
+    #         raise e
+
+    try:
+        results, total_value = database.confirmedOrder(userid, orderid, confirmed)
+
+    except Exception as e:
+        errorMsg =  str(e)
+        stderr.write("database error: " + errorMsg)
+        raise e  
 
     stripe.api_key = 'sk_test_AwX9JLUwBYsuh9qhVFQISrDL00WRZ6jKh4'
 
@@ -608,6 +622,7 @@ def qrReroute():
     # if confirmedFood_list == None:
     #     confirmedFood_list = []
     # print(confirmedFood_list)
+
     database = get_db()
     print(orderid)
 

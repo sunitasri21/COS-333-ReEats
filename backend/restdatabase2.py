@@ -228,7 +228,9 @@ class Database:
         quantity = int(quantity)
         qrCode = ''
 
-        stmstr = 'INSERT INTO order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id) VALUES (?, ?, ?, ?, ?, ?, ?);'
+        # we had issues with replace so might be insert for stmstr
+        stmstr = 'UPDATE order_table SET new_price=?,  quantity=?, food=?, food_id=?, order_id=?, confirmed=?, user_id=? ' +\
+        'WHERE order_table.food_id LIKE ?;'
         arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
         cursor.execute(stmstr, arguments)
 
@@ -239,7 +241,6 @@ class Database:
         self._connection.commit()
         cursor.close()
         return 
-
 
     def confirmedOrder(self, userid, orderid, confirmed):
         cursor = self._connection.cursor() 
