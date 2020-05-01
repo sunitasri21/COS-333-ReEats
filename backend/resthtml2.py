@@ -18,6 +18,7 @@ import random
 from time import localtime, asctime, strftime
 from flask_login import LoginManager, login_user, logout_user, login_required, UserMixin
 import stripe
+from flask_sqlalchemy import SQLAlchemy
 import re
 
 #-----------------------------------------------------------------------
@@ -25,12 +26,12 @@ import re
 template_dir = os.path.join(os.path.dirname(__file__), '../frontend')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
 
+dev = False
 # -----------------------------------------------------------------------
 
 def create_app():
     app = Flask(__name__,  template_folder='../frontend')
     app.secret_key = "WEFWEFGEWDNFEJNJK2938Rdnjenfcjv"
-
 
     with app.app_context():
         get_db()
@@ -49,6 +50,16 @@ def get_db():
     return g.db
 
 app = create_app()
+
+if dev:
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///reeats.db'
+else:
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db_sql = SQLAlchemy(app)
+
 # -----------------------------------------------------------------------
 
 login_manager = LoginManager()
@@ -98,7 +109,7 @@ def searchResults():
     if 'logged_in' in session:
         # User is loggedin show them the home page
         template = jinja_env.get_template("userFirstPage.html")    
-        html = render_template(template, restaurant=searchResults, discount=discount, username=session['username'])
+        html = render_template(template, restaurant=searchResults, discount=discount, username=session.get('username'))
         response = make_response(html)
         if not session.get('logged_in'):
             return redirect(url_for('login'))
@@ -119,11 +130,18 @@ def restabout():
     response = make_response(html)
     return response  
 # -----------------------------------------------------------------------
+@app.route('/about', methods=['GET'])
+
+def about():
+    html = render_template('defaultAbout.html')
+    response = make_response(html)
+    return response  
+# -----------------------------------------------------------------------
 @app.route('/restFP', methods=['GET'])
 @login_required
 def restPage():
     restName = str(request.args.get('restName')) or ""
-    discount = request.args.get('discount', default=1) 
+    discount = float(request.args.get('discount', default=1))
      
     database = get_db()
 
@@ -193,12 +211,16 @@ def checkoutPage():
 @login_required
 
 def restAccount():
-    html = render_template('restAccount.html')
+    username = session.get('username')
+    email = session.get('email')
+    password = session.get('password')
+    html = render_template('restAccount.html', username=username, email=email, password=password)
+
     response = make_response(html)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        return response     
+        return response         
 # -----------------------------------------------------------------------
 
 @app.route('/userAccount', methods=['GET'])
@@ -269,7 +291,9 @@ def login():
             restUser = User(restaurant[1], unhashed_password, restaurant[0], True, None)
             # Create session data, we can access this data in other routes
             session['logged_in'] = True
-            session['username1'] = restaurant[1]  
+            session['username'] = restaurant[1]  
+            session['password'] = restaurant[2]
+            session['email'] = restaurant[3]
             session['id'] = restaurant[0]
             session['restaurant_name'] = database.restaurant_search(restaurant[0])
             login_user(restUser)
@@ -348,7 +372,7 @@ def updateDiscount():
         database.inputDiscount(discount, quantity, foodId)
 
         # database.connect()
-        newPrice = database.pullNewPrice(foodId)
+        newPrice = float(database.pullNewPrice(foodId))
         retVal = jsonify(
             itemNum=foodId,
             discountVal=newPrice
@@ -434,8 +458,9 @@ def confirmationPage():
             newPrice = database.pullNewPrice(value)
             name = "item" + str(value) + "_quantity"
             quantity = request.form[name]
+            print("q: " + str(quantity))
             foodName = database.pullName(value)
-            total_value = total_value + float(quantity) * newPrice
+            total_value = float(total_value) + float(quantity) * float(newPrice)
             database.updateQuantity(quantity, value)
             userid = session['id']
             confirmed = 1
@@ -463,8 +488,8 @@ def confirmationPage():
         'currency': 'usd',
         'quantity': 1
       }],
-      success_url='http://localhost:12345/qrCodePage',
-      cancel_url='http://localhost:12345/userFP'
+      success_url='https://reeats-test1.herokuapp.com/qrCodePage',
+      cancel_url='https://reeats-test1.herokuapp.com/userFP'
     )
 
     sessionId = session2["id"]
@@ -548,8 +573,8 @@ def confirmationPageReloaded():
         'currency': 'usd',
         'quantity': 1
       }],
-      success_url='http://localhost:12345/qrCodePage',
-      cancel_url='http://localhost:12345/userFP'
+      success_url='https://reeats-test1.herokuapp.com/qrCodePage',
+      cancel_url='https://reeats-test1.herokuapp.com/userFP'
     )
 
     sessionId = session2["id"]
@@ -600,7 +625,7 @@ def qrCodePage():
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "http://localhost:12345/qrReroute" + orderid + "&amp;size=100x100"
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute" + orderid + "&amp;size=100x100"
     print(url)
 
     html2 = render_template(template2,foodList = results, total = total_value, orderid = url)

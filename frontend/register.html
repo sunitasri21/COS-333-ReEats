@@ -1,11 +1,61 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8">
+		
 		<title>Register</title>
+        <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
 		<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
 		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
-	</head>
+        <style>
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+  .column2 {
+    width: 100%;
+    display: block;
+  }
+}
+    
+ul.topnav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
+
+ul.topnav li {float: left;}
+
+ul.topnav li a {
+  display: block;
+  color: black;
+  font-size: 20px;
+  font-family: "Source Code Pro";
+  font-weight: 500;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+span.vertical {
+  writing-mode: vertical-rl; 
+  text-shadow: 2px 2px 5px grey;
+}
+ul.topnav li a.active {background-color: #cc6666; color: white}
+ul.topnav li a:hover{background-color: #cc4949;}
+ul.topnav li a.active:hover{background-color: #cc4949;}
+
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px) {
+  ul.topnav li.right, 
+  ul.topnav li {float: none;}
+}
+        
+        </style>
+    </head>
 	<body>
           <head>
   <title>Chennai Chimney</title>   
@@ -13,18 +63,11 @@
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="static/login.css" type="text/css">
-  <div class="topnav">
-
-     <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-      <a href="/" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
-
-
-
-      </div>
-    </div>
-
-    </a>
-     </div>
+              
+    <ul class="topnav">
+        <li><a class="active" href="/about"><span class="vertical"><b>Re</b></span>Eats</a></li>
+        
+    </ul>
 
   </head>
 		<div class="register">

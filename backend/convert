@@ -1,0 +1,7 @@
+load database  
+    from 'reeats.db'  
+    into postgresql:///reeats
+    alter schema 'reeats' rename to 'public'
+
+with reset sequences, create no tables, include no drop, create no indexes, disable triggers
+set work_mem to '200MB', maintenance_work_mem to '512 MB';

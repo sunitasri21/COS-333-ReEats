@@ -4,40 +4,43 @@
 <head>
 <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
 
-
 <style>
 body{
   background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");   
   background-size: cover;  
   margin: 0;
     }
-.fixed_header{
-    width: 1300px;
-    table-layout: fixed;
-    border-collapse: collapse;
-}
-
-.fixed_header tbody{
-  display:block;
-  width: 100%;
-  overflow: auto;
+    
+table { 
+  border-collapse: collapse;
   height: 500px;
+  display: inline-block; 
+  overflow: auto;
+
+}
+input[type="button"] {
+  font-family: "Source Code Pro";
+  width: 100%;
+  background: #cc6666;
+  border-radius: 3px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  transition: all 0.3s;
+  margin-top: -4px;
+  font-weight: 200;
+  display: block;
+  float: none;
+  text-align: center;
+}
+input[type="button"]:hover {
+  background: #cc4949;
 }
 
-.fixed_header thead tr {
-   display: block;
-}
 
-.fixed_header thead {
-  background: black;
-  color:#fff;
-}
-
-.fixed_header th, .fixed_header td {
-  padding: 10px;
-  text-align: left;
-  width: 1400px;
-}
 </style>
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
 
@@ -86,11 +89,10 @@ body{
         <li><a class="active" href="/restabout"><span class="vertical"><b>Re</b></span>Eats</a></li>
         <li class="right"><a href="/logout">Logout</a></li>
         <li class="right"><a href="/restFeedback">Feedback</a></li>
-        <li class="right"><a href="/restFP">Checkout</a></li>
+        <li class="right"><a href="/restDiscount">Discounts</a></li>
         <li class="right"><a href="/restAccount">Account</a></li>
         <li class="right"><a href="/restFP">Menu</a></li>           
     </ul>
-
   </head>
 
   <body>
@@ -110,20 +112,18 @@ body{
     <hr color ="black">
      </div>
     <center>
-    <table class="fixed_header" cellspacing="2" cellpadding="2">  
+    <table cellspacing="1" cellpadding="1" style = "align:center">  
       <!-- align:"center" -->
-        <thead>
       <tr>
-        <th><strong>Food Item</strong></th>
-        <th><strong>Description</strong></th>
-<!--         <td><strong>Dietary Restrictions</strong></td>
- -->    <th><strong>List Price</strong></th>
-        <th><strong>Quantity</strong></th>
-        <th><strong>Discount</strong></th>
-        <th><strong>Discounted Price</strong></th>
+          <th><strong><div>Food Item</div></strong></th>
+          <th><strong><div>Description</div></strong></th>
+          <th><strong><div>List Price</div></strong></th>
+          <th><strong><div>Quantity</div></strong></th>
+          <th><strong><div>Discount</div></strong></th>
+          <th><strong><div>Discounted Price</div></strong></th>
 
-            </tr></thead>
-        <tbody>
+            </tr>
+
       {% for item in restaurant %}
         <tr>
           <td>{{ item.getFood()}}</td>
@@ -148,7 +148,6 @@ body{
         </tr>
 
       {% endfor %}
-        </tbody>
 
         </table></center>
   </body>
