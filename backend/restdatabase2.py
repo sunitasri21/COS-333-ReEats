@@ -24,7 +24,7 @@ class Database:
 
     def connect(self):      
         DATABASE_URL = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
-        conn_string = "host='localhost' dbname='reeats6' user='arjunsaikrishnan' password='waterside2007'"
+        conn_string = "host='localhost' dbname='reeats3'"
        
       # if not path.isfile(DATABASE_NAME):
         #     raise Exception("database reeats.db not found")
