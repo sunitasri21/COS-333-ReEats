@@ -25,7 +25,6 @@
 <script>
 
       function submitChecks() {
-         // var sessionid = {{CHECKOUT_SESSION_ID}};
          var stripe = Stripe('pk_test_d3OIYzLIan4NGotYARF05gcp00VcXEXPPI');
           stripe.redirectToCheckout({sessionId: '{{CHECKOUT_SESSION_ID}}'}).then(function(result) {
             alert("done")
@@ -65,7 +64,7 @@
           
           function handleResponse(response)
           { 
-            $("html").html(response);
+            $("div").html(response);
           };
           if (request != null) request.abort();
           request = $.ajax(
@@ -91,7 +90,7 @@
 
           function handleResponse(response)
           { 
-            $("html").html(response);
+            $("#quantity").html(response);
           };
           if (request != null) request.abort();
           request = $.ajax(
@@ -117,7 +116,7 @@
           
           function handleResponse(response)
           { 
-            $("html").html(response);
+            $("#quantity").html(response);
           };
           if (request != null) request.abort();
           request = $.ajax(
@@ -212,7 +211,7 @@
 
 
        </tr>
-
+       <div id = "list">
        {% for item in foodList %}
       <tr>
         <tr>
@@ -230,7 +229,7 @@
           </td>
         </tr>
         {% endfor %}
-
+      </div>
       <tr>
         <td></td>
         <td></td>
@@ -251,46 +250,3 @@
 
   </body>
 </html>
-
-
-      <!-- {% for item in foodList %}
-      <tr>
-        <tr>
-          <td>{{ item[0]}}</td>
-          <td>{{ item[2]}}</td>
-          <td>{{ item[1]}}</td>
-          <td>{{ item[3]|int}}</td>
-          <td>{{"%.2f"|format(item[3]|int * item[1]|float)}}</td>
-        </tr>
-        {% endfor %}
-
-
-
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>Total:{{"%.2f"|format(total)}}</td>
-      </tr>
-
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><a href = "/">Press Here To Edit Cart</a></td>
-      </tr>
-
-      </tr> 
-    </table>
-      </center>
-
-    <p align="center">
-    <input type="submit" value="SUBMIT" onclick="submitChecks()"> 
-    </p>
-  </form>
-</head>
-
-  </body>
-</html> -->

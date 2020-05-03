@@ -1,0 +1,17 @@
+{% for item in foodList %}
+      <tr>
+        <tr>
+          <td id = "foodId" > {{ item.getId()}}</td>
+          <td id = "name" > {{ item.getFood()}}</td>
+          <td id = "price" > {{ item.getNewPrice())}}</td>
+          <td id = "quantity" >{{ item.getQuantity()|int}}</td>
+          <td>{{"%.2f"|format(item.getQuantity()*item.getNewPrice())}}</td>
+          <td>
+            <a input type="submit" value="X" onclick="changeOrder()"></a>
+          </td>
+          <td>
+            <a id = "addQuantity" input type="submit" value="+" onclick="addQuantity()"></a>
+            <a id = "subtractQuantity" input type="submit" value="-" onclick="subtractQuantity()"></a>
+          </td>
+        </tr>
+{% endfor %}
