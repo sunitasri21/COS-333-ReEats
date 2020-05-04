@@ -490,9 +490,9 @@ def confirmationPage():
 
     else:
         database = get_db()
-
         orderid = request.cookies.get('orderId')
         userid = request.cookies.get('userId')
+        print("userid = " + str(userid))
         confirmed = 1 
 
         try:
