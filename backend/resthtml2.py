@@ -531,8 +531,8 @@ def confirmationPage():
     response = make_response(html)
     # response.set_cookie('foodList', json_dumps(food_list))
     # response.set_cookie('total', str(total_value))
-    response.set_cookie('orderId', orderid)
-    response.set_cookie('userId', userid)
+    response.set_cookie('orderId', orderid, samesite='samesite')
+    response.set_cookie('userId', userid, samesite='samesite')
 
     if not session.get('logged_in'):
         return redirect(url_for('login'))
