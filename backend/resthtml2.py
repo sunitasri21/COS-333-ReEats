@@ -617,7 +617,7 @@ def confirmationPageReloaded():
     for box in results:
         print(box.getId())
 
-    template = jinja_env.get_template("removeitem.html")
+    template = jinja_env.get_template("removeItem.html")
 
     html = render_template(template, foodList = results, total = total_value)
     # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )

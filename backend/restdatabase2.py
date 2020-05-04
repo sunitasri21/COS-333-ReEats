@@ -28,7 +28,7 @@ class Database:
             DATABASE_URL = 'postgres://sxhvduxfyqmecj:c29b14492ff573a3a771277f2b06ba0f1d7d1543f76bb907df0e92ed7affdee1@ec2-34-230-149-169.compute-1.amazonaws.com:5432/db0m90v94g9tsi'
             self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
         else:
-            conn_string = "host='localhost' dbname='test' user='vedikapatwari'"
+            conn_string = "host='localhost' dbname='reeats8' user='arjunsaikrishnan'"
             self._connection = psycopg2.connect(conn_string)   
 
         # if not path.isfile(DATABASE_NAME):
