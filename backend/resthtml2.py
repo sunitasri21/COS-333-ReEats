@@ -780,6 +780,9 @@ def qrCodePage():
         orderid = result.getOrderId()
         confirmed = 0
         database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+        print(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+    
+    print("REMOVED EVERYTHING")
 
     html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
     response2 = make_response(html2)
