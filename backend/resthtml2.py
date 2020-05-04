@@ -445,7 +445,7 @@ def getNewPrice():
 
 
 #-----------------------------------------------------------------------
-@app.route('/confirmationPage', methods=['POST'])
+@app.route('/confirmationPage', methods=['GET','POST'])
 @login_required
 def confirmationPage():
     print("CONFIRMATION PAGE")
@@ -490,9 +490,9 @@ def confirmationPage():
 
     else:
         database = get_db()
-
         orderid = request.cookies.get('orderId')
-        userid = request.cookies.get('userId')
+        userid = session['id']
+        print("userid = " + str(userid))
         confirmed = 1 
 
         try:
@@ -532,7 +532,61 @@ def confirmationPage():
     # response.set_cookie('foodList', json_dumps(food_list))
     # response.set_cookie('total', str(total_value))
     response.set_cookie('orderId', orderid)
+<<<<<<< HEAD
     # response.set_cookie('userId', userid)
+=======
+    response.set_cookie('userId', str(userid))
+
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response
+
+#-----------------------------------------------------------------------
+@app.route('/globalCart', methods=['GET', 'POST'])
+@login_required
+def globalCart():
+    database = get_db()
+    orderid = request.cookies.get('orderId')
+    userid = session['id']
+    print("userid = " + str(userid))
+    confirmed = 1 
+
+    try:
+        results, total_value = database.confirmedOrder(userid, orderid, confirmed)
+
+    except Exception as e:
+        errorMsg =  str(e)
+        stderr.write("database error: " + errorMsg)
+        raise e  
+
+    print(len(results))
+
+    check = True
+    food_list = []
+
+    for result in results:
+        value = result.getId()
+        newPrice = result.getNewPrice()
+        foodName = result.getFood()
+        quantity = result.getQuantity()
+        print("quantity in results: " + str(quantity))
+        if quantity != 0:
+            check = False 
+        food_list.append((value, newPrice, foodName, float(quantity)))
+
+    template = jinja_env.get_template("userConfirmation.html")
+    # template2 = jinja_env.get_template("qrCodePage.html")
+
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
+
+    html = render_template(template, foodList = food_list, total = total_value, orderId = orderid)
+    # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
+    response = make_response(html)
+    # response.set_cookie('foodList', json_dumps(food_list))
+    # response.set_cookie('total', str(total_value))
+    response.set_cookie('orderId', orderid)
+    # response.set_cookie('userId', str(userid))
 
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -721,15 +775,24 @@ def qrCodePage():
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute" + orderid + "&amp;size=100x100"
     print(url)
 
+    for result in results:
+        newPrice = result.getNewPrice()
+        quantity = result.getQuantity()
+        foodid = result.getId()
+        foodName = result.getFood()
+        orderid = result.getOrderId()
+        confirmed = 0
+        database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+        print(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+    
+    print("REMOVED EVERYTHING")
+
     html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
     response2 = make_response(html2)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
         return response2
-
-
-
 #-----------------------------------------------------------------------
 
 @app.route('/qrReroute/<orderid>', methods=['GET'])
