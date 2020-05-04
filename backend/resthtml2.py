@@ -772,7 +772,7 @@ def qrCodePage():
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute" + orderid + "&amp;size=100x100"
     print(url)
 
-    for result in result:
+    for result in results:
         newPrice = result.getNewPrice()
         quantity = result.getQuantity()
         foodid = result.getId()
