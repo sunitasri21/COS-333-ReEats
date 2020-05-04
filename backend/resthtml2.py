@@ -445,7 +445,7 @@ def getNewPrice():
 
 
 #-----------------------------------------------------------------------
-@app.route('/confirmationPage', methods=['GET, ''POST'])
+@app.route('/confirmationPage', methods=['GET','POST'])
 @login_required
 def confirmationPage():
     print("CONFIRMATION PAGE")
