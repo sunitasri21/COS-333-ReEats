@@ -540,7 +540,7 @@ def confirmationPage():
         return response
 
 #-----------------------------------------------------------------------
-@app.route('/globalCart', methods=['POST'])
+@app.route('/globalCart', methods=['GET', 'POST'])
 @login_required
 def globalCart():
     database = get_db()
