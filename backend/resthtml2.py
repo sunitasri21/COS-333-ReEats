@@ -490,42 +490,10 @@ def confirmationPage():
 
     else:
         database = get_db()
-        data = request.get_json()
-        print(data)
 
-        foodName = data["name"]
-        newPrice = data["price"]
-        quantity = data["quantity"]
         orderid = request.cookies.get('orderId')
-        foodid = data["foodId"]
-
-        print("foodName: " + str(foodName))
-        print("newPrice: " + str(newPrice))
-        print("quantity: " + str(quantity))
-        print("orderid: " + str(orderid))
-        print("foodid: " + str(foodid))
-
-        addQuantity = data["addQuantity"]
-        subtractQuantity = data["subtractQuantity"]
-        remove = data["remove"]
-
-        print("remove = " + str(remove))
-
-        print("CONFIRMATION PAGE RELOADED QUANTITY")
-
-        if addQuantity == "+":
-            quantity = str(int(quantity) + 1)
-
-        if subtractQuantity == "-":
-            quantity = str(int(quantity) - 1)
-
-        if remove == "1":
-            quantity = 0
-
-        print("resthtml: quantity = " + str(quantity))
-        userid = session['id']
-        confirmed = 1
-        database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+        userid = request.cookies.get('userId')
+        confirmed = 1 
 
         try:
             results, total_value = database.confirmedOrder(userid, orderid, confirmed)
@@ -552,8 +520,6 @@ def confirmationPage():
 
         if check:
             return redirect(url_for('login'))
-        else:
-            return redirect(url_for())
 
     template = jinja_env.get_template("userConfirmation.html")
     # template2 = jinja_env.get_template("qrCodePage.html")
@@ -566,6 +532,7 @@ def confirmationPage():
     # response.set_cookie('foodList', json_dumps(food_list))
     # response.set_cookie('total', str(total_value))
     response.set_cookie('orderId', orderid)
+    response.set_cookie('userId', userid)
 
     if not session.get('logged_in'):
         return redirect(url_for('login'))
