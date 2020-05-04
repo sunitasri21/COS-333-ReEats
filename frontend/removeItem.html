@@ -1,17 +1,48 @@
+<form action="/qrCodePage", method="post"></form>
+<center>
+<table cellspacing="2" cellpadding="2" style = "align:center">  
+  <tr>
+    <th><strong>Item No.</strong></th>
+    <th><strong>Name</strong></th>
+
+    <th><strong>List Price</strong></th>
+    <th><strong>Quantity</strong></th>
+    <th><strong>Subtotal</strong></th>
+    <th><strong>Remove Item</strong></th>
+    <th><strong>Change Quantity</strong></th>
+
+  
+   </tr>
+
 {% for item in foodList %}
       <tr>
         <tr>
-          <td id = "foodId" > {{ item.getId()}}</td>
-          <td id = "name" > {{ item.getFood()}}</td>
-          <td id = "price" > {{ item.getNewPrice())}}</td>
-          <td id = "quantity" >{{ item.getQuantity()|int}}</td>
-          <td>{{"%.2f"|format(item.getQuantity()*item.getNewPrice())}}</td>
+          <td id = "item{{item.getId()}}_foodId" >{{item.getId()}}</td>
+          <td id = "item{{item.getId()}}_name"> {{item.getFood()}}</td>
+          <td id = "item{{item.getId()}}_price"> {{item.getNewPrice()}}</td>
+          <td id = "item{{item.getId()}}_quantity">{{item.getQuantity()|int}}</td>
+          <td id = "item{{item.getId()}}_subtotal">{{"%.2f"|format(item.getQuantity()|float * item.getNewPrice()|float)}}</td>
           <td>
-            <a input type="submit" value="X" onclick="changeOrder()"></a>
+            <input id = "r_{{item.getId()}}" type="button" value="X" onclick="changeOrder(this.id)"></input>
           </td>
           <td>
-            <a id = "addQuantity" input type="submit" value="+" onclick="addQuantity()"></a>
-            <a id = "subtractQuantity" input type="submit" value="-" onclick="subtractQuantity()"></a>
+            <input id = "a_{{item.getId()}}" type="button" value="+" onclick="addQuantity(this.id)"></input>
+            <input id = "s_{{item.getId()}}" type="button" value="-" onclick="subtractQuantity(this.id)"></input>
           </td>
         </tr>
 {% endfor %}
+
+<tr>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td></td>
+  <td id = "total_value">Total:{{"%.2f"|format(total)}}</td>
+</tr>
+
+</tr> 
+</table>
+
+

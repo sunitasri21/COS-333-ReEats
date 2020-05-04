@@ -25,6 +25,7 @@ import re
 ##TODO: remove exit()
 template_dir = os.path.join(os.path.dirname(__file__), '../frontend')
 jinja_env = jinja2.Environment(loader = jinja2.FileSystemLoader(template_dir))
+stripe.api_key = 'sk_test_AwX9JLUwBYsuh9qhVFQISrDL00WRZ6jKh4'
 
 dev = False
 # -----------------------------------------------------------------------
@@ -87,8 +88,10 @@ def searchResults():
     restName = str(request.args.get('restName')) or ""
     discount = request.args.get('discount', default=1) 
       
-    database = get_db()    
+    database = get_db()
     database.updateExpiredDiscounts()
+
+
     foodList = request.cookies.get('foodList')
 
     # response.set_cookie('total', str(total_value))
@@ -142,8 +145,10 @@ def about():
 def restPage():
     restName = str(request.args.get('restName')) or ""
     discount = float(request.args.get('discount', default=1))
+     
     database = get_db()
     database.updateExpiredDiscounts()
+
     try:
         # database.connect()
         searchResults = database.menuSearch(restName)
@@ -171,6 +176,7 @@ def restPage():
 def checkoutPage():
     database = get_db()
     database.updateExpiredDiscounts()
+
     try:
         results = database.previewAllDiscounts()
         for result in results:
@@ -179,9 +185,6 @@ def checkoutPage():
             print(result.getPrice())
             print(result.getDiscount())
             print(result.getNewPrice())
-
-
-
 
     except Exception as e:
         errorMsg =  str(e)
@@ -307,6 +310,7 @@ def login():
             session['password'] = user[2]
             session['email'] = user[3]
             login_user(userUser)
+            
 
             return redirect(url_for('searchResults'))
         else:          
@@ -444,70 +448,124 @@ def getNewPrice():
 @app.route('/confirmationPage', methods=['POST'])
 @login_required
 def confirmationPage():
-    check_list = request.form.getlist("check_list[]")
-    if check_list == None:
-        check_list = []
-    print(check_list)
-    database = get_db()
+    print("CONFIRMATION PAGE")
+    print(request.referrer)
 
-    food_list = []
-    total_value = 0
-    orderid = createOrderId()
-    
-    for value in check_list:
+    prevURL = request.referrer
+    parts = prevURL.split("/")
+    prevPage = parts[3]
+
+    if prevPage == "userFP":
+        check_list = request.form.getlist("check_list[]")
+        if check_list == None:
+            check_list = []
+        print(check_list)
+        database = get_db()
+
+        food_list = []
+        total_value = 0
+        orderid = createOrderId()
+        
+        for value in check_list:
+            try:
+                # database.connect()
+                newPrice = database.pullNewPrice(value)
+                name = "item" + str(value) + "_quantity"
+                quantity = request.form[name]
+                # print("q: " + str(quantity))
+                foodName = database.pullName(value)
+                total_value = float(total_value) + float(quantity) * float(newPrice)
+                database.updateQuantity(quantity, value)
+                userid = session['id']
+                confirmed = 1
+                # response.set_cookie('foodList', str(value))
+                database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
+                food_list.append((value, newPrice, foodName, float(quantity)))
+                print(value)
+
+            except Exception as e:
+                errorMsg =  str(e)
+                stderr.write("database error: " + errorMsg)
+                raise e
+
+    else:
+        database = get_db()
+        data = request.get_json()
+        print(data)
+
+        foodName = data["name"]
+        newPrice = data["price"]
+        quantity = data["quantity"]
+        orderid = request.cookies.get('orderId')
+        foodid = data["foodId"]
+
+        print("foodName: " + str(foodName))
+        print("newPrice: " + str(newPrice))
+        print("quantity: " + str(quantity))
+        print("orderid: " + str(orderid))
+        print("foodid: " + str(foodid))
+
+        addQuantity = data["addQuantity"]
+        subtractQuantity = data["subtractQuantity"]
+        remove = data["remove"]
+
+        print("remove = " + str(remove))
+
+        print("CONFIRMATION PAGE RELOADED QUANTITY")
+
+        if addQuantity == "+":
+            quantity = str(int(quantity) + 1)
+
+        if subtractQuantity == "-":
+            quantity = str(int(quantity) - 1)
+
+        if remove == "1":
+            quantity = 0
+
+        print("resthtml: quantity = " + str(quantity))
+        userid = session['id']
+        confirmed = 1
+        database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+
         try:
-            # database.connect()
-            newPrice = database.pullNewPrice(value)
-            name = "item" + str(value) + "_quantity"
-            quantity = request.form[name]
-            print("q: " + str(quantity))
-            foodName = database.pullName(value)
-            total_value = float(total_value) + float(quantity) * float(newPrice)
-            database.updateQuantity(quantity, value)
-            userid = session['id']
-            confirmed = 1
-            # response.set_cookie('foodList', str(value))
-            database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
-            food_list.append((value, newPrice, foodName, float(quantity)))
+            results, total_value = database.confirmedOrder(userid, orderid, confirmed)
 
         except Exception as e:
             errorMsg =  str(e)
             stderr.write("database error: " + errorMsg)
-            raise e
+            raise e  
 
-    stripe.api_key = 'sk_test_AwX9JLUwBYsuh9qhVFQISrDL00WRZ6jKh4'
-    
+        print(len(results))
 
-    username=session['email']
+        check = True
+        food_list = []
 
-    session2 = stripe.checkout.Session.create(
-      payment_method_types=['card'],
-      # receipt_email='nzarur@princeton.edu',
-      line_items=[{
-        'name': 'Your Order Total',
-        # 'images': ['/static/foodimage.png'],
-        'amount': int(total_value*100),
-        'currency': 'usd',
-        'quantity': 1
-      }],
-      success_url='https://reeats-test1.herokuapp.com/qrCodePage',
-      cancel_url='https://reeats-test1.herokuapp.com/userFP'
-    )
+        for result in results:
+            value = result.getId()
+            newPrice = result.getNewPrice()
+            foodName = result.getFood()
+            quantity = result.getQuantity()
+            print("quantity in results: " + str(quantity))
+            if quantity != 0:
+                check = False 
+            food_list.append((value, newPrice, foodName, float(quantity)))
 
-    sessionId = session2["id"]
+        if check:
+            return redirect(url_for('login'))
+        else:
+            return redirect(url_for())
 
     template = jinja_env.get_template("userConfirmation.html")
     # template2 = jinja_env.get_template("qrCodePage.html")
 
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
 
-    html = render_template(template, foodList = food_list, total = total_value, orderId = orderid, CHECKOUT_SESSION_ID = sessionId)
+    html = render_template(template, foodList = food_list, total = total_value, orderId = orderid)
     # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
     response = make_response(html)
     # response.set_cookie('foodList', json_dumps(food_list))
-    response.set_cookie('total', str(total_value))
+    # response.set_cookie('total', str(total_value))
     response.set_cookie('orderId', orderid)
-    response.set_cookie('CHECKOUT_SESSION_ID', sessionId)
 
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -519,30 +577,52 @@ def confirmationPage():
 @login_required
 def confirmationPageReloaded():
     database = get_db()
+    data = request.get_json()
+    print(data)
 
-    foodName = request.args.get("name")
-    newPrice = request.args.get("price")
-    quantity = request.args.get("quantity")
-    orderid = request.args.get("orderId")
-    foodid = request.args.get("foodId")
-    
+    foodName = data["name"]
+    newPrice = data["price"]
+    quantity = data["quantity"]
+    orderid = data['orderId']
+    foodid = data["foodId"]
+
+    print("foodName: " + str(foodName))
+    print("newPrice: " + str(newPrice))
+    print("quantity: " + str(quantity))
+    print("orderid: " + str(orderid))
+    print("foodid: " + str(foodid))
+
+    addQuantity = data["addQuantity"]
+    subtractQuantity = data["subtractQuantity"]
+    remove = data["remove"]
+
+    print("remove = " + str(remove))
+
+    print("CONFIRMATION PAGE RELOADED QUANTITY")
+
+    print("resthtml: quantity = " + str(quantity))
     userid = session['id']
     confirmed = 0
-    database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
+    database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
 
     try:
-        results, total_value = database.confirmedOrder(userid, orderid, confirmed)
+        results, total_value = database.confirmedOrder(userid, orderid, 1)
 
     except Exception as e:
         errorMsg =  str(e)
         stderr.write("database error: " + errorMsg)
         raise e  
 
-    template = jinja_env.get_template("removeItem.html")
+    print("RESULTS")
+    for box in results:
+        print(box.getId())
 
-    html = render_template(template, foodList = food_list)
+    template = jinja_env.get_template("removeitem.html")
+
+    html = render_template(template, foodList = results, total = total_value)
+    # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
     response = make_response(html)
-
+    
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
@@ -553,33 +633,94 @@ def confirmationPageReloaded():
 @login_required
 def confirmationPageReloadedQuantity():
     database = get_db()
+    data = request.get_json()
+    print(data)
 
-    foodName = request.args.get("name")
-    newPrice = request.args.get("price")
-    quantity = request.args.get("quantity")
-    orderid = request.args.get("orderId")
-    foodid = request.args.get("foodId")
+    foodName = data["name"]
+    newPrice = data["price"]
+    quantity = data["quantity"]
+    orderid = data['orderId']
+    foodid = data["foodId"]
 
-    addQuantity = request.args.get("addQuantity")
-    subtractQuantity = request.args.get("subtractQuantity")
+    print("foodName: " + str(foodName))
+    print("newPrice: " + str(newPrice))
+    print("quantity: " + str(quantity))
+    print("orderid: " + str(orderid))
+    print("foodid: " + str(foodid))
+
+    addQuantity = data["addQuantity"]
+    subtractQuantity = data["subtractQuantity"]
+    remove = data["remove"]
+
+    print("remove = " + str(remove))
+
+    print("CONFIRMATION PAGE RELOADED QUANTITY")
 
     if addQuantity == "+":
-        quantity = quantity + 1
-
-    if subtractQuantity == "-":
-        quantity = quantity - 1
+        quantity = str(int(quantity) + 1)
     
-    userid = session['id']
-    confirmed = 0
-    database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
+    if int(quantity) > 1:
+        if subtractQuantity == "-":
+            quantity = str(int(quantity) - 1)
 
-    response = "<td id = "quantity" >" + quantity + "</td>"
+    print("resthtml: quantity = " + str(quantity))
+    userid = session['id']
+    confirmed = 1
+    database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+
+    try:
+        results, total_value = database.confirmedOrder(userid, orderid, confirmed)
+
+    except Exception as e:
+        errorMsg =  str(e)
+        stderr.write("database error: " + errorMsg)
+        raise e  
+
+    print(len(results))
+
+    html = str(quantity) + " " + str(total_value) + " " + str(newPrice)
+    # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
+    response = make_response(html)
+    
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response
+#-----------------------------------------------------------------------
+@app.route('/checkoutSession', methods=['POST'])
+def checkoutSession():
+    data = request.get_json()
+
+    username=session['email']
+    total_value = data['total_value']
+    total_value = total_value[6:]
+    print(data)
+    userid = session['id']
+
+    session2 = stripe.checkout.Session.create(
+      payment_method_types=['card'],
+    #   receipt_email=['username'],
+      line_items=[{
+        'name': 'Your Order Total',
+        # 'images': ['/static/foodimage.png'],
+        'amount': int(float(total_value)*100),
+        'currency': 'usd',
+        'quantity': 1
+      }],
+      success_url='https://reeats-test1.herokuapp.com/qrCodePage',
+      cancel_url='https://reeats-test1.herokuapp.com/userFP'
+    )
+
+    sessionId = session2["id"]
+    
+    html = sessionId
+
+    response = make_response(html)
 
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
         return response
-
 #-----------------------------------------------------------------------
 @app.route('/qrCodePage', methods=['GET'])
 @login_required
@@ -605,6 +746,8 @@ def qrCodePage():
         errorMsg =  str(e)
         stderr.write("database error: " + errorMsg)
         raise e  
+
+    print(total_value)
 
     template2 = jinja_env.get_template("qrCodePage.html")
 

@@ -1,5 +1,5 @@
 --
--- PostgreSQL database dump
+-- vedikapatwariQL database dump
 --
 
 -- Dumped from database version 10.12
@@ -35,7 +35,7 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: _address; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _address; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._address (
@@ -50,10 +50,10 @@ CREATE TABLE public._address (
 );
 
 
-ALTER TABLE public._address OWNER TO postgres;
+ALTER TABLE public._address OWNER TO vedikapatwari;
 
 --
--- Name: _dietary; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _dietary; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._dietary (
@@ -62,10 +62,10 @@ CREATE TABLE public._dietary (
 );
 
 
-ALTER TABLE public._dietary OWNER TO postgres;
+ALTER TABLE public._dietary OWNER TO vedikapatwari;
 
 --
--- Name: _menu; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _menu; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._menu (
@@ -83,10 +83,10 @@ CREATE TABLE public._menu (
 );
 
 
-ALTER TABLE public._menu OWNER TO postgres;
+ALTER TABLE public._menu OWNER TO vedikapatwari;
 
 --
--- Name: _order_join; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _order_join; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._order_join (
@@ -96,10 +96,10 @@ CREATE TABLE public._order_join (
 );
 
 
-ALTER TABLE public._order_join OWNER TO postgres;
+ALTER TABLE public._order_join OWNER TO vedikapatwari;
 
 --
--- Name: _order_table; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _order_table; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._order_table (
@@ -113,10 +113,10 @@ CREATE TABLE public._order_table (
 );
 
 
-ALTER TABLE public._order_table OWNER TO postgres;
+ALTER TABLE public._order_table OWNER TO vedikapatwari;
 
 --
--- Name: _restaurant_accounts; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _restaurant_accounts; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._restaurant_accounts (
@@ -127,10 +127,10 @@ CREATE TABLE public._restaurant_accounts (
 );
 
 
-ALTER TABLE public._restaurant_accounts OWNER TO postgres;
+ALTER TABLE public._restaurant_accounts OWNER TO vedikapatwari;
 
 --
--- Name: _restaurants; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _restaurants; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._restaurants (
@@ -140,10 +140,10 @@ CREATE TABLE public._restaurants (
 );
 
 
-ALTER TABLE public._restaurants OWNER TO postgres;
+ALTER TABLE public._restaurants OWNER TO vedikapatwari;
 
 --
--- Name: _sqlite_sequence; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _sqlite_sequence; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._sqlite_sequence (
@@ -152,10 +152,10 @@ CREATE TABLE public._sqlite_sequence (
 );
 
 
-ALTER TABLE public._sqlite_sequence OWNER TO postgres;
+ALTER TABLE public._sqlite_sequence OWNER TO vedikapatwari;
 
 --
--- Name: _user_account; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _user_account; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._user_account (
@@ -166,10 +166,10 @@ CREATE TABLE public._user_account (
 );
 
 
-ALTER TABLE public._user_account OWNER TO postgres;
+ALTER TABLE public._user_account OWNER TO vedikapatwari;
 
 --
--- Name: _user_accounts; Type: TABLE; Schema: public; Owner: postgres
+-- Name: _user_accounts; Type: TABLE; Schema: public; Owner: vedikapatwari
 --
 
 CREATE TABLE public._user_accounts (
@@ -180,10 +180,10 @@ CREATE TABLE public._user_accounts (
 );
 
 
-ALTER TABLE public._user_accounts OWNER TO postgres;
+ALTER TABLE public._user_accounts OWNER TO vedikapatwari;
 
 --
--- Data for Name: _address; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _address; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._address (restaurant_id, street, zipcode, city, state, country, phone_number, email) FROM stdin;
@@ -192,7 +192,7 @@ COPY public._address (restaurant_id, street, zipcode, city, state, country, phon
 
 
 --
--- Data for Name: _dietary; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _dietary; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._dietary (food_id, category) FROM stdin;
@@ -200,7 +200,7 @@ COPY public._dietary (food_id, category) FROM stdin;
 
 
 --
--- Data for Name: _menu; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _menu; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._menu (food_id, restaurant_id, food, unit_price, category, description, discount, new_price, quantity, starttime, endtime) FROM stdin;
@@ -322,7 +322,7 @@ COPY public._menu (food_id, restaurant_id, food, unit_price, category, descripti
 
 
 --
--- Data for Name: _order_join; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _order_join; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._order_join (order_id, qrcode, user_id) FROM stdin;
@@ -360,7 +360,7 @@ OOXEEV		1
 
 
 --
--- Data for Name: _order_table; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _order_table; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._order_table (food_id, new_price, quantity, food, order_id, confirmed, user_id) FROM stdin;
@@ -368,7 +368,7 @@ COPY public._order_table (food_id, new_price, quantity, food, order_id, confirme
 
 
 --
--- Data for Name: _restaurant_accounts; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _restaurant_accounts; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._restaurant_accounts (restaurant_id, username, password, email) FROM stdin;
@@ -377,7 +377,7 @@ COPY public._restaurant_accounts (restaurant_id, username, password, email) FROM
 
 
 --
--- Data for Name: _restaurants; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _restaurants; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._restaurants (restaurant_id, restaurant_name, about) FROM stdin;
@@ -386,7 +386,7 @@ COPY public._restaurants (restaurant_id, restaurant_name, about) FROM stdin;
 
 
 --
--- Data for Name: _sqlite_sequence; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _sqlite_sequence; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._sqlite_sequence (name, seq) FROM stdin;
@@ -395,7 +395,7 @@ user_account	1
 
 
 --
--- Data for Name: _user_account; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _user_account; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._user_account (user_id, username, password, email) FROM stdin;
@@ -404,7 +404,7 @@ COPY public._user_account (user_id, username, password, email) FROM stdin;
 
 
 --
--- Data for Name: _user_accounts; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: _user_accounts; Type: TABLE DATA; Schema: public; Owner: vedikapatwari
 --
 
 COPY public._user_accounts (user_id, username, password, email) FROM stdin;
@@ -413,6 +413,6 @@ COPY public._user_accounts (user_id, username, password, email) FROM stdin;
 
 
 --
--- PostgreSQL database dump complete
+-- vedikapatwariQL database dump complete
 --
 

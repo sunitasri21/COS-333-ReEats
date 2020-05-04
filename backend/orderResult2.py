@@ -22,6 +22,9 @@ class OrderResult:
         return self.food 
         + ',' + self.price 
 
+    def __len__(self):
+        return 1
+
     def getFood(self):
         return self.food
 
@@ -47,3 +50,4 @@ class OrderResult:
     def getOrderId(self):
         return self.order_id
 
+    

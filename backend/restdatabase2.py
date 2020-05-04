@@ -17,29 +17,28 @@ from datetime import date
 # from menuResult import MenuResults
 
 #-----------------------------------------------------------------------
+heroku = False
 
 class Database:
     def __init__(self):
         self._connection = None
 
-    def connect(self):      
-        DATABASE_URL = 'postgres://cavaxcayvoqxdp:d738fe5b698af40d07276a90ec25bdbb24eb4b89bb984fa6af075828c3df7d5b@ec2-54-165-36-134.compute-1.amazonaws.com:5432/d4pdqjkun0inr5'
-        conn_string = "host='localhost' dbname='reeats3'"
-       
-      # if not path.isfile(DATABASE_NAME):
+    def connect(self):  
+        if heroku:    
+            DATABASE_URL = 'postgres://sxhvduxfyqmecj:c29b14492ff573a3a771277f2b06ba0f1d7d1543f76bb907df0e92ed7affdee1@ec2-34-230-149-169.compute-1.amazonaws.com:5432/db0m90v94g9tsi'
+            self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
+        else:
+            conn_string = "host='localhost' dbname='test' user='vedikapatwari'"
+            self._connection = psycopg2.connect(conn_string)   
+
+        # if not path.isfile(DATABASE_NAME):
         #     raise Exception("database reeats.db not found")
         # self._connection = connect(DATABASE_NAME)
-       
-        #self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
-        
-        self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
-        
+        # self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
+        # self._connection = psycopg2.connect(conn_string)   
+
     def disconnect(self):
         self._connection.close()
-        
-        
-   # def expiration(self):
-  #    DELETE FROM expire_table WHERE timestamp < NOW() - INTERVAL '3 hours';
 
     def account_login(self, username, password):
         cursor = self._connection.cursor() 
@@ -158,7 +157,7 @@ class Database:
 
     def inputDiscount(self, discount, quantity, foodid, startTime, endTime):
         cursor = self._connection.cursor() 
-        foodid = int(foodid)        
+        foodid = int(foodid)
         cursor.execute("SELECT food, unit_price FROM _menu WHERE food_id = %s", (foodid, )); 
         discount = float(discount)
 
@@ -170,8 +169,6 @@ class Database:
             quantity = 1
         if discount == None:
             discount = 0.0
-        #print(quantity)        
-        
         start = str(date.today()) + " " + startTime      
         end = str(date.today()) + " " + endTime        
         
@@ -180,21 +177,13 @@ class Database:
         newPrice = '{:.2f}'.format(newPrice)
         arguments = (discount, newPrice, quantity, foodid) 
         if (discount >= 0 and discount <= 1):
-            cursor.execute("UPDATE _menu SET discount = %s, new_price = %s, quantity = %s, starttime = TO_TIMESTAMP( %s, 'YYYY-MM-DD HH24:mi') , endtime = TO_TIMESTAMP(%s,'YYYY-MM-DD HH24:mi')  WHERE food_id= %s", (discount, newPrice, quantity, start, end,  foodid,)); 
+            cursor.execute("UPDATE _menu SET discount = %s, new_price = %s, quantity = %s, \
+                starttime = TO_TIMESTAMP( %s, 'YYYY-MM-DD HH24:mi') , endtime = TO_TIMESTAMP(%s,'YYYY-MM-DD HH24:mi') WHERE food_id= %s", \
+                 (discount, newPrice, quantity, start, end, foodid,)); 
         self._connection.commit()
         cursor.close()
         return 
-    
-    def updateExpiredDiscounts(self):
-        cursor = self._connection.cursor() 
-        zero_quantity = 0
-        command = "UPDATE _menu SET quantity = %s WHERE NOW() - endtime > INTERVAL '1 minute'"
-        cursor.execute(command, (zero_quantity,));
-        self._connection.commit()
-        cursor.close()
-        return 
-        
-    
+
     def updateQuantity(self, quantity, foodid):
         cursor = self._connection.cursor() 
         foodid = int(foodid)
@@ -248,6 +237,20 @@ class Database:
         quantity = int(quantity)
         qrCode = ''
 
+        arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
+
+        cursor.execute("INSERT INTO _order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s) \
+            ON CONFLICT (user_id, order_id, food_id) DO UPDATE \
+            SET new_price = %s, quantity = %s, food = %s, food_id = %s, order_id = %s, confirmed = %s, user_id = %s",
+            (price, quantity, food, foodid, orderid, confirmed, userid, price, quantity, food, foodid, orderid, confirmed, userid, )); 
+
+        arguments2 = (orderid, qrCode, userid) 
+        cursor.execute("UPDATE _order_join SET order_id = %s, qrCode = %s, user_id = %s", (orderid, qrCode, userid, )); 
+
+        self._connection.commit()
+        cursor.close()
+        return 
+
 # <<<<<<< HEAD
 #         # we had issues with replace so might be insert for stmstr
 #         stmstr = 'UPDATE order_table SET new_price=?,  quantity=?, food=?, food_id=?, order_id=?, confirmed=?, user_id=? ' +\
@@ -258,37 +261,35 @@ class Database:
         # cursor.execute("INSERT INTO _order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s)", 
         #     (price, quantity, food, foodid, orderid, confirmed, userid, )); 
 
-        arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
-        cursor.execute("UPDATE _order_table SET new_price = %s, quantity =%s, food = %s, food_id=%s, order_id=%s, confirmed=%s, user_id=%s",
-            (price, quantity, food, foodid, orderid, confirmed, userid, )); 
-
-        arguments2 = (orderid, qrCode, userid) 
-        cursor.execute("UPDATE _order_join SET order_id = %s, qrCode = %s, user_id = %s", (orderid, qrCode, userid, )); 
-
-        self._connection.commit()
-        cursor.close()
-        return 
-
     def confirmedOrder(self, userid, orderid, confirmed):
         cursor = self._connection.cursor() 
         userid = int(userid)
         confirmed = int(confirmed)
 
         arguments3 = (userid, orderid, confirmed)
-        cursor.execute("SELECT food, new_price, quantity FROM _order_table WHERE user_id = %s AND order_id = %s AND confirmed = %d", (userid, orderid, confirmed, )); 
+        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND order_id = %s AND confirmed = %s", (userid, orderid, confirmed, )); 
         results = []
         total_value = 0.0
         row = cursor.fetchone()
         while row is not None: 
             # print(row)
-            result = OrderResult(food = str(row[0]), new_price = str(row[1]), quantity = str(row[2]))
+            result = OrderResult(food_id = str(row[0]), food = str(row[1]), new_price = str(row[2]), quantity = str(row[3]))
             results.append(result)
-            total_value = float(total_value) + float(row[2]) * float(row[1])
+            total_value = float(total_value) + float(row[3]) * float(row[2])
             row = cursor.fetchone()
         cursor.close()
         return results, total_value
 
-
+    def updateExpiredDiscounts(self):
+        cursor = self._connection.cursor() 
+        zero_quantity = 0
+        command = "UPDATE _menu SET quantity = %s WHERE NOW() - endtime > INTERVAL '1 minute'"
+        cursor.execute(command, (zero_quantity,));
+        self._connection.commit()
+        cursor.close()
+        return 
+        
+    
 
 #-----------------------------------------------------------------------
 # For testing:

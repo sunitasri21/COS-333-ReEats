@@ -6,9 +6,10 @@
 <link rel="stylesheet" href="static/table.css" type="text/css">
 <style>
     body{
-      background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");   
-  background-size: cover;  
-  margin: 0;
+      background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");  
+      background-attachment: fixed; 
+      background-size: cover;  
+      margin: 0;
     }
 
 .title{
@@ -25,14 +26,33 @@
 <script>
 
       function submitChecks() {
-         var stripe = Stripe('pk_test_d3OIYzLIan4NGotYARF05gcp00VcXEXPPI');
-          stripe.redirectToCheckout({sessionId: '{{CHECKOUT_SESSION_ID}}'}).then(function(result) {
-            alert("done")
-            finalPage(); 
-          });
+         // var sessionid = {{CHECKOUT_SESSION_ID}};
+        const url = "/checkoutSession";
+        var request = null;
+        data = {
+            total_value: document.getElementById("total_value").textContent
+        };
+        alert(data['total_value'])
+          function handleResponse(response)
+          { 
+            var stripe = Stripe('pk_test_d3OIYzLIan4NGotYARF05gcp00VcXEXPPI');
+            stripe.redirectToCheckout({sessionId: response}).then(function(result) {
+            finalPage();})
+          };
+          if (request != null) request.abort();
+          request = $.ajax(
+               {
+                  type: "POST",
+                  url: url,
+                  data: JSON.stringify(data),
+                  contentType: 'application/json;charset=UTF-8',
+                  success: handleResponse
+               }
+            );
         }
 
       function finalPage() {
+          var request = null;
           const url = "/qrCodePage";
           data = {
             orderId: document.getElementById("id").textContent,
@@ -51,89 +71,143 @@
                   success: handleResponse
                }
             );
+      }
 
-       function changeOrder() {
-         const url = "/confirmationPageReloaded";
-          data = {
-            orderId: document.getElementById("id").textContent,
-            foodId: document.getElementById("foodId").textContent,
-            name: document.getElementById("name").textContent,
-            price: document.getElementById("price").textContent,
-            quanity: document.getElementById("quantity").textContent
-          };
+       function changeOrder(id) {
+          var request = null;
+          const url1 = "/confirmationPageReloaded";
+          var currid = id.split("_")[1]
+          var quant = "item" + currid + "_quantity";
+          var thisfoodid = "item" + currid + "_foodId";
+          var thisname = "item" + currid + "_name";
+          var thisprice = "item" + currid + "_price";
+          var thissubtotal = "item" + currid + "_subtotal"
           
+          data = {
+            orderId: document.getElementById("id").textContent,
+            foodId: document.getElementById(thisfoodid).textContent,
+            name: document.getElementById(thisname).textContent,
+            price: document.getElementById(thisprice).textContent,
+            quantity: document.getElementById(quant).textContent,
+            subtotal: document.getElementById(thissubtotal).textContent,
+            addQuantity: "",
+            subtractQuantity: "",
+            remove: "1"
+          };
+
           function handleResponse(response)
           { 
-            $("div").html(response);
+            $("#div").html(response);
           };
           if (request != null) request.abort();
           request = $.ajax(
                {
                   type: "POST",
-                  url: url,
-                  data: data,
+                  url: url1,
+                  data: JSON.stringify(data),
+                  contentType: 'application/json;charset=UTF-8',
                   success: handleResponse
                }
+          );
         }
 
-        function addQuantity() {
-         const url = "/confirmationPageReloadedQuantity";
-          data = {
-            orderId: document.getElementById("id").textContent,
-            foodId: document.getElementById("foodId").textContent,
-            name: document.getElementById("name").textContent,
-            price: document.getElementById("price").textContent,
-            quantity: document.getElementById("quantity").textContent
-            addQuantity: document.getElementById("addQuantity").value
-            subtractQuantity: ""
-          };
-
-          function handleResponse(response)
-          { 
-            $("#quantity").html(response);
-          };
-          if (request != null) request.abort();
-          request = $.ajax(
-               {
-                  type: "POST",
-                  url: url,
-                  data: data,
-                  success: handleResponse
-               }
-        }
-
-        function subtractQuantity() {
-         const url = "/confirmationPageReloadedQuantity";
-          data = {
-            orderId: document.getElementById("id").textContent,
-            foodId: document.getElementById("foodId").textContent,
-            name: document.getElementById("name").textContent,
-            price: document.getElementById("price").textContent,
-            quantity: document.getElementById("quantity").textContent
-            addQuantity: ""
-            subtractQuantity: document.getElementById("subtractQuantity").value
-          };
+        function addQuantity(id) {
+          var request = null;
+          const url2 = "/confirmationPageReloadedQuantity";
+          var currid = id.split("_")[1]
+          var quant = "item" + currid + "_quantity";
+          var thisfoodid = "item" + currid + "_foodId";
+          var thisname = "item" + currid + "_name";
+          var thisprice = "item" + currid + "_price";
           
+          data = {
+            orderId: document.getElementById("id").textContent,
+            foodId: document.getElementById(thisfoodid).textContent,
+            name: document.getElementById(thisname).textContent,
+            price: document.getElementById(thisprice).textContent,
+            quantity: document.getElementById(quant).textContent,
+            addQuantity: "+",
+            subtractQuantity: "",
+            remove: ""
+          };
+
+          var namestring = "#item" + currid + "_quantity";
+          var namestring2 = "#item" + currid + "_subtotal";
+          var currprice = parseFloat(document.getElementById(thisprice).textContent);
+
           function handleResponse(response)
           { 
-            $("#quantity").html(response);
+            resp = response.split(" ");
+            var total = parseFloat(resp[1]).toFixed(2);
+            var sumtotal = "Total: " + total.toString();
+            $("#total_value").html(sumtotal);
+            $(namestring).html(resp[0]);
+            var product = parseFloat(resp[0]) * currprice;
+            $(namestring2).html(product.toFixed(2));
           };
           if (request != null) request.abort();
           request = $.ajax(
                {
                   type: "POST",
-                  url: url,
-                  data: data,
+                  url: url2,
+                  data: JSON.stringify(data),
+                  contentType: 'application/json;charset=UTF-8',
                   success: handleResponse
                }
+          );
         }
+
+        function subtractQuantity(id) {
+          var request = null;
+          const url2 = "/confirmationPageReloadedQuantity";
+          var currid = id.split("_")[1]
+          var quant = "item" + currid + "_quantity";
+          var thisfoodid = "item" + currid + "_foodId";
+          var thisname = "item" + currid + "_name";
+          var thisprice = "item" + currid + "_price";
+          
+          data = {
+            orderId: document.getElementById("id").textContent,
+            foodId: document.getElementById(thisfoodid).textContent,
+            name: document.getElementById(thisname).textContent,
+            price: document.getElementById(thisprice).textContent,
+            quantity: document.getElementById(quant).textContent,
+            addQuantity: "",
+            subtractQuantity: "-",
+            remove: ""
+          };
+
+          var namestring = "#item" + currid + "_quantity";
+          var namestring2 = "#item" + currid + "_subtotal";
+
+          function handleResponse(response)
+          { 
+            resp = response.split(" ");
+            var total = parseFloat(resp[1]).toFixed(2);
+            var sumtotal = "Total: " + total.toString();
+            $("#total_value").html(sumtotal);
+            $(namestring).html(resp[0]);
+            var product = parseFloat(resp[0]) * parseFloat(document.getElementById(thisprice).textContent);
+            $(namestring2).html(product.toFixed(2));
+          };
+          if (request != null) request.abort();
+          request = $.ajax(
+               {
+                  type: "POST",
+                  url: url2,
+                  data: JSON.stringify(data),
+                  contentType: 'application/json;charset=UTF-8',
+                  success: handleResponse
+               } 
+          );
+        }
+
+
          
           // If `redirectToCheckout` fails due to a browser or network
           // error, display the localized error message to your customer
           // using `result.error.message`.
 
-
-        }
 
           // const url = "/qrCodePage";
           // alert(document.getElementById("id").textContent)
@@ -195,7 +269,8 @@
       <center>
      <label style="color: #cc6666"><strong>Order Number:</strong></label> 
           <label id="id" style="color: white"><strong>{{orderId}}</strong></label></center>
-    
+      
+<div id="div">   
     <form action="/qrCodePage", method="post"></form>
     <center>
     <table cellspacing="2" cellpadding="2" style = "align:center">  
@@ -209,43 +284,44 @@
         <th><strong>Remove Item</strong></th>
         <th><strong>Change Quantity</strong></th>
 
-
+      
        </tr>
-       <div id = "list">
        {% for item in foodList %}
       <tr>
         <tr>
-          <td id = "foodId" > {{ item[0]}}</td>
-          <td id = "name" > {{ item[2]}}</td>
-          <td id = "price" > {{ item[1]}}</td>
-          <td id = "quantity" >{{ item[3]|int}}</td>
-          <td>{{"%.2f"|format(item[3]*item[1])}}</td>
+          <td id = "item{{item[0]}}_foodId" >{{item[0]}}</td>
+          <td id = "item{{item[0]}}_name" >{{item[2]}}</td>
+          <td id = "item{{item[0]}}_price" >{{item[1]}}</td>
+          <td id = "item{{item[0]}}_quantity" >{{ item[3]|int}}</td>
+          <td id = "item{{item[0]}}_subtotal">{{"%.2f"|format(item[3]|float * item[1]|float)}}</td>
           <td>
-            <a input type="submit" value="X" onclick="changeOrder()"></a>
+            <input id = "r_{{item[0]}}" type="button" value="X" onclick="changeOrder(this.id)"></input>
           </td>
           <td>
-            <a id = "addQuantity" input type="submit" value="+" onclick="addQuantity()"></a>
-            <a id = "subtractQuantity" input type="submit" value="-" onclick="subtractQuantity()"></a>
+            <input id = "a_{{item[0]}}" type="button" value="+" onclick="addQuantity(this.id)"></input>
+            <input id = "s_{{item[0]}}" type="button" value="-" onclick="subtractQuantity(this.id)"></input>
           </td>
         </tr>
-        {% endfor %}
-      </div>
+      {% endfor %}
+
       <tr>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
-        <td>Total:{{"%.2f"|format(total)}}</td>
+        <td></td>
+        <td></td>
+        <td id = "total_value">Total:{{"%.2f"|format(total)}}</td>
       </tr>
 
       </tr> 
     </table>
+  </div>
       </center>
 
     <p align="center">
     <input type="submit" value="SUBMIT" onclick="submitChecks()"> 
     </p>
-  </form>
 </head>
 
   </body>

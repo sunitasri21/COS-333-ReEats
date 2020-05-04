@@ -1,30 +1,30 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-<link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
-<link rel="stylesheet" href="static/table.css" type="text/css">
-<style>
-    body{
-      background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");   
-  background-size: cover;  
-  margin: 0;
+  <head>
+    <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
+    <link rel="stylesheet" href="static/table2.css" type="text/css">
+    <style>
+        body{
+          background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");   
+      background-size: cover;  
+      margin: 0;
+        }
+    
+    .title{
+      background: rgb(30, 30, 40);
+      color: white;
+      font-family: 'Source Code Pro';
     }
-
-.title{
-  background: rgb(30, 30, 40);
-  color: white;
-  font-family: 'Source Code Pro';
-}
-</style>
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
-<script src="https://js.stripe.com/v3/"></script>
-<link rel="stylesheet" href="static/table.css" type="text/css">
-
-<script>
-
-      function submitChecks() {
+    </style>
+    
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+    <script src="https://js.stripe.com/v3/"></script>
+    <link rel="stylesheet" href="static/table2.css" type="text/css">
+    
+    <script>
+    
+    function submitChecks() {
          // var sessionid = {{CHECKOUT_SESSION_ID}};
          var stripe = Stripe('pk_test_d3OIYzLIan4NGotYARF05gcp00VcXEXPPI');
           stripe.redirectToCheckout({sessionId: '{{CHECKOUT_SESSION_ID}}'}).then(function(result) {
@@ -75,6 +75,7 @@
                   data: data,
                   success: handleResponse
                }
+          );
         }
          
           // If `redirectToCheckout` fails due to a browser or network
@@ -156,6 +157,7 @@
         <th><strong>Quantity</strong></th>
         <th><strong>Subtotal</strong></th>
         <th><strong>Remove Item</strong></th>
+        <th><strong>Change Quantity</strong></th>
 
        </tr>
 
@@ -167,35 +169,26 @@
           <td id = "quantity">{{ item.getQuantity()}}</td>
           <td>{{"%.2f"|format(item.getNewPrice()|float * item.getQuantity()|float)}}</td>
           <td>
-            <a input type="submit" value="X" onclick="changeOrder()"></a>
+            <input id = "addQuantity" type="button" value="+" onclick="addQuantity()"></input>
+          </td>
+          <td>
+            <input id = "subtractQuantity" type="button" value="-" onclick="subtractQuantity()"></input>
+          </td>
+          <td>
+            <input type="submit" value="X" onclick="changeOrder()"></input>
           </td>
         </tr>
       {% endfor %}
-
+      
       <tr>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td></td>
         <td>Total:{{"%.2f"|format(total)}}</td>
       </tr>
-
-
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>Total:{{"%.2f"|format(total)}}</td>
-      </tr>
-
-      <!-- <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><a href = "/">Press Here To Edit Cart</a></td>
-      </tr> -->
 
       </tr> 
     </table>
@@ -204,7 +197,6 @@
     <p align="center">
     <input type="submit" value="SUBMIT" onclick="submitChecks()"> 
     </p>
-  </form>
 </head>
 
   </body>
