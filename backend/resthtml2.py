@@ -772,15 +772,21 @@ def qrCodePage():
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute" + orderid + "&amp;size=100x100"
     print(url)
 
+    for result in result:
+        newPrice = result.getNewPrice()
+        quantity = result.getQuantity()
+        foodid = result.getId()
+        foodName = result.getFood()
+        orderid = result.getOrderId()
+        confirmed = 0
+        database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+
     html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
     response2 = make_response(html2)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
         return response2
-
-
-
 #-----------------------------------------------------------------------
 
 @app.route('/qrReroute/<orderid>', methods=['GET'])

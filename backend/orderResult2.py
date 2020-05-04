@@ -43,7 +43,6 @@ class OrderResult:
     def getQuantity(self):
         return self.quantity
 
-
     def getDiscount(self):
         return self.discount
 
