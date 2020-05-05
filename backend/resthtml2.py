@@ -731,7 +731,7 @@ def checkoutSession():
     #   receipt_email=['username'],
       line_items=[{
         'name': 'Your Order Total',
-        # 'images': ['/static/foodimage.png'],
+        'images': ["https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg"],
         'amount': int(float(total_value)*100),
         'currency': 'usd',
         'quantity': 1
