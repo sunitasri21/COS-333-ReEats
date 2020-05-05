@@ -160,10 +160,12 @@ class Database:
         return 
 
     def inputDiscount(self, discount, quantity, foodid, startTime, endTime):
+        print('inputdiscount')
         cursor = self._connection.cursor() 
         foodid = int(foodid)
         cursor.execute("SELECT food, unit_price FROM _menu WHERE food_id = %s", (foodid, )); 
         discount = float(discount)
+        print(discount)
 
         result = cursor.fetchone()
         food = result[0]
@@ -176,6 +178,7 @@ class Database:
         start = str(date.today()) + " " + startTime      
         end = str(date.today()) + " " + endTime        
         
+        print(start, end)
         
         newPrice = (1 - float(discount)) * float(price)
         newPrice = '{:.2f}'.format(newPrice)
@@ -186,6 +189,7 @@ class Database:
                  (discount, newPrice, quantity, start, end, foodid,)); 
         self._connection.commit()
         cursor.close()
+        print('returning')
         return 
 
     def updateQuantity(self, quantity, foodid):
