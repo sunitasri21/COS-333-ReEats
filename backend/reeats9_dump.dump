@@ -87,7 +87,8 @@ CREATE TABLE public._order_table (
     food character varying(20) DEFAULT NULL::character varying,
     order_id character varying(6) DEFAULT NULL::character varying,
     confirmed smallint,
-    user_id smallint
+    user_id smallint, 
+    paid smallint
 );
 
 
@@ -588,9 +589,6 @@ COPY public._user_accounts (user_id, username, password, email) FROM stdin;
 
 ALTER TABLE ONLY public._order_table
     ADD CONSTRAINT re_eat UNIQUE (user_id, order_id, food_id);
-
-ALTER TABLE ONLY public._order_table
-    ADD COLUMN paid smallint; 
 
 --
 -- PostgreSQL database dump complete
