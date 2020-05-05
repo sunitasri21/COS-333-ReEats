@@ -89,21 +89,27 @@ def searchResults():
     discount = request.args.get('discount', default=1) 
       
     database = get_db()
+    searchResults = database.menuSearchUser(restName)
+    for thing in searchResults:
+        print('searchresults', thing.getId())
+        print('searchresults', thing.getFood())
+
     database.updateExpiredDiscounts()
     print("hellosearchresults")
 
 
     foodList = request.cookies.get('foodList')
+    print(foodList)
 
     # response.set_cookie('total', str(total_value))
     # response.set_cookie('orderId', orderid)
     # response.set_cookie('CHECKOUT_SESSION_ID', sessionId)
 
     try:
-        searchResults = database.menuSearchUser(restName)
+        searchResults2 = database.menuSearchUser(restName)
         for thing in searchResults:
-            print('searchresults', thing.getId())
-            print('searchresults', thing.getFood())
+            print('searchresults2', thing.getId())
+            print('searchresults2', thing.getFood())
 
     except Exception as e:
         errorMsg =  str(e)
@@ -113,7 +119,7 @@ def searchResults():
     if 'logged_in' in session:
         # User is loggedin show them the home page
         template = jinja_env.get_template("userFirstPage.html")    
-        html = render_template(template, restaurant=searchResults, discount=discount, username=session.get('username'))
+        html = render_template(template, restaurant=searchResults2, discount=discount, username=session.get('username'))
         response = make_response(html)
         if not session.get('logged_in'):
             return redirect(url_for('login'))
