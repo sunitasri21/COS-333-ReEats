@@ -24,11 +24,13 @@ class Database:
         self._connection = None
 
     def connect(self):  
+        # conn_string = "host='localhost' dbname='reeats15'"
+        # self._connection = psycopg2.connect(conn_string)  
         if heroku:    
-            DATABASE_URL = 'postgres://nkprqcoopdaeyb:4c1332d24e848ae3d5e9554120db7b65e2fe58c0913f19fbed082dd106d7c979@ec2-34-195-169-25.compute-1.amazonaws.com:5432/d9dpro4r60j6ub'
+            DATABASE_URL = 'postgres://cqulnoxjkxtise:e4cf934d7fbcdcd7f3b1813ea177d7f886cba7f3df621529d939910706a247fc@ec2-18-210-214-86.compute-1.amazonaws.com:5432/den0qbpk58pjvv'
             self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
         else:
-            conn_string = "host='localhost' dbname='reeats10'"
+            conn_string = "host='localhost' dbname='reeats15'"
             self._connection = psycopg2.connect(conn_string)   
 
         # if not path.isfile(DATABASE_NAME):
@@ -316,6 +318,7 @@ class Database:
             # print(row)
             result = OrderResult(food_id = str(row[0]), food = str(row[1]), new_price = str(row[2]), quantity = str(row[3]))
             results.append(result)
+            print('inputpaidorderresult', result)
             row = cursor.fetchone()
 
         for result in results:
@@ -333,12 +336,15 @@ class Database:
         return 
 
     def paidOrder(self, userid):
+        print('inpaidorder')
         cursor = self._connection.cursor() 
         userid = int(userid)
         paid = 1
 
-        arguments3 = (userid, confirmed)
+
+        # arguments3 = (userid, confirmed)
         cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND paid = %s", (userid, paid, )); 
+        print('cursorpaidorderdone')
         results = []
         total_value = 0.0
         row = cursor.fetchone()
@@ -346,6 +352,7 @@ class Database:
             # print(row)
             result = OrderResult(food_id = str(row[0]), food = str(row[1]), new_price = str(row[2]), quantity = str(row[3]))
             results.append(result)
+            print(result)
             total_value = float(total_value) + float(row[3]) * float(row[2])
             row = cursor.fetchone()
         cursor.close()
