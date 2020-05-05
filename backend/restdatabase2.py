@@ -113,12 +113,13 @@ class Database:
         restId = cursor.fetchone()[0]
         menu_id = '1'
         cursor.execute("SELECT food, description, unit_price, food_id FROM _menu WHERE restaurant_id = %s ORDER BY food_id ASC", (menu_id, ))
-
+        print("inDatabaseSearch")
         results = []
         row = cursor.fetchone()
         while row is not None:  
             result = OrderResult(food=str(row[0]), description=str(row[1]), unit_price=str(row[2]), food_id=str(row[3]))
             results.append(result)
+            print('id', result.getId())
             row = cursor.fetchone()
         cursor.close()
 
