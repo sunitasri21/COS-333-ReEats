@@ -236,13 +236,14 @@ class Database:
         orderid = orderid
         quantity = int(quantity)
         qrCode = ''
+        paid = 0 
 
         arguments = (price, quantity, food, foodid, orderid, confirmed, userid)
 
-        cursor.execute("INSERT INTO _order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id) VALUES (%s, %s, %s, %s, %s, %s, %s) \
+        cursor.execute("INSERT INTO _order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id, paid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) \
             ON CONFLICT (user_id, order_id, food_id) DO UPDATE \
-            SET new_price = %s, quantity = %s, food = %s, food_id = %s, order_id = %s, confirmed = %s, user_id = %s",
-            (price, quantity, food, foodid, orderid, confirmed, userid, price, quantity, food, foodid, orderid, confirmed, userid, )); 
+            SET new_price = %s, quantity = %s, food = %s, food_id = %s, order_id = %s, confirmed = %s, user_id = %s, paid = %s",
+            (price, quantity, food, foodid, orderid, confirmed, userid, paid, price, quantity, food, foodid, orderid, confirmed, userid, paid, )); 
 
         arguments2 = (orderid, qrCode, userid) 
         cursor.execute("UPDATE _order_join SET order_id = %s, qrCode = %s, user_id = %s", (orderid, qrCode, userid, )); 
@@ -265,9 +266,10 @@ class Database:
         cursor = self._connection.cursor() 
         userid = int(userid)
         confirmed = int(confirmed)
+        paid = 0 
 
         arguments3 = (userid, orderid, confirmed)
-        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND order_id = %s AND confirmed = %s", (userid, orderid, confirmed, )); 
+        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND order_id = %s AND confirmed = %s AND paid = %s", (userid, orderid, confirmed, paid, )); 
         results = []
         total_value = 0.0
         row = cursor.fetchone()
@@ -288,8 +290,56 @@ class Database:
         self._connection.commit()
         cursor.close()
         return 
-        
     
+    
+    def inputPaidOrder(self, userid, orderid):
+        cursor = self._connection.cursor() 
+        userid = int(userid)
+        paid = 1
+        confirmed = 1
+
+        arguments3 = (userid, orderid)
+        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND order_id = %s", (userid, orderid, )); 
+        results = []
+        row = cursor.fetchone()
+        while row is not None: 
+            # print(row)
+            result = OrderResult(food_id = str(row[0]), food = str(row[1]), new_price = str(row[2]), quantity = str(row[3]))
+            results.append(result)
+            row = cursor.fetchone()
+
+        for result in results:
+            foodid = result.getId()
+            food = result.getFood()
+            quantity = result.getQuantity()
+            price = result.getNewPrice()
+            cursor.execute("INSERT INTO _order_table (new_price, quantity, food, food_id, order_id, confirmed, user_id, paid) VALUES (%s, %s, %s, %s, %s, %s, %s, %s) \
+            ON CONFLICT (user_id, order_id, food_id) DO UPDATE \
+            SET new_price = %s, quantity = %s, food = %s, food_id = %s, order_id = %s, confirmed = %s, user_id = %s, paid = %s",
+            (price, quantity, food, foodid, orderid, confirmed, userid, paid, price, quantity, food, foodid, orderid, confirmed, userid, paid, )); 
+
+        self._connection.commit()
+        cursor.close()
+        return 
+
+    def paidOrder(self, userid):
+        cursor = self._connection.cursor() 
+        userid = int(userid)
+        paid = 1
+
+        arguments3 = (userid, confirmed)
+        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND paid = %s", (userid, paid, )); 
+        results = []
+        total_value = 0.0
+        row = cursor.fetchone()
+        while row is not None: 
+            # print(row)
+            result = OrderResult(food_id = str(row[0]), food = str(row[1]), new_price = str(row[2]), quantity = str(row[3]))
+            results.append(result)
+            total_value = float(total_value) + float(row[3]) * float(row[2])
+            row = cursor.fetchone()
+        cursor.close()
+        return results, total_value
 
 #-----------------------------------------------------------------------
 # For testing:

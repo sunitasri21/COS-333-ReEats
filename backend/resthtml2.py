@@ -532,9 +532,8 @@ def confirmationPage():
     # response.set_cookie('foodList', json_dumps(food_list))
     # response.set_cookie('total', str(total_value))
     response.set_cookie('orderId', orderid)
-<<<<<<< HEAD
+
     # response.set_cookie('userId', userid)
-=======
     response.set_cookie('userId', str(userid))
 
     if not session.get('logged_in'):
@@ -717,6 +716,8 @@ def checkoutSession():
     total_value = total_value[6:]
     print(data)
     userid = session['id']
+    orderid = request.cookies.get('orderId')
+    print(orderid)
 
     session2 = stripe.checkout.Session.create(
       payment_method_types=['card'],
@@ -728,8 +729,9 @@ def checkoutSession():
         'currency': 'usd',
         'quantity': 1
       }],
-      success_url='https://reeats-test1.herokuapp.com/qrCodePage',
-      cancel_url='https://reeats-test1.herokuapp.com/userFP'
+      metadata= {"userid"=userid, "orderid"=orderid},
+      success_url='https://reeats-test3.herokuapp.com/qrCodePage',
+      cancel_url='https://reeats-test3.herokuapp.com/userFP'
     )
 
     sessionId = session2["id"]
@@ -747,43 +749,39 @@ def checkoutSession():
 @login_required
 def qrCodePage():
     # orderid = request.form["orderId"]
-    orderid = request.cookies.get('orderId')
-    # if confirmedFood_list == None:
-    #     confirmedFood_list = []
-    # print(confirmedFood_list)
+    # orderid = request.cookies.get('orderId')
+
     database = get_db()
 
     results = []
     total_value = 0
 
     userid = session['id']
+    # confirmed = 1
 
-    confirmed = 1
+    # try:
+    #     results, total_value = database.confirmedOrder(userid, orderid, confirmed)
 
-    try:
-        results, total_value = database.confirmedOrder(userid, orderid, confirmed)
-
-    except Exception as e:
-        errorMsg =  str(e)
-        stderr.write("database error: " + errorMsg)
-        raise e  
-
-    print(total_value)
+    # except Exception as e:
+    #     errorMsg =  str(e)
+    #     stderr.write("database error: " + errorMsg)
+    #     raise e  
+    # print(total_value)
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute" + orderid + "&amp;size=100x100"
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test3.herokuapp.com/qrReroute?userid=" + userid + "&amp;size=100x100"
     print(url)
 
-    for result in results:
-        newPrice = result.getNewPrice()
-        quantity = result.getQuantity()
-        foodid = result.getId()
-        foodName = result.getFood()
-        orderid = result.getOrderId()
-        confirmed = 0
-        database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
-        print(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+    # for result in results:
+    #     newPrice = result.getNewPrice()
+    #     quantity = result.getQuantity()
+    #     foodid = result.getId()
+    #     foodName = result.getFood()
+    #     orderid = result.getOrderId()
+    #     confirmed = 0
+    #     database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+    #     print(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
     
     print("REMOVED EVERYTHING")
 
@@ -795,7 +793,7 @@ def qrCodePage():
         return response2
 #-----------------------------------------------------------------------
 
-@app.route('/qrReroute/<orderid>', methods=['GET'])
+@app.route('/qrReroute', methods=['GET'])
 @login_required
 def qrReroute():
     # orderid = request.form["orderId"]
@@ -803,19 +801,14 @@ def qrReroute():
     # if confirmedFood_list == None:
     #     confirmedFood_list = []
     # print(confirmedFood_list)
+    userid = request.args.get('userid')
 
     database = get_db()
-    print(orderid)
-
     results = []
     total_value = 0
 
-    userid = session['id']
-
-    confirmed = 1
-
     try:
-        results, total_value = database.confirmedOrder(userid, orderid, confirmed)
+        results, total_value = database.paidOrder(userid)
 
     except Exception as e:
         errorMsg =  str(e)
@@ -844,6 +837,34 @@ def createOrderId():
     for i in range(6):
         orderId += letters[int(random.random()*len(letters))]
     return orderId
+
+#-----------------------------------------------------------------------
+
+@app.route("/webhooks", methods=["POST"])
+def webhooks():
+    webhook_secret = "whsec_BUPGTfDOv2mIaP51MipyKfS0GfAOjw31" 
+    payload = request.data.decode("utf-8")
+    received_sig = request.headers.get("Stripe-Signature", None)
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, received_sig, webhook_secret
+        )
+    except ValueError:
+        print("Error while decoding event!")
+        return "Bad payload", 400
+    except stripe.error.SignatureVerificationError:
+        print("Invalid signature!")
+        return "Bad signature", 400
+
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        orderid = session['metadata']['orderid']
+        userid = session['metadata']['userid']
+        database = get_db()
+        database.inputPaidOrder(userid, orderid)
+
+    return "", 200
 #-----------------------------------------------------------------------
 # @app.route('/userCheckout', methods=['POST'])
 # def userCheckoutPage():
