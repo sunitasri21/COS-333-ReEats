@@ -90,6 +90,7 @@ def searchResults():
       
     database = get_db()
     database.updateExpiredDiscounts()
+    print("hellosearchresults")
 
 
     foodList = request.cookies.get('foodList')
