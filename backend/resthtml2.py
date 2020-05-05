@@ -729,7 +729,11 @@ def checkoutSession():
         'currency': 'usd',
         'quantity': 1
       }],
-      metadata= {"userid"=userid, "orderid"=orderid},
+
+      metadata= {
+        "userid": userid, 
+        "orderid": orderid
+        },
       success_url='https://reeats-test3.herokuapp.com/qrCodePage',
       cancel_url='https://reeats-test3.herokuapp.com/userFP'
     )
