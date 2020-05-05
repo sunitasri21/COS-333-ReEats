@@ -113,26 +113,27 @@ class Database:
         restId = cursor.fetchone()[0]
         menu_id = '1'
         cursor.execute("SELECT food, description, unit_price, food_id FROM _menu WHERE restaurant_id = %s ORDER BY food_id ASC", (menu_id, ))
-        print("inDatabaseSearch")
         results = []
         row = cursor.fetchone()
         while row is not None:  
             result = OrderResult(food=str(row[0]), description=str(row[1]), unit_price=str(row[2]), food_id=str(row[3]))
             results.append(result)
-            print('id', result.getId())
             row = cursor.fetchone()
         cursor.close()
 
         return results
 
     def menuSearchUser(self, restName):
+        print("inDatabaseSearch")
+
         cursor = self._connection.cursor() 
         rest_name = 'Chennai Chimney'
         cursor.execute("SELECT restaurant_id FROM _restaurants WHERE restaurant_name = %s", (rest_name, ))
         restId = cursor.fetchone()[0]
         # 'WHERE menu.food_id = order_table.food_id;'
         cursor.execute("SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM _menu WHERE NOW() - starttime > INTERVAL '1 minute' ")
-
+        print('cursordone')
+        print(restId)
         results = []
         row = cursor.fetchone()
         while row is not None:  
@@ -143,6 +144,8 @@ class Database:
             if (discount is not None and discount != '') and (quantity != '' and quantity != '0'):
                 result = OrderResult(food=str(row[0]), description=str(row[1]), unit_price=str(row[2]), food_id=str(row[3]), new_price=str(row[5]), quantity=quantity)
                 results.append(result)
+                print('id', result.getId())
+
             row = cursor.fetchone()
         cursor.close()
 
