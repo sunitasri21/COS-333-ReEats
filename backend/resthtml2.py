@@ -101,8 +101,8 @@ def searchResults():
     try:
         searchResults = database.menuSearchUser(restName)
         for thing in searchResults:
-            print(thing.getId())
-            print(thing.getFood())
+            print('searchresults', thing.getId())
+            print('searchresults', thing.getFood())
 
     except Exception as e:
         errorMsg =  str(e)
