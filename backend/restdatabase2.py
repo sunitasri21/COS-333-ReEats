@@ -17,7 +17,7 @@ from datetime import date
 # from menuResult import MenuResults
 
 #-----------------------------------------------------------------------
-heroku = True
+heroku = False 
 
 class Database:
     def __init__(self):
@@ -30,7 +30,7 @@ class Database:
             DATABASE_URL = 'postgres://wpxdvkyrrqcyou:82d1e9ec563437e7ca1eb239ef20054157daf870aa58c3f10540a8ef73d5ee28@ec2-18-233-137-77.compute-1.amazonaws.com:5432/d4lmf0ecvv5g98'
             self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
         else:
-            conn_string = "host='localhost' dbname='reeats15'"
+            conn_string = "host='localhost' dbname='reeats10git'"
             self._connection = psycopg2.connect(conn_string)   
 
         # if not path.isfile(DATABASE_NAME):

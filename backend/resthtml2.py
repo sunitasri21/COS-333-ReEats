@@ -465,14 +465,15 @@ def confirmationPage():
 
     if prevPage == "userFP":
         check_list = request.form.getlist("check_list[]")
-        if check_list == None:
-            check_list = []
+        if len(check_list) == 0:
+            return redirect(url_for('searchResults'))
         print(check_list)
         database = get_db()
 
         food_list = []
         total_value = 0
         orderid = createOrderId()
+        userid = session['id']
         
         for value in check_list:
             try:
@@ -484,7 +485,6 @@ def confirmationPage():
                 foodName = database.pullName(value)
                 total_value = float(total_value) + float(quantity) * float(newPrice)
                 database.updateQuantity(quantity, value)
-                userid = session['id']
                 confirmed = 1
                 # response.set_cookie('foodList', str(value))
                 database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
