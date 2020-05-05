@@ -24,14 +24,14 @@ class Database:
         self._connection = None
 
     def connect(self):  
-        conn_string = "host='localhost' dbname='reeats15'"
-        self._connection = psycopg2.connect(conn_string)  
-        # if heroku:    
-        #     DATABASE_URL = 'postgres://cqulnoxjkxtise:e4cf934d7fbcdcd7f3b1813ea177d7f886cba7f3df621529d939910706a247fc@ec2-18-210-214-86.compute-1.amazonaws.com:5432/den0qbpk58pjvv'
-        #     self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
-        # else:
-        #     conn_string = "host='localhost' dbname='reeats15'"
-        #     self._connection = psycopg2.connect(conn_string)   
+        # conn_string = "host='localhost' dbname='reeats10git'"
+        # self._connection = psycopg2.connect(conn_string)  
+        if heroku:    
+            DATABASE_URL = 'postgres://wpxdvkyrrqcyou:82d1e9ec563437e7ca1eb239ef20054157daf870aa58c3f10540a8ef73d5ee28@ec2-18-233-137-77.compute-1.amazonaws.com:5432/d4lmf0ecvv5g98'
+            self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
+        else:
+            conn_string = "host='localhost' dbname='reeats15'"
+            self._connection = psycopg2.connect(conn_string)   
 
         # if not path.isfile(DATABASE_NAME):
         #     raise Exception("database reeats.db not found")
@@ -158,7 +158,7 @@ class Database:
     # Adds a new user to the database during Registration
     def add_user(self, user_id, username, password, email):
         cursor = self._connection.cursor() 
-        cursor.execute("INSERT INTO _user_account (user_id, username, password, email) VALUES (%s, %s , %s , %s)", (user_id, username, password, email,)); 
+        cursor.execute("INSERT INTO _user_account (user_id, username, password, email) VALUES (DEFAULT, %s , %s , %s)", ( username, password, email,)); 
         self._connection.commit()
         cursor.close()
         return 
