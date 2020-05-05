@@ -24,14 +24,14 @@ class Database:
         self._connection = None
 
     def connect(self):  
-        # conn_string = "host='localhost' dbname='reeats15'"
-        # self._connection = psycopg2.connect(conn_string)  
-        if heroku:    
-            DATABASE_URL = 'postgres://cqulnoxjkxtise:e4cf934d7fbcdcd7f3b1813ea177d7f886cba7f3df621529d939910706a247fc@ec2-18-210-214-86.compute-1.amazonaws.com:5432/den0qbpk58pjvv'
-            self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
-        else:
-            conn_string = "host='localhost' dbname='reeats15'"
-            self._connection = psycopg2.connect(conn_string)   
+        conn_string = "host='localhost' dbname='reeats15'"
+        self._connection = psycopg2.connect(conn_string)  
+        # if heroku:    
+        #     DATABASE_URL = 'postgres://cqulnoxjkxtise:e4cf934d7fbcdcd7f3b1813ea177d7f886cba7f3df621529d939910706a247fc@ec2-18-210-214-86.compute-1.amazonaws.com:5432/den0qbpk58pjvv'
+        #     self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
+        # else:
+        #     conn_string = "host='localhost' dbname='reeats15'"
+        #     self._connection = psycopg2.connect(conn_string)   
 
         # if not path.isfile(DATABASE_NAME):
         #     raise Exception("database reeats.db not found")
