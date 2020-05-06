@@ -103,7 +103,6 @@
 <!--         <td><strong>Dietary Restrictions</strong></td>
  -->    <th><strong>List Price</strong></th>
         <th><strong>Quantity</strong></th>
-        <th><strong>Subtotal</strong></th>
         <!-- <th><strong>Discount</strong></th> -->
         <!-- <th><strong>Discounted Price</strong></th> -->
         <!-- <th><strong>Select</strong></th> -->
@@ -117,7 +116,6 @@
           <td>{{ item.getFood()}}</td>
           <td>{{ item.getNewPrice()}}</td>
           <td>{{ item.getQuantity()}}</td>
-          <td>{{"%.2f"|format(item.getNewPrice()|float * item.getQuantity()|float)}}</td>
         </tr>
       {% endfor %}
 
@@ -127,7 +125,6 @@
         <td></td>
         <td></td>
         <td></td>
-        <td>Total:{{"%.2f"|format(total)}}</td>
       </tr>
 
     </table>
