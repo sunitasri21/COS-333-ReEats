@@ -634,7 +634,7 @@ def confirmationPage():
     template = jinja_env.get_template("userConfirmation.html")
     # template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "'https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&orderid=" + str(orderid) + "&amp;size=100x100"
+    url = "'https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&orderid=" + str(orderid) + "'" + "&amp;size=100x100"
 
     html = render_template(template, foodList = food_list, total = total_value, orderId = orderid)
     # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
@@ -919,7 +919,7 @@ def qrCodePage():
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&orderid=" + str(orderid) + "&amp;size=100x100"
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&orderid=" + str(orderid) + "&amp;size=100x100"
     print(url)
 
     # for result in results:
