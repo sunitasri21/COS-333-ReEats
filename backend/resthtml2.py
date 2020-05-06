@@ -742,8 +742,8 @@ def checkoutSession():
         "userid": userid, 
         "orderid": orderid
         },
-      success_url='http://localhost:39230/qrCodePage',
-      cancel_url='http://localhost:39230/userFP'
+      success_url='http://reeats-test1.herokuapp.com/qrCodePage',
+      cancel_url='http://reeats-test1.herokuapp.com/userFP'
       # success_url='http://reeats-test3.herokuapp.com/qrCodePage',
       # cancel_url='http://reeats-test3.herokuapp.com/userFP'
     )
@@ -783,8 +783,8 @@ def qrCodePage():
     # print(total_value)
 
     template2 = jinja_env.get_template("qrCodePage.html")
-
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'http://localhost:39230/qrReroute?userid=" + str(userid) + "&amp;size=100x100"
+local
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'http://reeats-test1.herokuapp/qrReroute?userid=" + str(userid) + "&amp;size=100x100"
     print(url)
 
     # for result in results:
@@ -858,14 +858,14 @@ def createOrderId():
 
 @app.route("/webhooks", methods=["POST"])
 def webhooks():
-    # webhook_secret = "whsec_BUPGTfDOv2mIaP51MipyKfS0GfAOjw31" 
-    webhook_secret = "whsec_pu2iikEKy0aoYqCvSxBoqmKghbnL5bTz"
+    webhook_secret_heroku = "whsec_BUPGTfDOv2mIaP51MipyKfS0GfAOjw31" 
+    # webhook_secret_local = "whsec_pu2iikEKy0aoYqCvSxBoqmKghbnL5bTz"
     payload = request.data.decode("utf-8")
     received_sig = request.headers.get("Stripe-Signature", None)
     print("hellowebhooks")
     try:
         event = stripe.Webhook.construct_event(
-            payload, received_sig, webhook_secret
+            payload, received_sig, webhook_secret_heroku
         )
     except ValueError:
         print("Error while decoding event!")
