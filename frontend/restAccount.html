@@ -79,6 +79,30 @@ ul.topnav li.right {float: right;}
   ul.topnav li.right, 
   ul.topnav li {float: none;}
 }
+input[type="submit"] {
+  font-family: "Source Code Pro";
+  width: 17%;
+  background: #cc6666;
+  border-radius: 5px;
+  border: 0;
+  cursor: pointer;
+  color: white;
+  font-size: 18px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  padding-left: 15px;
+  padding-right: 15px;
+  transition: all 0.3s;
+  margin-top: -4px;
+
+  font-weight: 700;
+  display: block;
+  float: none;
+  text-align: center;
+}
+input[type="submit"]:hover {
+  background: #cc4949;
+}
 </style>
 </head>
 
@@ -105,15 +129,15 @@ ul.topnav li.right {float: right;}
     </div> 
 
   <body>
-
-    <div class="title" > 
+<div class="title">
     <hr color ="black">
         <center>
         <label><strong>Account
         </strong></label>
-        </center>
+    </center>
     <hr color ="black">
-    </div>
+        </div>
+      
     <center>
     <table cellspacing="2" cellpadding="2" align:"center">
       <tr>
@@ -132,7 +156,12 @@ ul.topnav li.right {float: right;}
       </tr>
     </table>
       </center>
-  <input type = "submit" href = "/restOrders"> 
+      <br>
+      
+      <center>
+      <form action="/restOrders">
+    <input type="submit" value="See all paid orders"/>
+</form>
+ </center>
   </body>
 </html>
-
