@@ -957,7 +957,7 @@ def webhooks():
     # webhook_secret = "whsec_BUPGTfDOv2mIaP51MipyKfS0GfAOjw31" 
     # webhook_secret = "whsec_pu2iikEKy0aoYqCvSxBoqmKghbnL5bTz"
     # comment
-    webhook_secret ="whsec_VaGkW3F0DEA633YMhR1I1CSD56euokfu"
+    webhook_secret ="whsec_6iLpmaBG9GXUSXDiEZM51PkFQv7O4dUE"
     payload = request.data.decode("utf-8")
     received_sig = request.headers.get("Stripe-Signature", None)
     print("hellowebhooks")
