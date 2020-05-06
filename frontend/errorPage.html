@@ -1,20 +1,121 @@
- <!DOCTYPE html>
+<!DOCTYPE html>
 <html>
-    <head>
-        <title>Page Title</title>
-    </head>
+  <head>      
+    <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
+    <link rel="stylesheet" href="static/login.css" type="text/css">
 
-    <body>
+       <meta name="viewport" content="width=device-width,
+        initial-scale=1">
+      
+     <link rel="stylesheet" href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
 
-        <h1>Registrar's Office</h1>
+<style>
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
 
-		<h3>{{ errorMessage }}</h3>
-		
-        <hr>
+th, td {
+  text-align: left;
+  padding: 8px;
+  font-family: 'Source Code Pro';
+}
+ 
+.error {
+  color: red;
+  font-family: 'Source Code Pro';
+}
+@media screen and (max-width: 650px) {
+  .column {
+    width: 100%;
+    display: block;
+  }
+  .column2 {
+    width: 100%;
+    display: block;
+  }
+}
+    
+ul.topnav {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: white;
+}
 
-      <!--   <p>Created by <a href="https://www.linkedin.com/in/noazarur/">Noa Zarur</a> and <a href="https://www.linkedin.com/in/austinmejia/">Austin Mejia</a></p> -->
+ul.topnav li {float: left;}
 
-        <hr>
+ul.topnav li a {
+  display: block;
+  color: black;
+  font-size: 20px;
+  font-family: "Source Code Pro";
+  font-weight: 500;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+span.vertical {
+  writing-mode: vertical-rl; 
+  text-shadow: 2px 2px 5px grey;
+}
+ul.topnav li a.active {background-color: #cc6666; color: white}
+ul.topnav li a:hover{background-color: #cc4949;}
+ul.topnav li a.active:hover{background-color: #cc4949;}
 
-    </body>
+
+ul.topnav li.right {float: right;}
+
+@media screen and (max-width: 600px) {
+  ul.topnav li.right, 
+  ul.topnav li {float: none;}
+}
+</style>
+</head>
+
+  <head>
+  <title>Chennai Chimney</title>   
+      <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+      <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css">
+  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <link rel="stylesheet" href="static/login.css" type="text/css">
+      
+    <!-- <ul class="topnav">
+        <li><a class="active" href="/about"><span class="vertical"><b>Re</b></span>Eats</a></li>
+        
+    </ul> -->
+
+  </head>
+
+  <body>
+
+    
+<div class="login">
+            <h1>Error</h1>
+            <!-- <div class="links">
+                <a href="{{ url_for('login') }}" class="active">Login</a>
+                <a href="{{ url_for('register') }}">Register</a>
+            </div>
+            <form action="{{ url_for('login') }}" method="post">
+                <label for="username">
+                    <i class="fas fa-user"></i>
+                </label>
+                <input type="text" name="username" placeholder="Username" id="username" required>
+                <label for="password">
+                    <i class="fas fa-lock"></i>
+                </label>
+                <input type="password" name="password" placeholder="Password" id="password" required>
+                <div class="msg">{{ msg }}</div>
+
+
+                <input type="submit" value="Login">
+            </form> -->
+            <div class="container">
+                <h3>{{ errorMessage }}</h3>
+            </div>
+        </div>
+  </body>
 </html>
+

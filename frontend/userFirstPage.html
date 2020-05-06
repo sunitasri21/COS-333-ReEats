@@ -504,6 +504,18 @@ ul.topnav li.right {float: right;}
           
       //     alert("after posting")
       // }
+
+      // Select your input element.
+      var number = document.getElementById('number');
+
+      // Listen for input event on numInput.
+      number.onkeydown = function(e) {
+          if(!((e.keyCode > 95 && e.keyCode < 106)
+            || (e.keyCode > 47 && e.keyCode < 58) 
+            || e.keyCode == 8)) {
+              return false;
+    }
+}
       
 
 </script>
@@ -582,7 +594,9 @@ ul.topnav li.right {float: right;}
           <!-- <td><input type="checkbox" id="item{{item.getId()}}_check" name="check_list[]" value={{item.getId()}}> -->
           <td>
             <label for="quantity"></label><br>
-            <input align = "right" style="width:70%"  type="text" id="item{{item.getId()}}_quantity" name="item{{item.getId()}}_quantity" ><br><br>
+<!--             <input type="number" id="number" min="0" />
+ -->            <!-- <input align = "right" style="width:70%"  type="text" id="item{{item.getId()}}_quantity" name="item{{item.getId()}}_quantity" ><br><br> -->
+ <input align = "right" style="width:70%"  type="number"  min="0" max="{{item.getQuantity()}}" id="item{{item.getId()}}_quantity" name="item{{item.getId()}}_quantity" ><br><br>
           </td>
           <td><label class="checkbox-label">
             <input type="checkbox" name="check_list[]" value={{item.getId()}}>
