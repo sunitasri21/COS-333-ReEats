@@ -4,7 +4,8 @@
 <head>
 <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
 <link rel="stylesheet" href="static/table.css" type="text/css">
-<style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
     body{
       background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");  
       background-attachment: fixed; 
@@ -201,36 +202,6 @@
           );
         }
 
-        // var counter=0;
-
-        // function a(){
-        // if(counter<5){
-        //     document.getElementById('a').innerHTML += "<input type='radio'>";
-        //     counter++;
-        // }
-        // else{
-        //     document.getElementById("id").disabled=true;
-        // }
-        // }
-
-        function clickCounter(limit) {
-        if (typeof(Storage) !== "undefined") {
-          if (localStorage.clickcount) {
-            localStorage.clickcount = Number(localStorage.clickcount)+1;
-          } else {
-            localStorage.clickcount = 1;
-          }
-
-          if (localStorage.clickcount == limit) {
-            document.getElementById("button").disabled = true;
-          }
-        //   document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " time(s).";
-        // } else {
-        //   document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
-        // }
-            }
-          }
-
 
          
           // If `redirectToCheckout` fails due to a browser or network
@@ -273,15 +244,23 @@
   <title>Chennai Chimney</title> 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+   
+    <div class="topnav">
+       <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+        <a href="/userabout" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
 
-    <ul class="topnav">
-        <li><a class="active" href="/about"><span class="vertical"><b>Re</b></span>Eats</a></li>
-        <li class="right"><a href="/logout">Logout</a></li>
-        <li class="right"><a href="/userFeedback">Feedback</a></li>
-        <li class="right"><a href="/globalCart">Checkout</a></li>
-        <li class="right"><a href="/userAccount">Account</a></li>
-        <li class="right"><a href="/userFP">Menu</a></li>           
-    </ul>
+        <div class="w3-right w3-hide-small">
+          <a href="/userabout" class="w3-bar-item w3-button">Home<i class="	glyphicon glyphicon-home"></i></a>
+          <a href="/userFP" class="w3-bar-item w3-button">Menu<span class="glyphicon glyphicon-menu-hamburger"></span></a>          
+          <a href="/globalCart" class="w3-bar-item w3-button">Checkout<span class="glyphicon glyphicon-shopping-cart"></span></a>
+          <a href="/userAccount" class="w3-bar-item w3-button">Account<span class="glyphicon glyphicon-user"></span></a>
+          <a href="/userFeedback" class="w3-bar-item w3-button">Feedback<span class="glyphicon glyphicon-comment"></span></a>
+          <a href="/logout" class="w3-bar-item w3-button">Logout<span class="glyphicon glyphicon-log-out"></span></a>
+          
+          
+        </div>
+      </div>     
+    </div> 
   </head>
 
   <body>
@@ -327,8 +306,8 @@
             <input id = "r_{{item[0]}}" type="button" value="X" onclick="changeOrder(this.id)"></input>
           </td>
           <td>
-          <input id = "s_{{item[0]}}" type="button" value="-" onclick="subtractQuantity(this.id)"></input>
             <input id = "a_{{item[0]}}" type="button" value="+" onclick="addQuantity(this.id)"></input>
+            <input id = "s_{{item[0]}}" type="button" value="-" onclick="subtractQuantity(this.id)"></input>
           </td>
         </tr>
       {% endfor %}
