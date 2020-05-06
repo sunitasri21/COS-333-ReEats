@@ -128,6 +128,7 @@ ul.topnav li.right {float: right;}
  
  width: 95%;
 }
+
 h2{
   text-shadow: 2px 2px 5px grey;
 }
@@ -135,33 +136,75 @@ p{
   text-shadow: 2px 2px 5px white;
   text-align: left;
 }
+    
+    
+input[type=text], select, textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical;
+}
+
+input[type=submit] {
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+input[type=submit]:hover {
+  background-color: #45a049;
+}
+
+.container {
+  border-radius: 5px;
+  background-color: #f2f2f2;
+  padding: 20px;
+}
 </style>
 
 
  <head>
-  <title>Chennai Chimney: Available Discounts</title> 
+  <title>Re Eats</title> 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <div class="topnav">
+       <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+        <a href="/about" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
 
-    <ul class="topnav">
-        <li><a class="active" href="/about"><span class="vertical"><b>Re</b></span>Eats</a></li>
-        <li class="right"><a href="/login">Login</a></li>
-
-    </ul>
-
+        <div class="w3-right w3-hide-small">
+          <a href="/login" class="w3-bar-item w3-button">Login<i class="glyphicon glyphicon-log-in"></i></a>
+        </div>
+      </div>     
+    </div>     
+     
   </head>
 <body>
     <br>
+      <!-- section intro -->
     <center>
   <!-- About Section -->
   <div class="w3-container">
-      <h2 class="w3-center">About ReEats</h2><br>
-      <p >We aim to connect restaurants, with leftover food at closing time, with college students who will purchase this food at a discounted price. Each day, the restaurants using our application can post a list of available items and select the discounts on each of these items. The students using our app will receive a notification each time a new restaurant posts discounted food items on the app. The student will be able to view the available items per restaurant and choose what they want to eat and from which restaurant. Our app adds a new base of customers for restaurants and enables them to establish a new revenue stream and form new partnerships. For students, our app helps them find cheap food from their favorite restaurants. It’s a win-win for restaurants and students. </p>
+      <h2 class="w3-center">Welcome to ReEats</h2>   
+      <br>
+      
+      <div class="w3-row-padding">
+  <div class="w3-col s4" style="width:50%"><h3>We aim to connect restaurants, with leftover food at closing time, with college students who will purchase this food at a discounted price. Each day, the restaurants using our application can post a list of available items and select the discounts on each of these items. The students using our app will be able to view the available items per restaurant, choose what they want to eat and purcase the items on our website.</h3></div>
+  <div class="w3-col s4" style="width:50%"><img src="/static/food.jpg" style="width:80%">
+          </div></div>
+      <br>
+      <br>
       <h5 class="w3-center">Created in 2020</h5>
-      <p class="w3-large"></p>
+      <br>
     </div>
-    
   <br>
   <div class="w3-container m6 w3-padding-large">       
       <h2 style="text-align:center">Our Team</h2>
@@ -180,20 +223,12 @@ p{
               </div>
           </div>
           </div>
+          
           <div class="column">
-            <div class="flip-card" opacity=100% >
-              <div class="flip-card-inner">
-                <div class="flip-card-front">
-                  <img src="/static/sunita.jpg" alt="Avatar" style="width:300px;height:300px;">
-                 </div>
-                 <div class="flip-card-back">
-                  <h1>Sunita Srivatsan</h1>
-                  <p>sunitas@princeton.edu</p>
-                  <p>Princeton 2021</p>
-                </div>
-              </div>
-          </div>
-          </div>
+            <br><br><br>
+            <img src="/static/warriors.jpg" alt="Avatar" style="width:95%">
+            </div>
+          
           <div class="column">
       <div class="flip-card" opacity=100% >
   <div class="flip-card-inner">
@@ -212,7 +247,7 @@ p{
       </div>
         <div class="row">
            
-             <div class="column2">
+             <div class="column">
             <div class="flip-card" opacity=100% >
               <div class="flip-card-inner">
                 <div class="flip-card-front">
@@ -226,7 +261,22 @@ p{
               </div>
           </div>
           </div>
-             <div class="column2">
+            <div class="column">
+            <div class="flip-card" opacity=100% >
+              <div class="flip-card-inner">
+                <div class="flip-card-front">
+                  <img src="/static/sunita.jpg" alt="Avatar" style="width:300px;height:300px;">
+                 </div>
+                 <div class="flip-card-back">
+                  <h1>Sunita Srivatsan</h1>
+                  <p>sunitas@princeton.edu</p>
+                  <p>Princeton 2021</p>
+                </div>
+              </div>
+          </div>
+          </div>
+            
+             <div class="column">
             <div class="flip-card" opacity=100% >
               <div class="flip-card-inner">
                 <div class="flip-card-front">
@@ -244,5 +294,78 @@ p{
       </div>
         </div>
     </center>
+    <br>
+    
+    
+    
+    
+    <center>
+    <div class="w3-container">
+        <h2 style="text-align:center">Help Us Reduce Food Waste</h2><br>
+         <div class="w3-row-padding">
+  <div class="w3-col s4" style="width:33%">
+      <h3><u>Keep Your Serving Sizes in Check</u></h3>
+      <h4>Overeating is a problem for many people.</h4>
+    <h4>Making sure your portion sizes stay within a healthy range doesn’t just help keep your weight down, it also reduces food waste.</h4>
+    <h4>While you may not think twice about scraping the leftover food on your plate into the trash, remember that food waste has a major impact on the environment.</h4>
+    <h4>Being more mindful of how hungry you actually are and practicing portion control are great ways to reduce food waste.</h4>
+      <img src="/static/Banana.gif" alt="Avatar" style="width:90%"> <br>
+             </div>
+  <div class="w3-col s4" style="width:33%">
+      <img src="/static/Beet.gif" alt="Avatar" style="width:90%"> <br>   
+      <h3><u>Blend It Up</u></h3>
+      <h4>Blending up a nutrient-packed smoothie can be a delicious way to reduce food waste.</h4>
+      <h4>While the stems, ends and peels of produce may not be appetizing in their whole form, adding them to a smoothie is a way to reap their many benefits.</h4>
+      <h4>The stems of greens like kale and chard are packed with fiber and nutrients, making them a great addition to smoothies. The tops of beets, strawberries and carrots also make great add-ins.</h4>
+      <h4>Other items that would otherwise be discarded can also be thrown into a nutritious blend, including fruit and vegetable peels, wilted herbs, overripe bananas and chopped broccoli stalks.</h4>
+             </div>
+             
+             
+  <div class="w3-col s4" style="width:33%">
+      <h3><u>Save Leftovers</u></h3>
+      <h4>Leftovers aren’t just for holidays.</h4>
+      <h4>Although many people save excess food from large meals, it is often forgotten in the fridge, then tossed when it goes bad.</h4>
+    <h4>Storing leftovers in a clear glass container, rather than in an opaque container, helps ensure you don’t forget the food.</h4>
+     <h4>If you happen to cook a lot and you regularly have leftovers, designate a day to use up any that have accumulated in the fridge. It’s a great way to avoid throwing away food.</h4>
+      <h4>What’s more, it saves you time and money.</h4>
+      <img src="/static/Milk.gif" alt="Avatar" style="width:90%"> <br>     
+             </div>
+        </div><br>
+        </div></center>
+    <br>
+    
+
+
+    
+    <center><div class="w3-container">
+        <h2 style="text-align:center">Our Collaborators</h2><br>
+       
+        
+        <div class="w3-row-padding">            
+            <div class="w3-col s4" style="width:50%"> 
+                <h3>Chennai Chimney</h3>
+                <p>Set in the historic town of  Princeton, New Jersey, <a href="https://www.chennaichimney.com/" target="_blank">Chennai Chimney</a>, an Indian restaurant, offers exotic dishes in authentic flavor from the traditional kitchens of Southern India where the city of Chennai is located. Our contemporary version of rustic Indian food will be beyond your expectations and take you on a mouthwatering journey to it's origins.</p>
+                
+                <img src="/static/chennai.jpg" style="width:80%"> 
+            </div>
+            <div class="w3-col s4" style="width:50%"><br><br><br>            
+ <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3040.666713215193!2d-74.66484978474433!3d40.34973887937293!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c3e6c09a0dc02f%3A0x4145c896bd9c25b!2sChennai%20Chimney!5e0!3m2!1sen!2sus!4v1588745431638!5m2!1sen!2sus" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>             
+                
+            </div>
+        </div>
+            <br>
+                <h2 style="text-align:center">Are You A Restaurant?</h2>
+        <h2><script type="text/javascript" defer src="//www.123formbuilder.com/embed/5432615.js?type=lightbox" data-role="form" data-default-width="650px" data-embed-type="lightbox-text-link" data-embed-text-link="Join Us">Join Us</script>  </h2><br>
+        </div></center>
+    <br>
+    
+    <center>
+        <div class="w3-container">
+
+
+        
+        </div>
+    </center>
+    
 </body>
 </html>
