@@ -365,6 +365,7 @@ def login():
             session['password'] = restaurant[2]
             session['email'] = restaurant[3]
             session['id'] = restaurant[0]
+            session['orderid'] = None
             session['restaurant_name'] = database.restaurant_search(restaurant[0])
             login_user(restUser)
             # Redirect to home page
@@ -373,6 +374,7 @@ def login():
             userUser = User(user[1], unhashed_password, user[0], True, None)
             session['logged_in'] = True
             session['id'] = user[0]
+            session['orderid'] = None
             session['username'] = user[1]
             session['password'] = user[2]
             session['email'] = user[3]
@@ -553,7 +555,7 @@ def confirmationPage():
             session['orderid'] = orderid
         else:
             orderid = session['orderid']   
-                 
+
         for value in check_list:
             try:
                 # database.connect()
