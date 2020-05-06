@@ -515,6 +515,7 @@ def confirmationPage():
             try:
                 # database.connect()
                 newPrice = database.pullNewPrice(value)
+                realval = database.pullQuantity(value)
                 name = "item" + str(value) + "_quantity"
                 quantity = request.form[name]
                 # print("q: " + str(quantity))
@@ -524,8 +525,10 @@ def confirmationPage():
                 userid = session['id']
                 confirmed = 1
                 # response.set_cookie('foodList', str(value))
+                session[value] = float(realval)
                 database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
                 food_list.append((value, newPrice, foodName, float(quantity)))
+                foodid = str(value)
                 print(value)
 
             except Exception as e:
@@ -740,6 +743,9 @@ def confirmationPageReloadedQuantity():
     orderid = data['orderId']
     foodid = data["foodId"]
 
+    originalQuantity = database.pullQuantity(foodid)
+    totalQuantity = originalQuantity + quantity 
+
     print("foodName: " + str(foodName))
     print("newPrice: " + str(newPrice))
     print("quantity: " + str(quantity))
@@ -754,8 +760,12 @@ def confirmationPageReloadedQuantity():
 
     print("CONFIRMATION PAGE RELOADED QUANTITY")
 
-    if addQuantity == "+":
-        quantity = str(int(quantity) + 1)
+    print("Currquant = " + quantity)
+    print("Total = " + str(session[foodid]))
+
+    if float(quantity) < session[foodid]:
+        if addQuantity == "+":
+            quantity = str(int(quantity) + 1)
     
     if int(quantity) > 1:
         if subtractQuantity == "-":

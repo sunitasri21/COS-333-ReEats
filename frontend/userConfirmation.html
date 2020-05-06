@@ -201,6 +201,36 @@
           );
         }
 
+        // var counter=0;
+
+        // function a(){
+        // if(counter<5){
+        //     document.getElementById('a').innerHTML += "<input type='radio'>";
+        //     counter++;
+        // }
+        // else{
+        //     document.getElementById("id").disabled=true;
+        // }
+        // }
+
+        function clickCounter(limit) {
+        if (typeof(Storage) !== "undefined") {
+          if (localStorage.clickcount) {
+            localStorage.clickcount = Number(localStorage.clickcount)+1;
+          } else {
+            localStorage.clickcount = 1;
+          }
+
+          if (localStorage.clickcount == limit) {
+            document.getElementById("button").disabled = true;
+          }
+        //   document.getElementById("result").innerHTML = "You have clicked the button " + localStorage.clickcount + " time(s).";
+        // } else {
+        //   document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+        // }
+            }
+          }
+
 
          
           // If `redirectToCheckout` fails due to a browser or network
@@ -297,8 +327,8 @@
             <input id = "r_{{item[0]}}" type="button" value="X" onclick="changeOrder(this.id)"></input>
           </td>
           <td>
+          <input id = "s_{{item[0]}}" type="button" value="-" onclick="subtractQuantity(this.id)"></input>
             <input id = "a_{{item[0]}}" type="button" value="+" onclick="addQuantity(this.id)"></input>
-            <input id = "s_{{item[0]}}" type="button" value="-" onclick="subtractQuantity(this.id)"></input>
           </td>
         </tr>
       {% endfor %}
