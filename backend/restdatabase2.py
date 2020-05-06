@@ -371,14 +371,14 @@ class Database:
         cursor.close()
         return 
 
-    def paidOrder(self, userid):
+    def paidOrder(self, userid, orderid):
         print('inpaidorder')
         cursor = self._connection.cursor() 
         userid = int(userid)
         paid = 1
 
         # arguments3 = (userid, confirmed)
-        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND paid = %s", (userid, paid, )); 
+        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND paid = %s AND order_id = %s", (userid, paid, orderid, )); 
         print('cursorpaidorderdone')
         results = []
         total_value = 0.0

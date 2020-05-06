@@ -149,7 +149,7 @@ def searchResults():
 def userabout():
     html = render_template('userAbout.html')
     response = make_response(html)
-    return response  
+    return response
 # -----------------------------------------------------------------------
 @app.route('/restabout', methods=['GET'])
 
@@ -943,13 +943,14 @@ def qrReroute():
     #     confirmedFood_list = []
     # print(confirmedFood_list)
     userid = request.args.get('userid')
+    orderid = session['orderid']
 
     database = get_db()
     results = []
     total_value = 0
 
     try:
-        results, total_value = database.paidOrder(userid)
+        results, total_value = database.paidOrder(userid, orderid)
         for result in results:
             print('paidorder', result.getId())
 
