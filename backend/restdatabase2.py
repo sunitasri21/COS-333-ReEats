@@ -223,6 +223,34 @@ class Database:
         self._connection.commit()
         cursor.close()
         return 
+    
+    def addQuantity(self, quantity, foodid):
+        cursor = self._connection.cursor() 
+        foodid = int(foodid)
+        cursor.execute("SELECT quantity FROM _menu WHERE food_id = %s", (foodid, )); 
+        result = cursor.fetchone()
+        originalQuantity = result[0]
+
+        # result = cursor.fetchone()
+        # food = result[0]
+        # price = result[1]
+        # quantity = int(quantity)
+        # if quantity == None:
+        #     quantity = 1
+        # if discount == None:
+        #     discount = 0.0
+        # print(quantity)
+        # newPrice = (1 - float(discount)) * float(price)
+        # newPrice = '{:.2f}'.format(newPrice)
+
+        newQuant = int(originalQuantity) + int(quantity)   
+
+        arguments = (newQuant, foodid) 
+        if (int(originalQuantity) >= int(quantity)):
+            cursor.execute("UPDATE _menu SET quantity = %s WHERE food_id = %s", (newQuant, foodid, ));  
+        self._connection.commit()
+        cursor.close()
+        return 
 
     def pullNewPrice(self, food_id):
         cursor = self._connection.cursor() 
@@ -319,7 +347,7 @@ class Database:
         confirmed = 1
 
         arguments3 = (userid, orderid)
-        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND order_id = %s", (userid, orderid, )); 
+        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND order_id = %s AND confirmed = %s", (userid, orderid, confirmed, )); 
         results = []
         row = cursor.fetchone()
         while row is not None: 
@@ -349,7 +377,6 @@ class Database:
         userid = int(userid)
         paid = 1
 
-
         # arguments3 = (userid, confirmed)
         cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE user_id = %s AND paid = %s", (userid, paid, )); 
         print('cursorpaidorderdone')
@@ -365,7 +392,29 @@ class Database:
             row = cursor.fetchone()
         cursor.close()
         return results, total_value
+    
+    def allPaidOrders(self):
+        print('inpaidorder')
+        cursor = self._connection.cursor() 
+        userid = int(userid)
+        paid = 1
 
+
+        # arguments3 = (userid, confirmed)
+        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE paid = %s", (paid, )); 
+        print('cursorpaidorderdone')
+        results = []
+        total_value = 0.0
+        row = cursor.fetchone()
+        while row is not None: 
+            # print(row)
+            result = OrderResult(food_id = str(row[0]), food = str(row[1]), new_price = str(row[2]), quantity = str(row[3]))
+            results.append(result)
+            print(result)
+            total_value = float(total_value) + float(row[3]) * float(row[2])
+            row = cursor.fetchone()
+        cursor.close()
+        return results, total_value
 #-----------------------------------------------------------------------
 # For testing:
 

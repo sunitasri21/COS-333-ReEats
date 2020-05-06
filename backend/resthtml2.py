@@ -20,6 +20,7 @@ from flask_login import LoginManager, login_user, logout_user, login_required, U
 import stripe
 from flask_sqlalchemy import SQLAlchemy
 import re
+from flask_mail import Mail, Message
 
 #-----------------------------------------------------------------------
 ##TODO: remove exit()
@@ -67,6 +68,17 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 app.config['TESTING'] = False
+app.config.update(dict(
+    DEBUG = True,
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = 587,
+    MAIL_USE_TLS = True,
+    MAIL_USE_SSL = False,
+    MAIL_USERNAME = 'askethme99@gmail.com',
+    MAIL_PASSWORD = 'waterside2007',
+))
+mail = Mail(app)
+mail.init_app(app)
 # -----------------------------------------------------------------------
 class User(UserMixin):
     def __init__ (self, username, password, userid, admin, email):
@@ -293,6 +305,32 @@ def restFeedback():
     else:
         return response  
 # -----------------------------------------------------------------------
+@app.route('/sendMail', methods=['GET', 'POST'])
+@login_required
+
+def sendMail():
+    database = get_db()
+    data = request.get_json()
+    print(data)
+
+    name = data["name"]
+    email = data["email"]
+    comment = data['comment']
+
+    message = "Name: " + str(name) + "\n" + "Email: " + str(email) + "\n" + "Message: " + str(comment)
+
+    msg = Message(message,
+                recipients=["ak36@princeton.edu"])
+   
+    mail.send(msg)
+    
+    response = "Thank you! We will get back to you shortly."
+
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response 
+# -----------------------------------------------------------------------
 
 @login_manager.user_loader
 def load_user(id):
@@ -502,8 +540,8 @@ def confirmationPage():
 
     if prevPage == "userFP":
         check_list = request.form.getlist("check_list[]")
-        if check_list == None:
-            check_list = []
+        if len(check_list) == 0:
+            return redirect(url_for('searchResults'))
         print(check_list)
         database = get_db()
 
@@ -697,6 +735,7 @@ def confirmationPageReloaded():
     userid = session['id']
     confirmed = 0
     database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+    database.addQuantity(quantity, foodid)
 
     try:
         results, total_value = database.confirmedOrder(userid, orderid, 1)
@@ -957,7 +996,7 @@ def webhooks():
     # webhook_secret = "whsec_BUPGTfDOv2mIaP51MipyKfS0GfAOjw31" 
     # webhook_secret = "whsec_pu2iikEKy0aoYqCvSxBoqmKghbnL5bTz"
     # comment
-    webhook_secret ="whsec_VaGkW3F0DEA633YMhR1I1CSD56euokfu"
+    webhook_secret ="whsec_6iLpmaBG9GXUSXDiEZM51PkFQv7O4dUE"
     payload = request.data.decode("utf-8")
     received_sig = request.headers.get("Stripe-Signature", None)
     print("hellowebhooks")
@@ -976,7 +1015,7 @@ def webhooks():
         session = event['data']['object']
         orderid = session['metadata']['orderid']
         userid = session['metadata']['userid']
-        print(session)
+        print(session)     
         print(orderid)
         print(userid)
         database = get_db()

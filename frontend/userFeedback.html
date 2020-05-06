@@ -55,9 +55,40 @@ ul.topnav li.right {float: right;}
   ul.topnav li.right, 
   ul.topnav li {float: none;}
 }
-    
   </style>
+  
   </head>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+<script src="https://js.stripe.com/v3/"></script>
+
+  <script>
+    function submitChecks() {
+         // var sessionid = {{CHECKOUT_SESSION_ID}};
+        const url = "/sendMail";
+        var request = null;
+        data = {
+            name: document.getElementById("name").textContent,
+            email: document.getElementById("email").textContent,
+            comment: document.getElementById("text").textContent
+        };
+          function handleResponse(response)
+          {
+            $("message").html(response);
+          };
+          if (request != null) request.abort();
+          request = $.ajax(
+               {
+                  type: "POST",
+                  url: url,
+                  data: JSON.stringify(data),
+                  contentType: 'application/json;charset=UTF-8',
+                  success: handleResponse
+               }
+            );
+        }
+  </script>
 
     <head>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
@@ -76,11 +107,13 @@ ul.topnav li.right {float: right;}
   <body>
 
     <form>      
-      <input style = "font-family: 'Source Code Pro'" name="name" type="text" class="feedback-input" placeholder="Name" />   
-      <input style = "font-family: 'Source Code Pro'" name="email" type="text" class="feedback-input" placeholder="Email" />
-      <textarea style = "font-family: 'Source Code Pro'" name="text" class="feedback-input" placeholder="Comment"></textarea>
-      <input style = "font-family: 'Source Code Pro'" type="submit" value="SUBMIT"/>
+      <input style = "font-family: 'Source Code Pro'" name="name" id="name" type="text" class="feedback-input" placeholder="Name" />   
+      <input style = "font-family: 'Source Code Pro'" name="email" id="email" type="text" class="feedback-input" placeholder="Email" />
+      <textarea style = "font-family: 'Source Code Pro'" name="text" id="text" class="feedback-input" placeholder="Comment"></textarea>
+      <input style = "font-family: 'Source Code Pro'" type="submit" value="SUBMIT" onclick=submitFeedback()/>
     </form>
+
+    <div id="message"></div>
 <!-- 
     <hr color ="black">
     <hr color ="black">
