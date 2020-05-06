@@ -595,7 +595,8 @@ ul.topnav li.right {float: right;}
           <!-- <td><input type="checkbox" id="item{{item.getId()}}_check" name="check_list[]" value={{item.getId()}}> -->
           <td>
             <label for="quantity"></label><br>
-            <input align = "right" style="width:70%"  type="text" id="item{{item.getId()}}_quantity" name="item{{item.getId()}}_quantity" ><br><br>
+            <input align = "right" style="width:70%"  type="number" min="0" max="{{item.getQuantity()}}"
+                   id="item{{item.getId()}}_quantity" name="item{{item.getId()}}_quantity" ><br><br>
           </td>
           <td><label class="checkbox-label">
             <input type="checkbox" name="check_list[]" value={{item.getId()}}>
