@@ -588,8 +588,8 @@ ul.topnav li.right {float: right;}
         <tr>
           <td>{{ item.getFood()}}</td>
           <td>{{ item.getDescription()}}</td>
-          <td id="item{{item.getId()}}_price" value={{item.getPrice()}}> {{item.getPrice() }} </td>
-          <td id="item{{item.getId()}}_discount" value={{item.getDiscount()}}> {{item.getNewPrice()}} </td>
+          <td id="item{{item.getId()}}_price" value={{item.getPrice()}}> ${{item.getPrice() }} </td>
+          <td id="item{{item.getId()}}_discount" value={{item.getDiscount()}}> ${{item.getNewPrice()}} </td>
           <td id="item{{item.getId()}}_quantity" value={{item.getQuantity()}}> {{item.getQuantity()}} </td>
           <!-- source = https://www.w3schools.com/tags/tryit.asp?filename=tryhtml5_input_type_checkbox -->
           <!-- <td><input type="checkbox" id="item{{item.getId()}}_check" name="check_list[]" value={{item.getId()}}> -->
