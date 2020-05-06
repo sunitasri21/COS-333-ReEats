@@ -994,6 +994,45 @@ def qrReroute():
 
 
 #-----------------------------------------------------------------------
+@app.route('/restOrders', methods=['GET'])
+@login_required
+def restOrders():
+    database = get_db()
+    results = []
+    total_value = 0
+
+    try:
+        results, total_value = database.allPaidOrders()
+        for result in results:
+            print('paidorder', result.getId())
+
+    except Exception as e:
+        # errorMsg =  str(e)
+        # stderr.write("database error: " + errorMsg)
+        # raise e  
+        errorMsg =  str(e)
+        stderr.write("database error: " + errorMsg)
+
+        template = jinja_env.get_template("errorPage.html")
+
+        html = render_template(template, errorMessage = errorMsg)
+        response = make_response(html)
+        return response 
+
+    template2 = jinja_env.get_template("allOrders.html")
+
+    # figure out how to get order id from a url
+
+    # url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "http://localhost:12345/qrReroute" + orderid + "&amp;size=100x100"
+
+    html2 = render_template(template2,foodList = results, total = total_value)
+    response2 = make_response(html2)
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response2
+#-----------------------------------------------------------------------
+
 def createOrderId():
     letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     orderId = ""
