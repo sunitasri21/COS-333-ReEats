@@ -396,7 +396,6 @@ class Database:
     def allPaidOrders(self):
         print('inpaidorder')
         cursor = self._connection.cursor() 
-        userid = session['id']
         paid = 1
 
 
