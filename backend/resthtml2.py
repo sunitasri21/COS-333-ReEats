@@ -547,8 +547,13 @@ def confirmationPage():
 
         food_list = []
         total_value = 0
-        orderid = createOrderId()
-        
+
+        if session['orderid'] == None:
+            orderid = createOrderId()
+            session['orderid'] = orderid
+        else:
+            orderid = session['orderid']   
+                 
         for value in check_list:
             try:
                 # database.connect()
@@ -898,6 +903,7 @@ def qrCodePage():
     total_value = 0
 
     userid = session['id']
+    orderid = session['orderid']
     # confirmed = 1
 
     # try:
@@ -911,7 +917,7 @@ def qrCodePage():
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&amp;size=100x100"
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&orderid=" + str(orderid) + "&amp;size=100x100"
     print(url)
 
     # for result in results:
@@ -926,12 +932,15 @@ def qrCodePage():
     
     print("REMOVED EVERYTHING")
 
+    session['orderid'] = None
+
     html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
     response2 = make_response(html2)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
         return response2
+
 #-----------------------------------------------------------------------
 
 @app.route('/qrReroute', methods=['GET'])
@@ -943,7 +952,7 @@ def qrReroute():
     #     confirmedFood_list = []
     # print(confirmedFood_list)
     userid = request.args.get('userid')
-    orderid = session['orderid']
+    orderid = request.args.get('orderid')
 
     database = get_db()
     results = []
