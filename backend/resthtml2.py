@@ -783,7 +783,6 @@ def qrCodePage():
     # print(total_value)
 
     template2 = jinja_env.get_template("qrCodePage.html")
-local
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'http://reeats-test1.herokuapp/qrReroute?userid=" + str(userid) + "&amp;size=100x100"
     print(url)
 
