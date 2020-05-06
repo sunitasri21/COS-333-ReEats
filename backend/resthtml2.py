@@ -953,9 +953,11 @@ def qrReroute():
     # if confirmedFood_list == None:
     #     confirmedFood_list = []
     # print(confirmedFood_list)
-    userid = request.args.get('userid')
-    orderid = request.args.get('orderid')
-
+    id1 = request.args.get('id')
+    ids = id1.split("_")
+    userid = ids[0]
+    orderid = ids[1]
+    
     database = get_db()
     results = []
     total_value = 0
