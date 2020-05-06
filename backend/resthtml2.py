@@ -921,6 +921,7 @@ def qrCodePage():
 
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid) + "&amp;size=100x100"
     print(url)
+    url2 = "https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid)
 
     # for result in results:
     #     newPrice = result.getNewPrice()
@@ -936,7 +937,7 @@ def qrCodePage():
 
     session['orderid'] = None
 
-    html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
+    html2 = render_template(template2,foodList = results, total = total_value, orderid = url, url2 = url2)
     response2 = make_response(html2)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
