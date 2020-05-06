@@ -820,13 +820,8 @@ def checkoutSession():
         "userid": userid, 
         "orderid": orderid
         },
-<<<<<<< HEAD
       success_url='https://reeats-test1.herokuapp.com/qrCodePage',
       cancel_url='https://reeats-test1.herokuapp.com/userFP'
-=======
-      success_url='http://reeats-test1.herokuapp.com/qrCodePage',
-      cancel_url='http://reeats-test1.herokuapp.com/userFP'
->>>>>>> 4a4b5ce69bc7e0c534ed54ceba50448037e2773b
       # success_url='http://reeats-test3.herokuapp.com/qrCodePage',
       # cancel_url='http://reeats-test3.herokuapp.com/userFP'
     )
@@ -852,17 +847,8 @@ def qrCodePage():
 
     results = []
     total_value = 0
- 
+
     userid = session['id']
-    template2 = jinja_env.get_template("qrCodePage.html")
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "http://reeats-test1.herokuapp/qrReroute?userid=" + str(userid) + "&amp;size=100x100"
-    print(url)
-    html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
-    response2 = make_response(html2)
-    if not session.get('logged_in'):
-        return redirect(url_for('login'))
-    else:
-        return response2
     # confirmed = 1
 
     # try:
@@ -873,15 +859,12 @@ def qrCodePage():
     #     stderr.write("database error: " + errorMsg)
     #     raise e  
     # print(total_value)
-<<<<<<< HEAD
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&amp;size=100x100"
     print(url)
 
-=======
->>>>>>> 4a4b5ce69bc7e0c534ed54ceba50448037e2773b
     # for result in results:
     #     newPrice = result.getNewPrice()
     #     quantity = result.getQuantity()
@@ -891,7 +874,15 @@ def qrCodePage():
     #     confirmed = 0
     #     database.inputOrderId(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
     #     print(userid, newPrice, quantity, foodid, foodName, orderid, confirmed)
+    
+    print("REMOVED EVERYTHING")
 
+    html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
+    response2 = make_response(html2)
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response2
 #-----------------------------------------------------------------------
 
 @app.route('/qrReroute', methods=['GET'])
@@ -929,6 +920,7 @@ def qrReroute():
     template2 = jinja_env.get_template("qrReroute.html")
 
     # figure out how to get order id from a url
+
     # url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "http://localhost:12345/qrReroute" + orderid + "&amp;size=100x100"
 
     html2 = render_template(template2,foodList = results, total = total_value)
@@ -952,21 +944,16 @@ def createOrderId():
 
 @app.route("/webhooks", methods=["POST"])
 def webhooks():
-<<<<<<< HEAD
     # webhook_secret = "whsec_BUPGTfDOv2mIaP51MipyKfS0GfAOjw31" 
     # webhook_secret = "whsec_pu2iikEKy0aoYqCvSxBoqmKghbnL5bTz"
     # comment
     webhook_secret ="whsec_VaGkW3F0DEA633YMhR1I1CSD56euokfu"
-=======
-    webhook_secret_heroku = "whsec_BUPGTfDOv2mIaP51MipyKfS0GfAOjw31" 
-    # webhook_secret_local = "whsec_pu2iikEKy0aoYqCvSxBoqmKghbnL5bTz"
->>>>>>> 4a4b5ce69bc7e0c534ed54ceba50448037e2773b
     payload = request.data.decode("utf-8")
     received_sig = request.headers.get("Stripe-Signature", None)
     print("hellowebhooks")
     try:
         event = stripe.Webhook.construct_event(
-            payload, received_sig, webhook_secret_heroku
+            payload, received_sig, webhook_secret
         )
     except ValueError:
         print("Error while decoding event!")
