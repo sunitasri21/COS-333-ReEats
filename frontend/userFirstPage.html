@@ -5,7 +5,8 @@
 <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="static/table.css" type="text/css">
-<style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <style>
 body{
   background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");   
   background-size: cover;  
@@ -504,18 +505,6 @@ ul.topnav li.right {float: right;}
           
       //     alert("after posting")
       // }
-
-      // Select your input element.
-      var number = document.getElementById('number');
-
-      // Listen for input event on numInput.
-      number.onkeydown = function(e) {
-          if(!((e.keyCode > 95 && e.keyCode < 106)
-            || (e.keyCode > 47 && e.keyCode < 58) 
-            || e.keyCode == 8)) {
-              return false;
-    }
-}
       
 
 </script>
@@ -528,14 +517,26 @@ ul.topnav li.right {float: right;}
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="static/table.css" type="text/css">
-    <ul class="topnav">
-        <li><a class="active" href="/userabout"><span class="vertical"><b>Re</b></span>Eats</a></li>
-        <li class="right"><a href="/logout">Logout</a></li>
-        <li class="right"><a href="/userFeedback">Feedback</a></li>
-        <li class="right"><a href="/globalCart">Checkout</a></li>
-        <li class="right"><a href="/userAccount">Account</a></li>
-        <li class="right"><a href="/userFP">Menu</a></li>           
-    </ul>
+  
+
+      
+    <div class="topnav">
+       <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+        <a href="/userabout" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
+
+        <div class="w3-right w3-hide-small">
+          <a href="/userabout" class="w3-bar-item w3-button">Home<i class="	glyphicon glyphicon-home"></i></a>
+          <a href="/userFP" class="w3-bar-item w3-button">Menu<span class="glyphicon glyphicon-menu-hamburger"></span></a>          
+          <a href="/globalCart" class="w3-bar-item w3-button">Checkout<span class="glyphicon glyphicon-shopping-cart"></span></a>
+          <a href="/userAccount" class="w3-bar-item w3-button">Account<span class="glyphicon glyphicon-user"></span></a>
+          <a href="/userFeedback" class="w3-bar-item w3-button">Feedback<span class="glyphicon glyphicon-comment"></span></a>
+          <a href="/logout" class="w3-bar-item w3-button">Logout<span class="glyphicon glyphicon-log-out"></span></a>
+          
+          
+        </div>
+      </div>     
+    </div> 
+
 
   </head>
 
@@ -594,9 +595,7 @@ ul.topnav li.right {float: right;}
           <!-- <td><input type="checkbox" id="item{{item.getId()}}_check" name="check_list[]" value={{item.getId()}}> -->
           <td>
             <label for="quantity"></label><br>
-<!--             <input type="number" id="number" min="0" />
- -->            <!-- <input align = "right" style="width:70%"  type="text" id="item{{item.getId()}}_quantity" name="item{{item.getId()}}_quantity" ><br><br> -->
- <input align = "right" style="width:70%"  type="number"  min="0" max="{{item.getQuantity()}}" id="item{{item.getId()}}_quantity" name="item{{item.getId()}}_quantity" ><br><br>
+            <input align = "right" style="width:70%"  type="text" id="item{{item.getId()}}_quantity" name="item{{item.getId()}}_quantity" ><br><br>
           </td>
           <td><label class="checkbox-label">
             <input type="checkbox" name="check_list[]" value={{item.getId()}}>
