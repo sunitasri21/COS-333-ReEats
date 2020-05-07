@@ -396,18 +396,17 @@ class Database:
     def allPaidOrders(self):
         print('inpaidorder')
         cursor = self._connection.cursor() 
-        userid = int(userid)
         paid = 1
 
         # arguments3 = (userid, confirmed)
-        cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE paid = %s", (paid, )); 
+        cursor.execute("SELECT food_id, food, new_price, quantity, order_id FROM _order_table WHERE paid = %s", (paid, )); 
         print('cursorpaidorderdone')
         results = []
         total_value = 0.0
         row = cursor.fetchone()
         while row is not None: 
             # print(row)
-            result = OrderResult(food_id = str(row[0]), food = str(row[1]), new_price = str(row[2]), quantity = str(row[3]))
+            result = OrderResult(food_id = str(row[0]), food = str(row[1]), new_price = str(row[2]), quantity = str(row[3]), order_id = str(row[4]))
             results.append(result)
             print(result)
             total_value = float(total_value) + float(row[3]) * float(row[2])

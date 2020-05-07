@@ -5,6 +5,7 @@
 <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
 <link rel="stylesheet" href="static/table.css" type="text/css">
 <style>
+
     body{
       background-image: url("https://www.natrajindiancuisinevietnam.com/img/slider/slide01.jpg");  
       background-attachment: fixed; 
@@ -17,35 +18,7 @@
   color: white;
   font-family: 'Source Code Pro';
 }
-/*table {
-  border-collapse: collapse;
-  width: 100%;
-}
 
-th, td {
-  text-align: left;
-  padding: 8px;
-  font-family: 'Source Code Pro';
-}
-
-tr:nth-child(even){background-color: #f2f2f2}
-
-th {
-  background-color: #b34444;
-  color: white;
-  font-family: 'Source Code Pro';
-}
-
-hr {
-  background: rgb(30, 30, 40);
-  color: white;
-}
-
-.title{
-  background: rgb(30, 30, 40);
-  color: white;
-  font-family: 'Source Code Pro';
-}*/
 </style>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
@@ -62,26 +35,32 @@ hr {
 </head>
 
 <head>
+    <head>
   <title>Chennai Chimney</title> 
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
   <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
     <div class="topnav">
        <div class="w3-bar w3-white w3-wide w3-padding w3-card">
-        <a href="/userabout" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
+        <a href="/restabout" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
 
         <div class="w3-right w3-hide-small">
-          <a href="/userabout" class="w3-bar-item w3-button">Home<i class="	glyphicon glyphicon-home"></i></a>
-          <a href="/userFP" class="w3-bar-item w3-button">Menu<span class="glyphicon glyphicon-menu-hamburger"></span></a>          
-          <a href="/globalCart" class="w3-bar-item w3-button">Checkout<span class="glyphicon glyphicon-shopping-cart"></span></a>
-          <a href="/userAccount" class="w3-bar-item w3-button">Account<span class="glyphicon glyphicon-user"></span></a>
-          <a href="/userFeedback" class="w3-bar-item w3-button">Feedback<span class="glyphicon glyphicon-comment"></span></a>
+          <a href="/restabout" class="w3-bar-item w3-button">Home<i class="	glyphicon glyphicon-home"></i></a>
+          <a href="/restFP" class="w3-bar-item w3-button">Menu<span class="glyphicon glyphicon-menu-hamburger"></span></a>          
+          <a href="/restDiscount" class="w3-bar-item w3-button">Active Discounts<span class="glyphicon glyphicon-shopping-cart"></span></a>
+          <a href="/restAccount" class="w3-bar-item w3-button">Account<span class="glyphicon glyphicon-user"></span></a>
+          <a href="/restFeedback" class="w3-bar-item w3-button">Feedback<span class="glyphicon glyphicon-comment"></span></a>
           <a href="/logout" class="w3-bar-item w3-button">Logout<span class="glyphicon glyphicon-log-out"></span></a>
           
           
         </div>
       </div>     
     </div> 
+<!--       </div>
+    </div>
+
+    </a>
+  </div>
 
   <title>Testing QR code</title>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
@@ -106,37 +85,37 @@ hr {
         <label for="restName"></label><br> -->
         <label
           style = "padding-left: 575px"
-          ><strong>Chennai Chimney: Order Confirmation
+          ><strong>Chennai Chimney: All Paid Orders
         </strong></label>
       
 <!--     </form> -->
 
     <hr color ="black">
      </div>
-   <!-- 
-   <form id="payment-form"action="/qrCodePage", method="post"></form>
+  <center>
+   <!--  <form id="payment-form"action="/qrCodePage", method="post"></form> -->
     <table cellspacing="2" cellpadding="2" style = "align:center">  
-     align:"center" 
+      <!-- align:"center" -->
       <tr>
+        <th><strong>Order ID.</strong></th>
         <th><strong>Item No.</strong></th>
         <th><strong>Name</strong></th>
-        <td><strong>Dietary Restrictions</strong></td>
-      <th><strong>List Price</strong></th>
+<!--         <td><strong>Dietary Restrictions</strong></td>
+ -->    <th><strong>List Price</strong></th>
         <th><strong>Quantity</strong></th>
-        <th><strong>Subtotal</strong></th>
-         <th><strong>Discount</strong></th> 
-         <th><strong>Discounted Price</strong></th>
-       <th><strong>Select</strong></th> 
+        <!-- <th><strong>Discount</strong></th> -->
+        <!-- <th><strong>Discounted Price</strong></th> -->
+        <!-- <th><strong>Select</strong></th> -->
        </tr>
 
 
       {% for item in foodList %}
         <tr>
+          <td>{{ item.getOrderId()}} </td>
           <td>{{ item.getId()}}</td>
           <td>{{ item.getFood()}}</td>
           <td>{{ item.getNewPrice()}}</td>
           <td>{{ item.getQuantity()}}</td>
-          <td>{{"%.2f"|format(item.getNewPrice()|float * item.getQuantity()|float)}}</td>
         </tr>
       {% endfor %}
 
@@ -145,35 +124,14 @@ hr {
         <td></td>
         <td></td>
         <td></td>
-        <td>Total:{{"%.2f"|format(total)}}</td>
+        <td></td>
       </tr>
 
     </table>
- -->
-<!--      <br
-     style = "align-content: center"
-    style = "padding-left: 575px">
-    Please present the following QR code at restaurant:
-    </br> -->
-    
-  <div class="title" >
+  </center>
 
-    <hr style="background-color: #5b5d73">
-
-    
- <!--    <form action="/" method="get">
-        <label for="restName"></label><br> -->
-        <label
-          style = "padding-left: 575px"
-          >Please present the following QR code at restaurant:
-        </label>
-      
-<!--     </form> -->
-
-    <hr color ="black">
-     </div>
-                      
- <br></br>
+  <br>
+  <br>
 
   <!-- <p 
     onblur='generateBarCode();' />
@@ -182,22 +140,17 @@ hr {
     alt="" 
     width="200" 
     height="200" /></p> -->
-<center> 
-   <a id="text" 
+
+  <!--  <a id="text" 
       style="Width:20%"
       onblur='generateBarCode();'></a> 
 
     <img id='barcode' 
           src="{{orderid}}" 
           alt=""  
-          width="300" 
-          height="300" />
-    </center>
-     <label
-          style = "padding-left: 575px"
-          >{{url2}}
-        </label>
-
+          width="150" 
+          height="150" />
+ -->
 
   </body>
 </html>

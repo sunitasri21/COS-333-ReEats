@@ -4,7 +4,12 @@
 <head>
     <link rel="stylesheet" href="static/feedbackStyling.css" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Source Code Pro" rel="stylesheet">
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <style>
+      
+body{
+  background-color: black;
+      }
   table {
     border-collapse: collapse;
     width: 100%;
@@ -55,65 +60,40 @@ ul.topnav li.right {float: right;}
   ul.topnav li.right, 
   ul.topnav li {float: none;}
 }
+    
   </style>
-  
   </head>
-
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
-<script src="https://js.stripe.com/v3/"></script>
-
-  <script>
-    function submitChecks() {
-         // var sessionid = {{CHECKOUT_SESSION_ID}};
-        const url = "/sendMail";
-        var request = null;
-        data = {
-            name: document.getElementById("name").textContent,
-            email: document.getElementById("email").textContent,
-            comment: document.getElementById("text").textContent
-        };
-          function handleResponse(response)
-          {
-            $("message").html(response);
-          };
-          if (request != null) request.abort();
-          request = $.ajax(
-               {
-                  type: "POST",
-                  url: url,
-                  data: JSON.stringify(data),
-                  contentType: 'application/json;charset=UTF-8',
-                  success: handleResponse
-               }
-            );
-        }
-  </script>
 
     <head>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  
+    <div class="topnav">
+       <div class="w3-bar w3-white w3-wide w3-padding w3-card">
+        <a href="/userabout" class="w3-bar-item w3-button"><b>Re</b> Eats</a>
 
-    <ul class="topnav">
-        <li><a class="active" href="/userabout"><span class="vertical"><b>Re</b></span>Eats</a></li>
-        <li class="right"><a href="/logout">Logout</a></li>
-        <li class="right"><a href="/userFeedback">Feedback</a></li>
-        <li class="right"><a href="/confirmationPage">Checkout</a></li>
-        <li class="right"><a href="/userAccount">Account</a></li>
-        <li class="right"><a href="/userFP">Menu</a></li>           
-    </ul>
+        <div class="w3-right w3-hide-small">
+          <a href="/userabout" class="w3-bar-item w3-button">Home<i class="	glyphicon glyphicon-home"></i></a>
+          <a href="/userFP" class="w3-bar-item w3-button">Menu<span class="glyphicon glyphicon-menu-hamburger"></span></a>          
+          <a href="/globalCart" class="w3-bar-item w3-button">Checkout<span class="glyphicon glyphicon-shopping-cart"></span></a>
+          <a href="/userAccount" class="w3-bar-item w3-button">Account<span class="glyphicon glyphicon-user"></span></a>
+          <a href="/userFeedback" class="w3-bar-item w3-button">Feedback<span class="glyphicon glyphicon-comment"></span></a>
+          <a href="/logout" class="w3-bar-item w3-button">Logout<span class="glyphicon glyphicon-log-out"></span></a>
+          
+          
+        </div>
+      </div>     
+    </div> 
 
 </head>
 
   <body>
 
     <form>      
-      <input style = "font-family: 'Source Code Pro'" name="name" id="name" type="text" class="feedback-input" placeholder="Name" />   
-      <input style = "font-family: 'Source Code Pro'" name="email" id="email" type="text" class="feedback-input" placeholder="Email" />
-      <textarea style = "font-family: 'Source Code Pro'" name="text" id="text" class="feedback-input" placeholder="Comment"></textarea>
-      <input style = "font-family: 'Source Code Pro'" type="submit" value="SUBMIT" onclick=submitFeedback()/>
+      <input style = "font-family: 'Source Code Pro'" name="name" type="text" class="feedback-input" placeholder="Name" />   
+      <input style = "font-family: 'Source Code Pro'" name="email" type="text" class="feedback-input" placeholder="Email" />
+      <textarea style = "font-family: 'Source Code Pro'" name="text" class="feedback-input" placeholder="Comment"></textarea>
+      <input style = "font-family: 'Source Code Pro'" type="submit" value="SUBMIT"/>
     </form>
-
-    <div id="message"></div>
 <!-- 
     <hr color ="black">
     <hr color ="black">

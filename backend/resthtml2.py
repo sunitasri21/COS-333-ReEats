@@ -634,7 +634,7 @@ def confirmationPage():
     template = jinja_env.get_template("userConfirmation.html")
     # template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + orderid + "&amp;size=100x100"
+    url = "'https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&orderid=" + str(orderid) + "'" + "&amp;size=100x100"
 
     html = render_template(template, foodList = food_list, total = total_value, orderId = orderid)
     # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
@@ -919,8 +919,13 @@ def qrCodePage():
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
+<<<<<<< HEAD
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid) + "&amp;size=100x100"
+=======
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid) + "&amp;size=100x100"
+>>>>>>> df565b7ce79abc01315c016df3ec586498f10306
     print(url)
+    url2 = "https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid)
 
     # for result in results:
     #     newPrice = result.getNewPrice()
@@ -936,7 +941,7 @@ def qrCodePage():
 
     session['orderid'] = None
 
-    html2 = render_template(template2,foodList = results, total = total_value, orderid = url)
+    html2 = render_template(template2,foodList = results, total = total_value, orderid = url, url2 = url2)
     response2 = make_response(html2)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -953,9 +958,11 @@ def qrReroute():
     # if confirmedFood_list == None:
     #     confirmedFood_list = []
     # print(confirmedFood_list)
-    userid = request.args.get('userid')
-    orderid = request.args.get('orderid')
-
+    id1 = request.args.get('id')
+    ids = id1.split("_")
+    userid = ids[0]
+    orderid = ids[1]
+    
     database = get_db()
     results = []
     total_value = 0
@@ -994,6 +1001,45 @@ def qrReroute():
 
 
 #-----------------------------------------------------------------------
+@app.route('/restOrders', methods=['GET'])
+@login_required
+def restOrders():
+    database = get_db()
+    results = []
+    total_value = 0
+
+    try:
+        results, total_value = database.allPaidOrders()
+        for result in results:
+            print('paidorder', result.getId())
+
+    except Exception as e:
+        # errorMsg =  str(e)
+        # stderr.write("database error: " + errorMsg)
+        # raise e  
+        errorMsg =  str(e)
+        stderr.write("database error: " + errorMsg)
+
+        template = jinja_env.get_template("errorPage.html")
+
+        html = render_template(template, errorMessage = errorMsg)
+        response = make_response(html)
+        return response 
+
+    template2 = jinja_env.get_template("allOrders.html")
+
+    # figure out how to get order id from a url
+
+    # url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "http://localhost:12345/qrReroute" + orderid + "&amp;size=100x100"
+
+    html2 = render_template(template2,foodList = results, total = total_value)
+    response2 = make_response(html2)
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return response2
+#-----------------------------------------------------------------------
+
 def createOrderId():
     letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     orderId = ""
