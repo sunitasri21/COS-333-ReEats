@@ -74,8 +74,9 @@ app.config.update(dict(
     MAIL_PORT = 587,
     MAIL_USE_TLS = True,
     MAIL_USE_SSL = False,
-    MAIL_USERNAME = 'askethme99@gmail.com',
-    MAIL_PASSWORD = 'waterside2007',
+    MAIL_USERNAME = 'reeatsprinceton@gmail.com',
+    MAIL_PASSWORD = 'reeats2021',
+    MAIL_DEFAULT_SENDER = 'reeatsprinceton@gmail.com',
 ))
 mail = Mail(app)
 mail.init_app(app)
@@ -287,7 +288,7 @@ def userAccount():
 @login_required
 
 def userFeedback():
-    html = render_template('userFeedback.html')
+    html = render_template('userFeedback.html', message="")
     response = make_response(html)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -310,26 +311,36 @@ def restFeedback():
 
 def sendMail():
     database = get_db()
-    data = request.get_json()
-    print(data)
+    # data = request.get_json()
 
-    name = data["name"]
-    email = data["email"]
-    comment = data['comment']
+    # name = data["name"]
+    # email = data["email"]
+    # comment = data["message"]
 
-    message = "Name: " + str(name) + "\n" + "Email: " + str(email) + "\n" + "Message: " + str(comment)
+    name = request.form["name"]
+    email = request.form["email"]
+    comment = request.form["text"]
 
-    msg = Message(message,
+    print("Name = " + str(name))
+    print("Email = " + str(email))
+    print("Comment = " + str(comment))
+
+    # message = "Name: " + str(name) + "\n" + "Email: " + str(email) + "\n" + "Message: " + str(comment)
+
+    msg = Message(comment,
                 recipients=["ak36@princeton.edu"])
-   
+    
+    msg.subject = "Message from " + str(name) + " (" + str(email) + ")" 
+    msg.body = str(comment)
+
     mail.send(msg)
     
-    response = "Thank you! We will get back to you shortly."
+    thanks = "Thank you! We will get back to you shortly."
 
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     else:
-        return response 
+        return render_template('userFeedback.html', message=thanks)
 # -----------------------------------------------------------------------
 
 @login_manager.user_loader
@@ -919,11 +930,7 @@ def qrCodePage():
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
-<<<<<<< HEAD
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid) + "&amp;size=100x100"
-=======
     url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid) + "&amp;size=100x100"
->>>>>>> df565b7ce79abc01315c016df3ec586498f10306
     print(url)
     url2 = "https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid)
 
