@@ -399,7 +399,6 @@ class Database:
         userid = int(userid)
         paid = 1
 
-
         # arguments3 = (userid, confirmed)
         cursor.execute("SELECT food_id, food, new_price, quantity FROM _order_table WHERE paid = %s", (paid, )); 
         print('cursorpaidorderdone')

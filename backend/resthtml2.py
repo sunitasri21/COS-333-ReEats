@@ -919,7 +919,7 @@ def qrCodePage():
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&orderid=" + str(orderid) + "&amp;size=100x100"
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "'https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid) + "&amp;size=100x100"
     print(url)
 
     # for result in results:
