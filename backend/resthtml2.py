@@ -328,7 +328,7 @@ def sendMail():
     # message = "Name: " + str(name) + "\n" + "Email: " + str(email) + "\n" + "Message: " + str(comment)
 
     msg = Message(comment,
-                recipients=["ak36@princeton.edu"])
+                recipients=["reeatsprinceton@gmail.com"])
     
     msg.subject = "Message from " + str(name) + " (" + str(email) + ")" 
     msg.body = str(comment)
