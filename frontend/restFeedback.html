@@ -86,6 +86,38 @@ ul.topnav li.right {float: right;}
     </div> 
 
 </head>
+    
+     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script> 
+
+  <script>
+      function submitFeedback() {
+          var request = null;
+          const url2 = "/sendMail";
+          data = {
+            name: document.getElementById("name"),
+            email: document.getElementById("email"),
+            message: document.getElementById("text")
+          };
+
+          function handleResponse(response)
+          { 
+            $("#message").html(response);
+            $("#name").html("");
+            $("#text").html("");
+            alert(document.getElementById("name").textContent)
+          };
+          if (request != null) request.abort();
+          request = $.ajax(
+               {
+                  type: "POST",
+                  url: url2,
+                  data: JSON.stringify(data),
+                  contentType: 'application/json;charset=UTF-8',
+                  success: handleResponse
+               }
+          );
+        }
+  </script>
 
   <body>
 
