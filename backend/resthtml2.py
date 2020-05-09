@@ -299,7 +299,7 @@ def userFeedback():
 @login_required
 
 def restFeedback():
-    html = render_template('restFeedback.html')
+    html = render_template('restFeedback.html', message="")
     response = make_response(html)
     if not session.get('logged_in'):
         return redirect(url_for('login'))
@@ -341,6 +341,43 @@ def sendMail():
         return redirect(url_for('login'))
     else:
         return render_template('userFeedback.html', message=thanks)
+# -----------------------------------------------------------------------
+# -----------------------------------------------------------------------
+@app.route('/sendMailRest', methods=['GET', 'POST'])
+@login_required
+
+def sendMail():
+    database = get_db()
+    # data = request.get_json()
+
+    # name = data["name"]
+    # email = data["email"]
+    # comment = data["message"]
+
+    name = request.form["name"]
+    email = request.form["email"]
+    comment = request.form["text"]
+
+    print("Name = " + str(name))
+    print("Email = " + str(email))
+    print("Comment = " + str(comment))
+
+    # message = "Name: " + str(name) + "\n" + "Email: " + str(email) + "\n" + "Message: " + str(comment)
+
+    msg = Message(comment,
+                recipients=["reeatsprinceton@gmail.com"])
+    
+    msg.subject = "Message from " + str(name) + " (" + str(email) + ")" 
+    msg.body = str(comment)
+
+    mail.send(msg)
+    
+    thanks = "Thank you! We will get back to you shortly."
+
+    if not session.get('logged_in'):
+        return redirect(url_for('login'))
+    else:
+        return render_template('restFeedback.html', message=thanks)
 # -----------------------------------------------------------------------
 
 @login_manager.user_loader
