@@ -89,12 +89,16 @@ ul.topnav li.right {float: right;}
 
   <body>
 
-    <form>      
+     <form method="POST" action="/sendMail">
       <input style = "font-family: 'Source Code Pro'" name="name" type="text" class="feedback-input" placeholder="Name" />   
       <input style = "font-family: 'Source Code Pro'" name="email" type="text" class="feedback-input" placeholder="Email" />
       <textarea style = "font-family: 'Source Code Pro'" name="text" class="feedback-input" placeholder="Comment"></textarea>
-      <input style = "font-family: 'Source Code Pro'" type="submit" value="SUBMIT"/>
-    </form>
+      <input style = "font-family: 'Source Code Pro'" type="submit" value="SUBMIT" onclick="alertThanks()" />
+  </form>
+   
+  <center>
+      <div style="color: white; font-family: 'Source Code Pro'" type="text" class="msg">{{ message }}</div>
+  </center>
 <!-- 
     <hr color ="black">
     <hr color ="black">
