@@ -92,7 +92,7 @@ ul.topnav li.right {float: right;}
   <script>
       function submitFeedback() {
           var request = null;
-          const url2 = "/restFeedback";
+          const url2 = "/sendMailRest";
           data = {
             name: document.getElementById("name"),
             email: document.getElementById("email"),
@@ -121,7 +121,7 @@ ul.topnav li.right {float: right;}
 
   <body>
 
-     <form method="POST" action="/restFeedback">
+     <form method="POST" action="/sendMailRest">
       <input style = "font-family: 'Source Code Pro'" name="name" type="text" class="feedback-input" placeholder="Name" />   
       <input style = "font-family: 'Source Code Pro'" name="email" type="text" class="feedback-input" placeholder="Email" />
       <textarea style = "font-family: 'Source Code Pro'" name="text" class="feedback-input" placeholder="Comment"></textarea>
