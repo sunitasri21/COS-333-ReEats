@@ -346,7 +346,7 @@ def sendMail():
 @app.route('/sendMailRest', methods=['GET', 'POST'])
 @login_required
 
-def sendMail():
+def sendMailRest():
     database = get_db()
     # data = request.get_json()
 
