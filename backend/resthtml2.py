@@ -482,6 +482,10 @@ def register():
     return render_template('register.html', msg=msg)
 
 # -----------------------------------------------------------------------
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('errorPage.html', errorMessage = "404: Page Not Found!"), 404
+# -----------------------------------------------------------------------
 
 @app.route('/updateDiscount', methods=['POST'])
 def updateDiscount():
