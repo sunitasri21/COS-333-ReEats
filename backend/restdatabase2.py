@@ -26,8 +26,9 @@ class Database:
     def connect(self):  
         # conn_string = "host='localhost' dbname='reeats10git'"
         # self._connection = psycopg2.connect(conn_string)  
-        if heroku:    
-            DATABASE_URL = 'postgres://wpxdvkyrrqcyou:82d1e9ec563437e7ca1eb239ef20054157daf870aa58c3f10540a8ef73d5ee28@ec2-18-233-137-77.compute-1.amazonaws.com:5432/d4lmf0ecvv5g98'
+        if heroku:
+            DATABASE_URL = 'postgres://vzrdyuikdfepqb:dbe88d61edc7b6ec7d9ec7246b8e12a5feaf38708268e0a208fcc26212bc1b44@ec2-52-202-22-140.compute-1.amazonaws.com:5432/d4au5bt7256n5f'    
+            # DATABASE_URL = 'postgres://wpxdvkyrrqcyou:82d1e9ec563437e7ca1eb239ef20054157daf870aa58c3f10540a8ef73d5ee28@ec2-18-233-137-77.compute-1.amazonaws.com:5432/d4lmf0ecvv5g98'
             self._connection = psycopg2.connect(DATABASE_URL, sslmode='require')
         else:
             conn_string = "host='localhost' dbname='reeats10git'"
