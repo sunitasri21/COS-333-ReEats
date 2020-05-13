@@ -173,11 +173,10 @@ def about():
 @app.route('/restFP', methods=['GET'])
 @login_required
 def restPage():
-    if session['username'] != "chennai":
-        return redirect(url_for('searchResults'))
-
     restName = str(request.args.get('restName')) or ""
     discount = float(request.args.get('discount', default=1))
+    if session['username'] != "chennai":
+        return redirect(url_for('searchResults'))
      
     database = get_db()
     database.updateExpiredDiscounts()
@@ -641,11 +640,9 @@ def confirmationPage():
                 # response.set_cookie('foodList', str(value))
                 session[value] = float(realval)
                 database.inputOrderId(userid, newPrice, quantity, value, foodName, orderid, confirmed)
-                food_list.append((value, newPrice, foodName, float(quantity)))
-                foodid = str(value)
-                print(value)
-
-                
+                # food_list.append((value, newPrice, foodName, float(quantity)))
+                # foodid = str(value)
+                # print(value)
 
             except Exception as e:
                 # errorMsg =  str(e)
@@ -663,7 +660,7 @@ def confirmationPage():
 
         try:
             results, total_value = database.confirmedOrder(userid, orderid, confirmed)
-
+        
         except Exception as e:
             # errorMsg =  str(e)
             # stderr.write("database error: " + errorMsg)
@@ -686,8 +683,6 @@ def confirmationPage():
             if quantity != 0:
                 check = False 
             food_list.append((value, newPrice, foodName, float(quantity)))
-
-                
 
     else:
         database = get_db()
