@@ -626,7 +626,7 @@ def confirmationPage():
                 quantity = request.form[name]
                 if quantity == "":
                     session['message'] = "Please input a quantity for every selected item!"
-                    return redirect(url_for('searchResult'))
+                    return redirect(url_for('searchResults'))
                 # print("q: " + str(quantity))
                 foodName = database.pullName(value)
                 total_value = float(total_value) + float(quantity) * float(newPrice)
