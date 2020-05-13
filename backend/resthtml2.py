@@ -100,7 +100,10 @@ def firstPage():
 @login_required
 def searchResults():
     restName = str(request.args.get('restName')) or ""
-    discount = request.args.get('discount', default=1) 
+    discount = request.args.get('discount', default=1)
+    curr_message = session['message']
+    if curr_message == None:
+        curr_message = ""
       
     database = get_db()
     searchResults = database.menuSearchUser(restName)
@@ -138,7 +141,7 @@ def searchResults():
     if 'logged_in' in session:
         # User is loggedin show them the home page
         template = jinja_env.get_template("userFirstPage.html")    
-        html = render_template(template, restaurant=searchResults2, discount=discount, username=session.get('username'))
+        html = render_template(template, restaurant=searchResults2, discount=discount, username=session.get('username'), message=curr_message)
         response = make_response(html)
         if not session.get('logged_in'):
             return redirect(url_for('login'))
@@ -620,7 +623,8 @@ def confirmationPage():
                 name = "item" + str(value) + "_quantity"
                 quantity = request.form[name]
                 if quantity == "":
-                    return(redirect(url_for('searchResults')))
+                    session['message'] = "Please input a quantity for every selected item!"
+                    return redirect(url_for('searchResult'))
                 # print("q: " + str(quantity))
                 foodName = database.pullName(value)
                 total_value = float(total_value) + float(quantity) * float(newPrice)
@@ -692,7 +696,7 @@ def confirmationPage():
     template = jinja_env.get_template("userConfirmation.html")
     # template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "'https://reeats-test1.herokuapp.com/qrReroute?userid=" + str(userid) + "&orderid=" + str(orderid) + "'" + "&amp;size=100x100"
+    url = "'https://reeats-finaltest.herokuapp.com/qrReroute?userid=" + str(userid) + "&orderid=" + str(orderid) + "'" + "&amp;size=100x100"
 
     html = render_template(template, foodList = food_list, total = total_value, orderId = orderid)
     # html2 = render_template(template2,foodList = food_list, total = total_value, orderid = url )
@@ -934,8 +938,8 @@ def checkoutSession():
         "userid": userid, 
         "orderid": orderid
         },
-      success_url='https://reeats-test1.herokuapp.com/qrCodePage',
-      cancel_url='https://reeats-test1.herokuapp.com/userFP'
+      success_url='https://reeats-finaltest.herokuapp.com/qrCodePage',
+      cancel_url='https://reeats-finaltest.herokuapp.com/userFP'
       # success_url='http://reeats-test3.herokuapp.com/qrCodePage',
       # cancel_url='http://reeats-test3.herokuapp.com/userFP'
     )
@@ -977,9 +981,9 @@ def qrCodePage():
 
     template2 = jinja_env.get_template("qrCodePage.html")
 
-    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid) + "&amp;size=100x100"
+    url = "https://api.qrserver.com/v1/create-qr-code/?data=" + "https://reeats-finaltest.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid) + "&amp;size=100x100"
     print(url)
-    url2 = "https://reeats-test1.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid)
+    url2 = "https://reeats-finaltest.herokuapp.com/qrReroute?id=" + str(userid) + "_" + str(orderid)
 
     # for result in results:
     #     newPrice = result.getNewPrice()
@@ -1108,7 +1112,9 @@ def webhooks():
     # webhook_secret = "whsec_BUPGTfDOv2mIaP51MipyKfS0GfAOjw31" 
     # webhook_secret = "whsec_pu2iikEKy0aoYqCvSxBoqmKghbnL5bTz"
     # comment
-    webhook_secret ="whsec_6iLpmaBG9GXUSXDiEZM51PkFQv7O4dUE"
+    # webhook_secret ="whsec_6iLpmaBG9GXUSXDiEZM51PkFQv7O4dUE"
+    webhook_secret ="whsec_2gHYhTVzM3SbEJkUvJa3sLoNGXm8StOM"
+
     payload = request.data.decode("utf-8")
     received_sig = request.headers.get("Stripe-Signature", None)
     print("hellowebhooks")
