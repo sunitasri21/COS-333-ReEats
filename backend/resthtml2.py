@@ -590,6 +590,8 @@ def confirmationPage():
 
     prevURL = request.referrer
     if prevURL == None:
+        if session['orderid'] == None:
+            session['orderid'] = createOrderId()
         return redirect(url_for('globalCart'))
     parts = prevURL.split("/")
     prevPage = parts[3]
