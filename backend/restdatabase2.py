@@ -134,7 +134,8 @@ class Database:
         cursor.execute("SELECT restaurant_id FROM _restaurants WHERE restaurant_name = %s", (rest_name, ))
         restId = cursor.fetchone()[0]
         # 'WHERE menu.food_id = order_table.food_id;'
-        cursor.execute("SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM _menu WHERE NOW() - starttime > INTERVAL '1 minute' ")
+        # cursor.execute("SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM _menu WHERE NOW() - starttime > INTERVAL '1 minute' ")
+        cursor.execute("SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM _menu WHERE LOCALTIMESTAMP - starttime > INTERVAL '1 minute' ")
         # cursor.execute("SELECT food, description, unit_price, food_id, discount, new_price, quantity FROM _menu")
 
         print('cursordone')
