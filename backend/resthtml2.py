@@ -714,7 +714,7 @@ def confirmationPage():
 @login_required
 def globalCart():
     database = get_db()
-    orderid = request.cookies.get('orderId')
+    orderid = session['orderid']
     userid = session['id']
     print("userid = " + str(userid))
     confirmed = 1 
