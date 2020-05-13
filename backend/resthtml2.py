@@ -418,6 +418,7 @@ def login():
             session['id'] = restaurant[0]
             session['orderid'] = None
             session['restaurant_name'] = database.restaurant_search(restaurant[0])
+            session['message'] = ""
             login_user(restUser)
             # Redirect to home page
             return redirect(url_for('restPage'))
@@ -429,6 +430,7 @@ def login():
             session['username'] = user[1]
             session['password'] = user[2]
             session['email'] = user[3]
+            session['message'] = ""
             login_user(userUser)
             
 
