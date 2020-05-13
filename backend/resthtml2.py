@@ -588,6 +588,9 @@ def confirmationPage():
     print("CONFIRMATION PAGE")
     print(request.referrer)
 
+    if request == None:
+        return redirect(url_for('globalCart'))
+
     prevURL = request.referrer
     parts = prevURL.split("/")
     prevPage = parts[3]
