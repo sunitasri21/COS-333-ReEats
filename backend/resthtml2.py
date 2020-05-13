@@ -620,7 +620,7 @@ def confirmationPage():
                 name = "item" + str(value) + "_quantity"
                 quantity = request.form[name]
                 if quantity == "":
-                    return(redirect(url_for('userFP')))
+                    return(redirect(url_for('searchResults')))
                 # print("q: " + str(quantity))
                 foodName = database.pullName(value)
                 total_value = float(total_value) + float(quantity) * float(newPrice)
