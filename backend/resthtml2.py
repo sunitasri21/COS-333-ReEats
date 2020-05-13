@@ -605,6 +605,7 @@ def confirmationPage():
     if prevPage == "userFP":
         check_list = request.form.getlist("check_list[]")
         if len(check_list) == 0:
+            session['message'] = "Please select items before clicking Submit!"
             return redirect(url_for('searchResults'))
         print(check_list)
         database = get_db()
