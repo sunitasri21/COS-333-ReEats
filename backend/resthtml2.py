@@ -173,6 +173,9 @@ def about():
 @app.route('/restFP', methods=['GET'])
 @login_required
 def restPage():
+    if session['username'] != "chennai":
+        return redirect(url_for('searchResults'))
+
     restName = str(request.args.get('restName')) or ""
     discount = float(request.args.get('discount', default=1))
      
@@ -642,6 +645,8 @@ def confirmationPage():
                 foodid = str(value)
                 print(value)
 
+                
+
             except Exception as e:
                 # errorMsg =  str(e)
                 # stderr.write("database error: " + errorMsg)
@@ -655,6 +660,34 @@ def confirmationPage():
                 html = render_template(template, errorMessage = errorMsg)
                 response = make_response(html)
                 return response 
+
+        try:
+            results, total_value = database.confirmedOrder(userid, orderid, confirmed)
+
+        except Exception as e:
+            # errorMsg =  str(e)
+            # stderr.write("database error: " + errorMsg)
+            # raise e  
+            errorMsg =  str(e)
+            stderr.write("database error: " + errorMsg)
+
+            template = jinja_env.get_template("errorPage.html")
+
+            html = render_template(template, errorMessage = errorMsg)
+            response = make_response(html)
+            return response 
+
+        for result in results:
+            value = result.getId()
+            newPrice = result.getNewPrice()
+            foodName = result.getFood()
+            quantity = result.getQuantity()
+            print("quantity in results: " + str(quantity))
+            if quantity != 0:
+                check = False 
+            food_list.append((value, newPrice, foodName, float(quantity)))
+
+                
 
     else:
         database = get_db()
