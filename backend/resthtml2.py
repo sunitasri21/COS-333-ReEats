@@ -104,6 +104,7 @@ def searchResults():
     curr_message = session['message']
     if curr_message == None:
         curr_message = ""
+    session['message'] = ""
       
     database = get_db()
     searchResults = database.menuSearchUser(restName)
